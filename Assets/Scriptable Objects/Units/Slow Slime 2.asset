@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd19c83295f0f449b8c432dde280c1e, type: 3}
+  m_Name: Slow Slime 2
+  m_EditorClassIdentifier: 
+  unitName: Slow Slime 2
+  icon: {fileID: -1676362213, guid: 90c0630c81187e14f80d4956326c961a, type: 3}
+  currentHealth: 3
+  maxHealth: 3
+  dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
+  weapons: []
+  speed: 2
+  prefab: {fileID: 5022865214254826152, guid: 81cddae49021ca44ab347417abeb8a48, type: 3}
+  isNPC: 0
