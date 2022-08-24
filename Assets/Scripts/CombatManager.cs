@@ -61,6 +61,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private List<Combatant> allyCombatants;
     [SerializeField] private List<Combatant> enemyCombatants;
 
+    [SerializeField] private Dice selectedDie;
     [SerializeField] private Action selectedAction;
     [SerializeField] private List<Combatant> selectedTargets;
 
@@ -85,8 +86,6 @@ public class CombatManager : MonoBehaviour
     }
 
     private void Update() {
-
-
         // Temp confirm action
         if (Input.GetKeyDown(KeyCode.Return) && state == CombatState.TurnStart) {
             if (coroutine != null) {
@@ -403,9 +402,12 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    public void SelectAction(Action action) {
+    public void SelectAction(Action action, Dice die) {
         // Update selected action
         selectedAction = action;
+
+        // Update selected die
+        selectedDie = die;
 
         // If given action is null, then Player wants to de-select action
         if (selectedAction != null) {
@@ -428,12 +430,12 @@ public class CombatManager : MonoBehaviour
         // Loop through all possible slots
         if (selectedAction.canTargetSelf) {
             // Select self
-            SelectTarget(currentCombatant.worldPosition);
+            SelectTarget(currentCombatant);
             return;
         }
         else if (selectedAction.canTargetEnemies) {
             foreach (var enemy in enemyCombatants) {
-                bool result = SelectTarget(enemy.worldPosition);
+                bool result = SelectTarget(enemy);
                 // If a valid target has been chosen, then dip
                 if (result)
                     return;
@@ -441,7 +443,7 @@ public class CombatManager : MonoBehaviour
         }
         else if (selectedAction.canTargetAllies) {
             foreach (var ally in allyCombatants) {
-                bool result = SelectTarget(ally.worldPosition);
+                bool result = SelectTarget(ally);
                 // If a valid target has been chosen, then dip
                 if (result)
                     return;
@@ -469,7 +471,24 @@ public class CombatManager : MonoBehaviour
         return true;
     }
 
-    public bool SelectTarget(Vector3Int position) {
+    public Combatant GetCombatantAtPosition(Vector3Int position) {
+        foreach (var ally in allyCombatants) {
+            if (ally.worldPosition == position) {
+                return ally;
+            }
+        }
+
+        foreach (var enemy in enemyCombatants) {
+            if (enemy.worldPosition == position) {
+                return enemy;
+            }
+        }
+
+        // If nothing found, return null
+        return null;
+    }
+
+    public bool SelectTarget(Combatant combatant) {
         // Check if target is valid
         // TODO
 
@@ -483,59 +502,61 @@ public class CombatManager : MonoBehaviour
 
         // Initialize
         selectedTargets = new List<Combatant>();
+
+        // If the target is not valid
+        if (!isValidTarget(currentCombatant, combatant, selectedAction)) {
+            return false;
+        }
+
+        selectedTargets.Add(combatant);
         
-        // Loop through all allies
-        foreach (var combatant in allyCombatants) {
-            if (combatant.worldPosition == position) {
-                // If the target is not valid
-                if (!isValidTarget(currentCombatant, combatant, selectedAction)) {
-                    return false;
-                }
-
-                selectedTargets.Add(combatant);
-                
-                // If no valid targets were chosen
-                if (selectedTargets.Count == 0) {
-                    return false;
-                }
-
-                // Update visuals
-                foreach (var target in selectedTargets) {
-                    CombatManagerUI.instance.HighlightTarget(target.worldPosition);
-                }
-
-                return true;
-            }
+        // If no valid targets were chosen
+        if (selectedTargets.Count == 0) {
+            return false;
         }
 
-        // Loop through all enemies
-        foreach (var combatant in enemyCombatants) {
-            if (combatant.worldPosition == position) {
-                // If the target is not valid
-                if (!isValidTarget(currentCombatant, combatant, selectedAction)) {
-                    return false;
-                }
-
-                selectedTargets.Add(combatant);
-
-                // Get any secondary targets based on action
-                selectedTargets.AddRange(selectedAction.getSecondaryTargets());
-                
-                // If no valid targets were chosen
-                if (selectedTargets.Count == 0) {
-                    return false;
-                }
-
-                // Update visuals
-                foreach (var target in selectedTargets) {
-                    CombatManagerUI.instance.HighlightTarget(target.worldPosition);
-                }
-
-                return true;
-            }
+        // Update visuals
+        foreach (var target in selectedTargets) {
+            CombatManagerUI.instance.HighlightTarget(target.worldPosition);
         }
 
-        return false;
+        return true;
+        
+        // // Loop through all allies
+        // foreach (var combatant in allyCombatants) {
+        //     if (combatant.worldPosition == position) {
+                
+        //     }
+        // }
+
+        // // Loop through all enemies
+        // foreach (var combatant in enemyCombatants) {
+        //     if (combatant.worldPosition == position) {
+        //         // If the target is not valid
+        //         if (!isValidTarget(currentCombatant, combatant, selectedAction)) {
+        //             return false;
+        //         }
+
+        //         selectedTargets.Add(combatant);
+
+        //         // Get any secondary targets based on action
+        //         selectedTargets.AddRange(selectedAction.getSecondaryTargets());
+                
+        //         // If no valid targets were chosen
+        //         if (selectedTargets.Count == 0) {
+        //             return false;
+        //         }
+
+        //         // Update visuals
+        //         foreach (var target in selectedTargets) {
+        //             CombatManagerUI.instance.HighlightTarget(target.worldPosition);
+        //         }
+
+        //         return true;
+        //     }
+        // }
+
+        // return false;
     }
 
     private IEnumerator ConfirmAction() {
@@ -550,7 +571,7 @@ public class CombatManager : MonoBehaviour
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // Perform action on targets
-        selectedAction.Perform(selectedTargets, currentCombatant.unit.dice);
+        selectedAction.Perform(selectedTargets, selectedDie);
 
         // TODO Delete used Dice
         // CombatManagerUI.instance.DeleteDiceUI();

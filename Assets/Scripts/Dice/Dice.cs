@@ -48,4 +48,21 @@ public class Dice : ScriptableObject
     public int GetInvertedValue() {
         return maxValue - value + 1;
     }
+
+    public bool isHighroll() {
+        return value == maxValue;
+    }
+
+    public bool isLowroll() {
+        return value == 1;
+    }
+
+    public bool isEven() {
+        return value % 2 == 0;
+    }
+
+    public bool isOdd() {
+        return !isEven();
+    }
+
 }

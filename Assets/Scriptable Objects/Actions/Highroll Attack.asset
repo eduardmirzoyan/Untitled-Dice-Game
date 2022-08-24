@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af463153dbb499f49a538aab556af93f, type: 3}
-  m_Name: Basic Attack
+  m_Script: {fileID: 11500000, guid: 7b1f464ba300b6d46a63c551060ce19a, type: 3}
+  m_Name: Highroll Attack
   m_EditorClassIdentifier: 
   canTargetSelf: 0
   canTargetAllies: 0
@@ -20,3 +20,4 @@ MonoBehaviour:
   cooldownCounter: 0
   uses: 0
   usesCounter: 0
+  damageMulitplier: 2

@@ -18,8 +18,7 @@ public class GameEvents : MonoBehaviour
         instance = this;
     }
 
-    public event Action<DiceSlotUI> onDiceInserted;
-    public event Action<DiceSlotUI> onDiceRemoved;
+    public event Action<DiceSlotUI> idk;
 
     
 

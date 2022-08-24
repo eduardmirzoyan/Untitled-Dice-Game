@@ -66,7 +66,69 @@ public class CombatManagerUI : MonoBehaviour
         // Default value for turn
         turnPosition = Vector3Int.back;
         actionUIs = new List<ActionUI>();
+
+
+        // Reset world selection
+        ResetSelection();
     }
+
+    # region Selection Logic
+    private void Update() {
+        // Left click to make selection
+        if (Input.GetMouseButtonDown(0)) {
+            // Get world position from camera
+            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            pos.z = 0; // Because camera is -10 from the world
+            Vector3Int worldPos = groundTilemap.WorldToCell(pos);
+
+            // For Debugging
+            // print(worldPos);
+            print("selected");
+
+            // Check to see if this is a selection or target
+            if (CombatManager.instance.hasActionBeenChoosen()) {
+                // Check if there was something to target at that location
+                var targetCombatant = CombatManager.instance.GetCombatantAtPosition(worldPos);
+                if (targetCombatant != null) {
+                    // Attempt to select target
+                    CombatManager.instance.SelectTarget(targetCombatant);
+                }
+                
+            }
+
+            // Check if selected map has tile
+            if (groundTilemap.HasTile(worldPos)) {
+                // Reset previous selection if exists
+                if (SelectionExists()) {
+                    ResetSelection();
+                }
+
+                // Cache selected position
+                selectionPosition = worldPos;
+                selectionTilemap.SetTile(worldPos, selectionTile);
+            }
+        }
+
+        // Right click to clear any selection
+        if (Input.GetMouseButtonDown(1) && SelectionExists()) {
+            ResetSelection();
+        }
+    }
+
+    private bool SelectionExists() {
+        return selectionPosition.z != -1;
+    }
+
+    private void ResetSelection() {
+        if (SelectionExists()) {
+            // Delete tile at selected location
+            selectionTilemap.SetTile(selectionPosition, null);
+        }
+        // Reset position
+        selectionPosition = new Vector3Int(0, 0, -1);
+    }
+
+    #endregion
 
     public void SetTurn(Vector3Int vector3Int) {
         // If something else was chosen as the turn, then deselect it
@@ -239,14 +301,14 @@ public class CombatManagerUI : MonoBehaviour
         // Clear any existing actions if exists
         ClearUnitActions();
 
-        // Get all possible actions from unit and display em
+        // Get all weapons equipped to the unit
         foreach (var action in unit.GetActions()) {
             // Create UI gameobject
-            var actionUI = Instantiate(actionUIPrefab, actionLayoutGroup.transform).GetComponent<ActionUI>();
-            // Initalize it
-            actionUI.Initialize(action);
-            // Add to list
-            actionUIs.Add(actionUI);
+                var actionUI = Instantiate(actionUIPrefab, actionLayoutGroup.transform).GetComponent<ActionUI>();
+                // Initalize it
+                actionUI.Initialize(action, action.sourceWeapon);
+                // Add to list
+                actionUIs.Add(actionUI);
         }
     }
 

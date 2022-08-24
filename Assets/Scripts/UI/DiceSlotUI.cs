@@ -25,20 +25,31 @@ public class DiceSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
          // If the dropped data is a die
          // Make sure there isnt already a die in this slot
          if (eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI) && containedDiceUI == null) {
-            // // Sets a new parent for the dice to snap back to
-            diceUI.SetParent(gameObject.transform);
             
-            // // Stores UI
-            containedDiceUI = diceUI;
-           
-            // // Update visuals
-            image.color = defaultColor;
+            // Check for any constraints
+            var action = actionUI.GetAction();
+            var dice = diceUI.GetDice();
 
-            // Select this
-            CombatManager.instance.SelectAction(actionUI.GetAction());
+            if (action.passesContraints(dice)) {
+               // Sets a new parent for the dice to snap back to
+               diceUI.SetParent(gameObject.transform);
+               
+               // Stores UI
+               containedDiceUI = diceUI;
             
-            // Update visuals
-            actionUI.Update();
+               // Update visuals
+               image.color = defaultColor;
+
+               // Select this
+               CombatManager.instance.SelectAction(action, dice);
+               
+               // Update visuals
+               actionUI.Update();
+            }
+            else {
+               print("Dice does not pass contraints of selected action");
+            }
+            
          }
       }
 

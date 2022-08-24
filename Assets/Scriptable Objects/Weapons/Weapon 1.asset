@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Sword
   description: IDK
+  baseDamage: 5
   actions:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
   - {fileID: 11400000, guid: 6c7d5165a38c037439d921dbbfc91ce0, type: 2}
+  - {fileID: 11400000, guid: 5187cc2ee0884e24085dccd81422e0b4, type: 2}

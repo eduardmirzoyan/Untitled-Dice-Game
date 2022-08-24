@@ -17,6 +17,7 @@ public abstract class Unit : ScriptableObject
 
     public List<Action> GetActions() {
         List<Action> result = new List<Action>();
+
         // Get actions from weapons
         foreach (var weapon in weapons) {
             result.AddRange(weapon.actions);
@@ -28,7 +29,7 @@ public abstract class Unit : ScriptableObject
         // Get actions from other sources
         // TODO
 
-        // Get default action, Flee
+        // Get default action, Pass
         // TODO
 
         return result;

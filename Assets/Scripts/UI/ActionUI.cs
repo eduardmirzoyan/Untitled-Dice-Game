@@ -12,13 +12,15 @@ public class ActionUI : MonoBehaviour
 
     [Header("Contained Action")]
     [SerializeField] private Action action;
+    [SerializeField] private Weapon sourceWeapon;
 
     private void Awake() {
         diceSlotUI = GetComponentInChildren<DiceSlotUI>();   
     }
 
-    public void Initialize(Action action) {
+    public void Initialize(Action action, Weapon sourceWeapon) {
         this.action = action;
+        this.sourceWeapon = sourceWeapon;
         UpdateText();
     }
 
@@ -28,7 +30,7 @@ public class ActionUI : MonoBehaviour
             text.text = "Dice value: " + diceSlotUI.GetContainedDice().GetValue() + " With action: " + action.name;
         }
         else {
-            text.text = action.name;
+            text.text = action.name + " from: " + sourceWeapon.weaponName;
         }
     }
 
@@ -45,8 +47,8 @@ public class ActionUI : MonoBehaviour
         return action;
     }
 
-    public Dice GetDice() {
-        return diceSlotUI.GetContainedDice();
+    public Weapon GetWeapon() {
+        return sourceWeapon;
     }
 
     public bool ContainsDie() {
@@ -66,4 +68,5 @@ public class ActionUI : MonoBehaviour
         UpdateText();
         UpdateVisuals();
     }
+
 }

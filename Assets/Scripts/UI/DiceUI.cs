@@ -219,8 +219,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
             // If it is currently in a dice slot, attempt to remove itself
             if (transform.parent.TryGetComponent(out DiceSlotUI diceSlotUI)) {
-                // diceSlotUI.RemoveDie();
-                CombatManager.instance.SelectAction(null);
+                // Deselect the action
+                CombatManager.instance.SelectAction(null, null);
             }
         }
     }

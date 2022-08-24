@@ -9,9 +9,10 @@ public class BasicAttack : Action
     public override void Perform(List<Combatant> targets, Dice dice) {
         // Deal damage
         foreach (var target in targets) {
-            target.TakeDamage(dice.GetValue());
+            // Deal damage based on weapon's base damage
+            target.TakeDamage(sourceWeapon.baseDamage);
             // target.unit.TakeDamage(dice.GetValue());
-            Debug.Log(target.unit.name + " took " + dice.GetValue() + " damage.");
+            Debug.Log(target.unit.name + " took " + sourceWeapon.baseDamage + " damage.");
         }
     }
 }
