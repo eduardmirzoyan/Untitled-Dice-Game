@@ -73,6 +73,10 @@ public class DiceSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
          return containedDiceUI.GetDice();
       }
 
+      public DiceUI GetDiceUI() {
+         return containedDiceUI;
+      }
+
       public bool ContainsDie() {
          return containedDiceUI != null;
       }

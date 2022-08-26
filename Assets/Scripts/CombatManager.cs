@@ -291,25 +291,6 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    // private void SpawnCombatants() {
-    //     // Spawn allies
-    //     foreach (var ally in allyCombatants) {
-    //         var position = CombatManagerUI.instance.GetCellCenter(ally.worldPosition);
-    //         // Spawn ally model
-    //         CombatManagerUI.instance.SpawnCombatant(ally.unit, position);
-
-    //         // Spawn animation?
-    //     }
-
-    //     // Spawn enemies
-    //     foreach (var enemy in enemyCombatants) {
-    //         var position = CombatManagerUI.instance.GetCellCenter(enemy.worldPosition);
-    //         // Spawn ally model
-    //         CombatManagerUI.instance.SpawnCombatant(enemy.unit, position);
-    //         // Spawn animation?
-    //     }
-    // }
-
     private IEnumerator GenerateDiceRolls() {
         // Empty current dice sets
         allyDice = new List<Dice>();
@@ -521,42 +502,6 @@ public class CombatManager : MonoBehaviour
         }
 
         return true;
-        
-        // // Loop through all allies
-        // foreach (var combatant in allyCombatants) {
-        //     if (combatant.worldPosition == position) {
-                
-        //     }
-        // }
-
-        // // Loop through all enemies
-        // foreach (var combatant in enemyCombatants) {
-        //     if (combatant.worldPosition == position) {
-        //         // If the target is not valid
-        //         if (!isValidTarget(currentCombatant, combatant, selectedAction)) {
-        //             return false;
-        //         }
-
-        //         selectedTargets.Add(combatant);
-
-        //         // Get any secondary targets based on action
-        //         selectedTargets.AddRange(selectedAction.getSecondaryTargets());
-                
-        //         // If no valid targets were chosen
-        //         if (selectedTargets.Count == 0) {
-        //             return false;
-        //         }
-
-        //         // Update visuals
-        //         foreach (var target in selectedTargets) {
-        //             CombatManagerUI.instance.HighlightTarget(target.worldPosition);
-        //         }
-
-        //         return true;
-        //     }
-        // }
-
-        // return false;
     }
 
     private IEnumerator ConfirmAction() {
@@ -573,8 +518,8 @@ public class CombatManager : MonoBehaviour
         // Perform action on targets
         selectedAction.Perform(selectedTargets, selectedDie);
 
-        // TODO Delete used Dice
-        // CombatManagerUI.instance.DeleteDiceUI();
+        // Change state of selected die
+        CombatManagerUI.instance.PerformAction(selectedAction);
 
         // Clear visuals
         CombatManagerUI.instance.ClearTargets();

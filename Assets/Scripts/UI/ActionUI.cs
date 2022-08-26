@@ -55,6 +55,10 @@ public class ActionUI : MonoBehaviour
         return diceSlotUI.ContainsDie();
     }
 
+    public void DeactivateDie() {
+        diceSlotUI.GetDiceUI().SetActive(false);
+    }
+
     public void DeSelect() {
         // Remove inserted die if possible
         diceSlotUI.RemoveInsertedDie();

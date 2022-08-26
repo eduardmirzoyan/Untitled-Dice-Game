@@ -16,6 +16,7 @@ public class Combatant : ScriptableObject
         this.partyIndex = partyIndex;
         this.worldPosition = worldPosition;
         this.isAllyAllegiance = isAllyAllegiance;
+        
     }
 
     public void AssignHealthbar(HealthbarUI healthbar) {

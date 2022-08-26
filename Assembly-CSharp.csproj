@@ -41,6 +41,7 @@
      <Compile Include="Assets\Scripts\UI\ActionUI.cs" />
      <Compile Include="Assets\Scripts\Actions\AoEAttack.cs" />
      <Compile Include="Assets\Scripts\CombatManager.cs" />
+     <Compile Include="Assets\Scripts\Actions\HighrollAttack.cs" />
      <Compile Include="Assets\Scripts\Actions\Action.cs" />
      <Compile Include="Assets\Scripts\UI\QueueUI.cs" />
      <Compile Include="Assets\Scripts\Units\Unit.cs" />
@@ -60,7 +61,7 @@
      <Compile Include="Assets\Scripts\CombatManagerUI.cs" />
      <Compile Include="Assets\Scripts\Units\Knight.cs" />
      <Compile Include="Assets\Scripts\UI\DiceSlotUI.cs" />
-     <Compile Include="Assets\Scripts\Actions\HighrollAttack.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.1f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

@@ -83,7 +83,6 @@ public class CombatManagerUI : MonoBehaviour
 
             // For Debugging
             // print(worldPos);
-            print("selected");
 
             // Check to see if this is a selection or target
             if (CombatManager.instance.hasActionBeenChoosen()) {
@@ -196,7 +195,6 @@ public class CombatManagerUI : MonoBehaviour
             // Store
             enemyDiceUI.Add(dieUI);
         }
-        
     }
 
     public void SpawnCombatants(List<Combatant> combatants) {
@@ -246,7 +244,7 @@ public class CombatManagerUI : MonoBehaviour
     public void EnableAllyDice() {
         foreach (var diceUI in allyDiceUI) {
             // Enable moving the die
-            diceUI.SetActive(true);
+            diceUI.SetInteractive(true);
         }
     }
 
@@ -356,6 +354,17 @@ public class CombatManagerUI : MonoBehaviour
             
             // Attempt to un-select every action
             if (actionUI.GetAction() != action && actionUI.ContainsDie()) {
+                actionUI.DeSelect();
+            }
+        }
+    }
+
+    public void PerformAction(Action action) {
+        foreach (var actionUI in actionUIs) {
+            if (actionUI.ContainsDie()) {
+                if (actionUI.GetAction() == action) {
+                    actionUI.DeactivateDie();
+                }
                 actionUI.DeSelect();
             }
         }

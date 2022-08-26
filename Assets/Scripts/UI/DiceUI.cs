@@ -23,41 +23,42 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     private Canvas playerScreen;
 
     [SerializeField] private float travelRate = 0.1f;
-    private bool isBeingDragged;
-
     [SerializeField] private float spinRate = 3f;
-
-    [SerializeField] private Transform child;
-    [SerializeField] private float speed;
-
+    [SerializeField] private bool isInteractable;
     [SerializeField] private bool isActive;
 
     private Coroutine rollRoutine;
+    private bool isBeingDragged;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
+        playerScreen = GameManager.instance.playerScreen;
     }
     
     private void Update() {
-        DrawDice();
-
+        // For debugging
         if (Input.GetKeyDown(KeyCode.F)) {
             Roll();
         }
+        if (Input.GetKeyDown(KeyCode.L)) {
+            Replenish();
+        }
     }
 
-    public void Initialize(Dice dice, Color color, RectTransform origin, bool isActive = false) {
+    public void Initialize(Dice dice, Color color, RectTransform origin, bool interactable = false) {
         this.dice = dice;
-        background.color = color;
-        // Set origin to itself
         this.origin = origin;
-        this.isActive = isActive;
+        this.isInteractable = interactable;
+        background.color = color;
+        isActive = true;
+
+        // Display the current state of the die
+        DrawVisuals();
     }
 
-    public void SetActive(bool active) {
-        isActive = active;
+    public void SetInteractive(bool state) {
+        isInteractable = state;
     }
 
     public void Roll() {
@@ -67,8 +68,23 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         rollRoutine = StartCoroutine(RollDice(rollDuration));
     }
 
-    private void DrawDice() {
-        ValueToUI();
+    public void Replenish() {
+        isActive = true;
+        // Update visuals
+        DrawVisuals();
+    }
+
+    private void DrawVisuals() {
+        // Draw the physical die
+        ValueToUI();  
+
+        // Update transparancy depending if die is active
+        if (isActive) {
+            canvasGroup.alpha = 1f;
+        }
+        else {
+            canvasGroup.alpha = 0.5f;
+        }
     }
 
     public Dice GetDice() {
@@ -83,6 +99,9 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         {
             // Lerp target item to its spot
             dice.Roll();
+
+            // Update visuals
+            DrawVisuals();
 
             elapsedTime += 0.1f;
             yield return new WaitForSeconds(0.1f);
@@ -165,7 +184,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     // Dragging helper functions
     public void OnBeginDrag(PointerEventData eventData) {
-        if (isActive) {
+        if (isInteractable) {
             // Update visuals
             canvasGroup.alpha = 0.6f;
             canvasGroup.blocksRaycasts = false;
@@ -191,7 +210,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        if (isActive) {
+        if (isInteractable) {
             // Stop dragging
             isBeingDragged = false;
 
@@ -210,6 +229,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
             // Reset position
             transform.localPosition = Vector3.zero;
+
+            DrawVisuals();
         }
     }
 
@@ -236,21 +257,32 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         currentParent = transform;
     }
 
-    private void Oscillate() {
-        // TODO
-
-        child.localPosition -= new Vector3(0, -speed * Time.deltaTime, 0);
-        transform.Rotate(0, 0, spinRate);
-
-        if (child.localPosition.y >= 210) {
-            speed = -speed;
-            child.localPosition = Vector3.up * 200;
-        }
-        if (child.localPosition.y <= -210) {
-            speed = -speed;
-            child.localPosition = Vector3.up * -200;
-        }
+    public void SetActive(bool active) {
+        isActive = active;
+        // Update visuals
+        DrawVisuals();
     }
+
+    public bool IsActive() {
+        return isActive;
+    }
+
+    // private void Oscillate() {
+    //     // TODO
+    //     float speed = 0;
+
+    //     child.localPosition -= new Vector3(0, -speed * Time.deltaTime, 0);
+    //     transform.Rotate(0, 0, spinRate);
+
+    //     if (child.localPosition.y >= 210) {
+    //         speed = -speed;
+    //         child.localPosition = Vector3.up * 200;
+    //     }
+    //     if (child.localPosition.y <= -210) {
+    //         speed = -speed;
+    //         child.localPosition = Vector3.up * -200;
+    //     }
+    // }
 
     private void FollowAndRotate() {
         // Make Die smoothly travel towards mouse
