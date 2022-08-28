@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Action : ScriptableObject
 {
+    [TextArea(10, 20)]
+    public string description;
     public bool canTargetSelf = false;
     public bool canTargetAllies = false;
     public bool canTargetEnemies = false;

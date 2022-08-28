@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class Weapon : ScriptableObject
+public class Weapon : Item
 {
-    // TODO:
-    public string weaponName;
-    public string description;
     public int baseDamage;
     public List<Action> actions;
+    
 }

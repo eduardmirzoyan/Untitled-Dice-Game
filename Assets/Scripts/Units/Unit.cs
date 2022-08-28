@@ -20,7 +20,8 @@ public abstract class Unit : ScriptableObject
 
         // Get actions from weapons
         foreach (var weapon in weapons) {
-            result.AddRange(weapon.actions);
+            if (weapon != null)
+                result.AddRange(weapon.actions);
         }
         
         // Get actions from passives

@@ -76,7 +76,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     private void DrawVisuals() {
         // Draw the physical die
-        ValueToUI();  
+        ValueToUI(dice.GetValue());  
 
         // Update transparancy depending if die is active
         if (isActive) {
@@ -110,13 +110,13 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         animator.Play("Selected");
     }
 
-    private void ValueToUI() {
+    private void ValueToUI(int value) {
         if (pipHolders == null) {
             throw new System.Exception("Dice render not set");
         }
 
         // Display certain pips depending on die value
-        switch (dice.GetValue()) {
+        switch (value) {
             case 1:
             pipHolders[0].enabled = false;
             pipHolders[1].enabled = true;
@@ -267,22 +267,9 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         return isActive;
     }
 
-    // private void Oscillate() {
-    //     // TODO
-    //     float speed = 0;
-
-    //     child.localPosition -= new Vector3(0, -speed * Time.deltaTime, 0);
-    //     transform.Rotate(0, 0, spinRate);
-
-    //     if (child.localPosition.y >= 210) {
-    //         speed = -speed;
-    //         child.localPosition = Vector3.up * 200;
-    //     }
-    //     if (child.localPosition.y <= -210) {
-    //         speed = -speed;
-    //         child.localPosition = Vector3.up * -200;
-    //     }
-    // }
+    public void DisplayValue(int value) {
+        ValueToUI(value);
+    }
 
     private void FollowAndRotate() {
         // Make Die smoothly travel towards mouse

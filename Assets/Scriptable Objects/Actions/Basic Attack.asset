@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af463153dbb499f49a538aab556af93f, type: 3}
   m_Name: Basic Attack
   m_EditorClassIdentifier: 
+  description: Deal base damage to enemy
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1

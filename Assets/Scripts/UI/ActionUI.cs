@@ -30,7 +30,7 @@ public class ActionUI : MonoBehaviour
             text.text = "Dice value: " + diceSlotUI.GetContainedDice().GetValue() + " With action: " + action.name;
         }
         else {
-            text.text = action.name + " from: " + sourceWeapon.weaponName;
+            text.text = action.name + " from: " + sourceWeapon.itemName;
         }
     }
 

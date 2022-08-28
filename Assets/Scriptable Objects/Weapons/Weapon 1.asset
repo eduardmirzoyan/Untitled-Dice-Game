@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae16fa7e0d81d244c9c0e0c09f28e8ba, type: 3}
   m_Name: Weapon 1
   m_EditorClassIdentifier: 
-  weaponName: Sword
-  description: IDK
+  itemName: Sword 1
+  itemDescription: This is a sword
+  sprite: {fileID: 21300000, guid: 77ce5e02095eec24abd398193b3d2792, type: 3}
   baseDamage: 5
   actions:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
