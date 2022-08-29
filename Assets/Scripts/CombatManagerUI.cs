@@ -24,8 +24,8 @@ public class CombatManagerUI : MonoBehaviour
     [SerializeField] private QueueUI queueUI;
 
     [Header("Actions UI")]
-    [SerializeField] private HorizontalLayoutGroup actionLayoutGroup;
-    [SerializeField] private GameObject actionUIPrefab;
+    [SerializeField] private LayoutGroup actionLayoutGroup;
+    [SerializeField] public GameObject actionUIPrefab;
     [SerializeField] private List<ActionUI> actionUIs;
 
     [Header("Dice UI")]
@@ -82,7 +82,7 @@ public class CombatManagerUI : MonoBehaviour
             Vector3Int worldPos = groundTilemap.WorldToCell(pos);
 
             // For Debugging
-            // print(worldPos);
+            print(worldPos);
 
             // Check to see if this is a selection or target
             if (CombatManager.instance.hasActionBeenChoosen()) {

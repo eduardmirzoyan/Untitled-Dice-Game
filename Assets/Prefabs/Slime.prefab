@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8589032303740902356}
   - component: {fileID: 1300580252033720058}
   - component: {fileID: 5906180130534755352}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 5022865213748004736}
   - component: {fileID: 5022865213748004751}
   - component: {fileID: 5022865213748004750}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5022865214254826153}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Slime
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b1f464ba300b6d46a63c551060ce19a, type: 3}
   m_Name: Highroll Attack
   m_EditorClassIdentifier: 
-  description: 'HIGHROLL: Deal base damage to enemy'
+  description: '<link><color=yellow>HIGHROLL</color></link>: Deal 2x base damage'
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1

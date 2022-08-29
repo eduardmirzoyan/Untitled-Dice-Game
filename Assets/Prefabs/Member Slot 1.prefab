@@ -575,8 +575,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.19999695, y: 0}
-  m_SizeDelta: {x: -3.88, y: -9.46}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -10, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5286157216191603031
 CanvasRenderer:
@@ -606,7 +606,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 44c2884f9af684d4e8ba1485f0b943c1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f035d2d2be9057b42afa0ae90d5071cd, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1416,7 +1416,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fd2a04ea03fa5bd499ee677e454854a0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3cc431b8c47613141b8e96826d5e8055, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1769,7 +1769,7 @@ MonoBehaviour:
   weapon1Transform: {fileID: 5286157217649463670}
   weapon2Transform: {fileID: 5286157217129892657}
   itemPrefab: {fileID: 3742355565742030271, guid: 28d81eabeb0eecc4db9019b7dfa64d23, type: 3}
-  unit: {fileID: 0}
+  unit: {fileID: 11400000, guid: 37d1b6d64a25cbc4b91cf8a7d645d399, type: 2}
   UIchangeTime: 3
 --- !u!1 &5286157217639695569
 GameObject:
@@ -2084,6 +2084,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5286157217787701069}
+  - component: {fileID: 1822620731}
   m_Layer: 5
   m_Name: Speed Stat
   m_TagString: Untagged
@@ -2113,6 +2114,20 @@ RectTransform:
   m_AnchoredPosition: {x: 9, y: 6}
   m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1822620731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5286157217787701068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3834dc058516fd46aed9f64974e8519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  header: Speed
+  description: Influences unit turn order.
 --- !u!1 &5286157217829094055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2670,6 +2685,7 @@ GameObject:
   - component: {fileID: 6131736625760598653}
   - component: {fileID: 6131736625760598648}
   - component: {fileID: 3868797274311372157}
+  - component: {fileID: 327019771}
   m_Layer: 0
   m_Name: Dice UI
   m_TagString: Untagged
@@ -2777,6 +2793,20 @@ SortingGroup:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
+--- !u!114 &327019771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131736625760598655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3834dc058516fd46aed9f64974e8519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  header: Die
+  description: Displays the largest value of the die currently carried by this unit.
 --- !u!1 &6131736625968651113
 GameObject:
   m_ObjectHideFlags: 0

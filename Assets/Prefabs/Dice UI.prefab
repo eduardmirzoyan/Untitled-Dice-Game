@@ -640,7 +640,7 @@ RectTransform:
   m_GameObject: {fileID: 5106957764423059705}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3664377370247550519}
@@ -703,12 +703,11 @@ MonoBehaviour:
   - {fileID: 5106957764752009697}
   - {fileID: 5106957763861489248}
   - {fileID: 5106957762872151041}
-  rollingDuration: 0.5
   origin: {fileID: 0}
   travelRate: 0.1
   spinRate: 3
-  child: {fileID: 3664377370247550519}
-  speed: -5
+  isInteractable: 0
+  isActive: 0
 --- !u!225 &5106957764423059710
 CanvasGroup:
   m_ObjectHideFlags: 0

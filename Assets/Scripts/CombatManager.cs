@@ -5,38 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-// [System.Serializable]
-// public struct Combatant {
-//     public Unit unit;
-//     public int partyIndex;
-//     public Vector3Int worldPosition;
-//     public bool isAllyAllegiance;
-    
-//     // Temp
-//     private HealthbarUI healthbar;
-
-//     public Combatant(Unit unit, int partyIndex, Vector3Int worldPosition, bool isAllyAllegiance) {
-//         this.unit = unit;
-//         this.partyIndex = partyIndex;
-//         this.worldPosition = worldPosition;
-//         this.isAllyAllegiance = isAllyAllegiance;
-//         // this.healthbar = healthbar;
-
-//         // Initialize health
-//         // healthbar.Initialize(unit.maxHealth, unit.currentHealth);
-//     }
-
-//     public void TakeDamage(int amount) {
-//         // Calls unit
-//         unit.TakeDamage(amount);
-
-//         // Spawn damage prefab
-
-//         // Updates health bar UI
-//         healthbar.UpdateHealth(unit.currentHealth);
-//     }
-// }
-
 public class CombatManager : MonoBehaviour
 {
     private enum CombatState { CombatStart, RoundStart, TurnStart, RoundEnd, CombatEnd };

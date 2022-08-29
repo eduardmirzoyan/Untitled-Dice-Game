@@ -2,13 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ActionUI : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] private Text text;
+    [SerializeField] private TextMeshProUGUI actionName;
+    [SerializeField] private TextMeshProUGUI actionDescription;
     [SerializeField] private DiceSlotUI diceSlotUI;
     [SerializeField] private Image borderImage;
+    [SerializeField] private Image sourceImage;
+    [SerializeField] private Image selfTargetIcon;
+    [SerializeField] private Image allyTargetIcon;
+    [SerializeField] private Image enemyTargetIcon;
 
     [Header("Contained Action")]
     [SerializeField] private Action action;
@@ -16,6 +22,20 @@ public class ActionUI : MonoBehaviour
 
     private void Awake() {
         diceSlotUI = GetComponentInChildren<DiceSlotUI>();   
+    }
+
+    public void JustDisplay(Action action) {
+        // Change name and text
+        actionName.text = action.name;
+        actionDescription.text = action.description;
+
+        // Disable source image
+        sourceImage.enabled = false;
+
+        // Toggle icons based on what action can do
+        selfTargetIcon.gameObject.SetActive(action.canTargetAllies);
+        allyTargetIcon.gameObject.SetActive(action.canTargetAllies);
+        enemyTargetIcon.gameObject.SetActive(action.canTargetEnemies);
     }
 
     public void Initialize(Action action, Weapon sourceWeapon) {
@@ -26,12 +46,23 @@ public class ActionUI : MonoBehaviour
 
 
     private void UpdateText() {
-        if (diceSlotUI.ContainsDie()) {
-            text.text = "Dice value: " + diceSlotUI.GetContainedDice().GetValue() + " With action: " + action.name;
+        // Update text
+        actionName.text = action.name;
+        actionDescription.text = action.description;
+
+        // Update source
+        if (sourceWeapon != null) {
+            sourceImage.enabled = true;
+            sourceImage.sprite = sourceWeapon.sprite;
         }
         else {
-            text.text = action.name + " from: " + sourceWeapon.itemName;
+            sourceImage.enabled = false;
         }
+
+        // Toggle icons based on what action can do
+        selfTargetIcon.gameObject.SetActive(action.canTargetAllies);
+        allyTargetIcon.gameObject.SetActive(action.canTargetAllies);
+        enemyTargetIcon.gameObject.SetActive(action.canTargetEnemies);
     }
 
     private void UpdateVisuals() {
@@ -69,8 +100,8 @@ public class ActionUI : MonoBehaviour
     }
 
     public void Update() {
-        UpdateText();
-        UpdateVisuals();
+        //UpdateText();
+        //UpdateVisuals();
     }
 
 }

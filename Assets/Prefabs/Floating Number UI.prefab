@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 1130675113578347391}
   - component: {fileID: -3257336570871767249}
   m_Layer: 0
-  m_Name: Floating Number
+  m_Name: Floating Number UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

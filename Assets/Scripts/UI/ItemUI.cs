@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField] private Item item;
     [SerializeField] private Image itemSprite;
@@ -20,19 +20,18 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        var weapon = (Weapon) item;
-        string actionText = "";
-        foreach (var action in weapon.actions) {
-            actionText += action.name + ": " + action.description + "\n";
-        }
-        TooltipUI.instance.Show(item.name, "Base damage: " + weapon.baseDamage + "\n"
-        + "~~~~~~Actions~~~~~\n"
-        + actionText
-        );
+        Vector3[] corners = new Vector3[4];
+        GetComponent<RectTransform>().GetWorldCorners(corners);
+        ItemDisplayUI.instance.Show(item, corners[3]);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        TooltipUI.instance.Hide();
+        ItemDisplayUI.instance.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        ItemDisplayUI.instance.Lock();
     }
 }

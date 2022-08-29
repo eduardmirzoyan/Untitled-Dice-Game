@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3798527959730341642}
   - component: {fileID: 4175147782836287227}
   - component: {fileID: 3216696710569043860}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &3216696710569043860
 MonoBehaviour:
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 6941026059459500611}
   - component: {fileID: 6941026059459500621}
   - component: {fileID: 6941026059459500610}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6941026059969208784}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Knight
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
