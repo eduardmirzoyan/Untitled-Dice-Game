@@ -4,11 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class PartyMemberUI : MonoBehaviour, IPointerClickHandler
+public class PartyMemberUI : MonoBehaviour
 {
-    [Header("Transforms")]
-    [SerializeField] private RectTransform windowTransform;
-    [SerializeField] private RectTransform HUDTransform;
 
     [Header("Displaying Components")]
     [SerializeField] private Text displayName;
@@ -24,80 +21,10 @@ public class PartyMemberUI : MonoBehaviour, IPointerClickHandler
     
     // Unit name
     [SerializeField] private Unit unit;
-    [SerializeField] private float UIchangeTime = 1f;
-    private Coroutine transitionRoutine;
-    private bool isRasied = false;
-    // Update display name
-
-        // Update icon
-
-        // Update healthbar
-
-        // Update die
-
-        // Update speed stat
-
-        // Update equipped weapons
-
-        // Update equipped armors
 
     public void Initialize(Unit unit) {
         this.unit = unit;
         UpdateVisuals();
-    }
-
-    private void Update() {
-        // Debugging
-        if (Input.GetKeyDown(KeyCode.J)) {
-            Initialize(unit);
-        }
-        
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (RectTransformUtility.RectangleContainsScreenPoint(HUDTransform, Input.mousePosition, Camera.main)) {
-            // Stop any coroutines first
-            if (transitionRoutine != null) StopCoroutine(transitionRoutine);
-
-            // Raise or lower based on current state
-            if (isRasied) {
-                transitionRoutine = StartCoroutine(LowerUI());
-            }
-            else {
-                transitionRoutine = StartCoroutine(RaiseUI());
-            }
-        }
-    }
-
-    private IEnumerator RaiseUI() {
-        isRasied = true;
-
-        float timer = UIchangeTime;
-        while (timer > 0) {
-            // Raise UI over time
-            var newY = Mathf.Lerp(windowTransform.anchoredPosition.y, 350, 1 - timer / UIchangeTime);
-            windowTransform.anchoredPosition = new Vector2(windowTransform.anchoredPosition.x, newY);
-
-            // Decrement time
-            timer -= Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    private IEnumerator LowerUI() {
-        isRasied = false;
-
-        float timer = UIchangeTime;
-        while (timer > 0) {
-            // Raise UI over time
-            var newY = Mathf.Lerp(windowTransform.anchoredPosition.y, -350, 1 - timer / UIchangeTime);
-            windowTransform.anchoredPosition = new Vector2(windowTransform.anchoredPosition.x, newY);
-
-            // Decrement time
-            timer -= Time.deltaTime;
-            yield return null;
-        }
     }
 
     public void UpdateVisuals() {
@@ -134,6 +61,7 @@ public class PartyMemberUI : MonoBehaviour, IPointerClickHandler
         }
 
         // Update equipped armors
+        // TODO
     }
 
 

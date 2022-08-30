@@ -20,7 +20,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Transform currentParent;
-    private Canvas playerScreen;
 
     [SerializeField] private float travelRate = 0.1f;
     [SerializeField] private float spinRate = 3f;
@@ -33,7 +32,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        playerScreen = GameManager.instance.playerScreen;
     }
     
     private void Update() {
@@ -193,7 +191,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             currentParent = rectTransform.parent;
 
             // Remove parent
-            rectTransform.SetParent(playerScreen.transform);
+            rectTransform.SetParent(GameManager.instance.playerScreen.transform);
 
             isBeingDragged = true;
         }
@@ -237,7 +235,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     public void OnPointerClick(PointerEventData eventData) {
         // Return to origin on right click
         if (eventData.button == PointerEventData.InputButton.Right) {
-
             // If it is currently in a dice slot, attempt to remove itself
             if (transform.parent.TryGetComponent(out DiceSlotUI diceSlotUI)) {
                 // Deselect the action

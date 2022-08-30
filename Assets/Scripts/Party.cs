@@ -19,4 +19,9 @@ public class Party : ScriptableObject
     public Unit[] GetMembers() {
         return partyMembers;
     }
+
+    public int Size() {
+        return partyMembers.Length;
+    }
+
 }

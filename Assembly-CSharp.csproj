@@ -41,6 +41,7 @@
      <Compile Include="Assets\Scripts\UI\ActionUI.cs" />
      <Compile Include="Assets\Scripts\Actions\AoEAttack.cs" />
      <Compile Include="Assets\Scripts\CombatManager.cs" />
+     <Compile Include="Assets\Scripts\UI\TooltipTrigger.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Actions\HighrollAttack.cs" />
      <Compile Include="Assets\Scripts\UI\PartyMemberUI.cs" />
@@ -50,10 +51,10 @@
      <Compile Include="Assets\Scripts\Item.cs" />
      <Compile Include="Assets\Scripts\Dice\Dice.cs" />
      <Compile Include="Assets\Scripts\Units\Slime.cs" />
+     <Compile Include="Assets\Scripts\UI\ItemDisplayUI.cs" />
      <Compile Include="Assets\Scripts\UI\ItemUI.cs" />
      <Compile Include="Assets\Scripts\UI\DiceUI.cs" />
      <Compile Include="Assets\Scripts\Party.cs" />
-     <Compile Include="Assets\Scripts\TransitionManager.cs" />
      <Compile Include="Assets\Scripts\FloatingNumberUI.cs" />
      <Compile Include="Assets\Scripts\UI\TooltipUI.cs" />
      <Compile Include="Assets\Scripts\GameEvents.cs" />
@@ -66,9 +67,10 @@
      <Compile Include="Assets\Scripts\CombatManagerUI.cs" />
      <Compile Include="Assets\Scripts\Units\Knight.cs" />
      <Compile Include="Assets\Scripts\UI\DiceSlotUI.cs" />
-     <Compile Include="Assets\OpenHyperlinks.cs" />
-     <Compile Include="Assets\Scripts\UI\ItemDisplayUI.cs" />
-     <Compile Include="Assets\Scripts\UI\TooltipTrigger.cs" />
+     <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
+     <Compile Include="Assets\Scripts\UI\SlidingWindow.cs" />
+     <Compile Include="Assets\HyperlinkTooltipTrigger.cs" />
+     <Compile Include="Assets\Scripts\UI\ItemSlotUI.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

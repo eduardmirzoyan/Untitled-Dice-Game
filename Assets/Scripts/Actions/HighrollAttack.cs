@@ -19,7 +19,7 @@ public class HighrollAttack : Action
             // Deal damage
             foreach (var target in targets) {
                 // Generate damage
-                int damage = (int) (sourceWeapon.baseDamage * damageMulitplier);
+                int damage = finalDamageValue();
                 // Deal damage based on weapon's base damage
                 target.TakeDamage(damage);
                 // target.unit.TakeDamage(dice.GetValue());
@@ -30,5 +30,15 @@ public class HighrollAttack : Action
             Debug.Log("Die was not highroll.");
         }
         
+    }
+
+    public int finalDamageValue() {
+        return (int) (sourceWeapon.baseDamage * damageMulitplier);
+    }
+
+    public override string GetDynamicDescription()
+    {
+        string interactiveDamageValue = "<link=\"" + damageMulitplier + "x weapon Base Damage" + "\"><color=red>" + finalDamageValue() + "</color></link>";
+        return description.Replace("DAMAGE", interactiveDamageValue + " damage");
     }
 }

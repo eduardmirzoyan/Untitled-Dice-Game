@@ -6,6 +6,7 @@ public abstract class Action : ScriptableObject
 {
     [TextArea(10, 20)]
     public string description;
+    public Sprite icon;
     public bool canTargetSelf = false;
     public bool canTargetAllies = false;
     public bool canTargetEnemies = false;
@@ -24,6 +25,9 @@ public abstract class Action : ScriptableObject
     public virtual List<Combatant> getSecondaryTargets() {
         // Returns empty list by default
         return new List<Combatant>();
-        
+    }
+
+    public virtual string GetDynamicDescription() {
+        return description;
     }
 }

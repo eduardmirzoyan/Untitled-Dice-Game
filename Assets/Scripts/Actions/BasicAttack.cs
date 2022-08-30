@@ -15,4 +15,10 @@ public class BasicAttack : Action
             Debug.Log(target.unit.name + " took " + sourceWeapon.baseDamage + " damage.");
         }
     }
+
+    public override string GetDynamicDescription()
+    {
+        string interactiveDamageValue = "<link=\"" + "Weapon base damage" + "\"><color=red>" + sourceWeapon.baseDamage + "</color></link>";
+        return description.Replace("DAMAGE", interactiveDamageValue + " damage");
+    }
 }

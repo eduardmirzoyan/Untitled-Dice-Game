@@ -86,6 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1419560261337740347}
   - component: {fileID: 1535665907292237970}
+  - component: {fileID: -3900327331533539763}
   m_Layer: 5
   m_Name: Item UI
   m_TagString: Untagged
@@ -126,4 +127,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2360b733cd44a14da37310d161acb11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  item: {fileID: 0}
   itemSprite: {fileID: 8491158637988486493}
+  isInteractable: 0
+--- !u!225 &-3900327331533539763
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3742355565742030271}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

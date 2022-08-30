@@ -17,7 +17,9 @@ MonoBehaviour:
   currentHealth: 5
   maxHealth: 5
   dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
-  weapons: []
+  weapons:
+  - {fileID: 0}
+  - {fileID: 0}
   speed: 2
   prefab: {fileID: 6941026059969208785, guid: cd5b4b295f2f78d4e9984d00398c681a, type: 3}
   isNPC: 0

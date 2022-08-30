@@ -7,13 +7,10 @@ using UnityEngine.EventSystems;
 public class DiceSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
       [SerializeField] private DiceUI containedDiceUI;
-
       [SerializeField] private ActionUI actionUI;
-
       [SerializeField] private Image image;
       [SerializeField] private Color defaultColor;
       [SerializeField] private Color highlightColor;
-
       [SerializeField] private bool isActive;
 
       private void Awake() {

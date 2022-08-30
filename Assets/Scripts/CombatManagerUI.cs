@@ -63,10 +63,10 @@ public class CombatManagerUI : MonoBehaviour
             return;
         }
         instance = this;
+
         // Default value for turn
         turnPosition = Vector3Int.back;
         actionUIs = new List<ActionUI>();
-
 
         // Reset world selection
         ResetSelection();
@@ -82,7 +82,7 @@ public class CombatManagerUI : MonoBehaviour
             Vector3Int worldPos = groundTilemap.WorldToCell(pos);
 
             // For Debugging
-            print(worldPos);
+            // print(worldPos);
 
             // Check to see if this is a selection or target
             if (CombatManager.instance.hasActionBeenChoosen()) {
@@ -304,7 +304,7 @@ public class CombatManagerUI : MonoBehaviour
             // Create UI gameobject
                 var actionUI = Instantiate(actionUIPrefab, actionLayoutGroup.transform).GetComponent<ActionUI>();
                 // Initalize it
-                actionUI.Initialize(action, action.sourceWeapon);
+                actionUI.Initialize(action);
                 // Add to list
                 actionUIs.Add(actionUI);
         }

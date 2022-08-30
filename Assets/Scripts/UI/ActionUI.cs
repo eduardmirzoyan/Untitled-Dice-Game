@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Text.RegularExpressions;
 
 public class ActionUI : MonoBehaviour
 {
@@ -18,7 +19,6 @@ public class ActionUI : MonoBehaviour
 
     [Header("Contained Action")]
     [SerializeField] private Action action;
-    [SerializeField] private Weapon sourceWeapon;
 
     private void Awake() {
         diceSlotUI = GetComponentInChildren<DiceSlotUI>();   
@@ -38,22 +38,35 @@ public class ActionUI : MonoBehaviour
         enemyTargetIcon.gameObject.SetActive(action.canTargetEnemies);
     }
 
-    public void Initialize(Action action, Weapon sourceWeapon) {
+    public void Initialize(Action action) {
         this.action = action;
-        this.sourceWeapon = sourceWeapon;
         UpdateText();
+    }
+
+    private string Change(Match m) {
+        // Get 2XB in match for example
+        string input = m.ToString();
+
+        // Gets the 2 from 2XB
+        float multiplier = float.Parse(m.Groups[2].Value);
+
+        // Round down
+        int finalDamageValue = (int) (multiplier * action.sourceWeapon.baseDamage);
+
+        string result = "<link=\"" + "Modifed damage" + " \"><color=red>" + finalDamageValue + "</color></link>";
+        return result;
     }
 
 
     private void UpdateText() {
         // Update text
         actionName.text = action.name;
-        actionDescription.text = action.description;
+        actionDescription.text = action.GetDynamicDescription();
 
         // Update source
-        if (sourceWeapon != null) {
+        if (action.sourceWeapon != null) {
             sourceImage.enabled = true;
-            sourceImage.sprite = sourceWeapon.sprite;
+            sourceImage.sprite = action.sourceWeapon.sprite;
         }
         else {
             sourceImage.enabled = false;
@@ -76,10 +89,6 @@ public class ActionUI : MonoBehaviour
 
     public Action GetAction() {
         return action;
-    }
-
-    public Weapon GetWeapon() {
-        return sourceWeapon;
     }
 
     public bool ContainsDie() {

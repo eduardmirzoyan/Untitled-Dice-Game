@@ -652,7 +652,6 @@ MonoBehaviour:
   allyTargetIcon: {fileID: 4833543686234080079}
   enemyTargetIcon: {fileID: 6623043591203981001}
   action: {fileID: 0}
-  sourceWeapon: {fileID: 0}
 --- !u!1 &3031498034615308514
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,7 +663,7 @@ GameObject:
   - component: {fileID: 2768423844570683808}
   - component: {fileID: 1848797564427923713}
   - component: {fileID: 8565034397523466066}
-  - component: {fileID: 3281838110725901592}
+  - component: {fileID: 2672539432836439796}
   m_Layer: 5
   m_Name: Description
   m_TagString: Untagged
@@ -789,7 +788,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3281838110725901592
+--- !u!114 &2672539432836439796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -798,10 +797,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3031498034615308514}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50c061ec34729544a9aeec46ab76786b, type: 3}
+  m_Script: {fileID: 11500000, guid: 055b93a7d3ea7ea42bf49a1161dde6fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doesColorChangeOnHover: 0
+  doesColorChangeOnHover: 1
   hoverColor: {r: 0.23529412, g: 0.47058824, b: 1, a: 1}
 --- !u!1 &3339230649848991971
 GameObject:
