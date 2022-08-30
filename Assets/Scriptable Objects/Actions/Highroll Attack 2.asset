@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af463153dbb499f49a538aab556af93f, type: 3}
-  m_Name: Basic Attack 2
+  m_Script: {fileID: 11500000, guid: 534f96c80fa2deb43aabe20876983e7b, type: 3}
+  m_Name: Highroll Attack 2
   m_EditorClassIdentifier: 
-  description: "Deal DAMAGE\r\n<link><color=yellow>EVEN</color></link>: Apply <link><color=yellow>BLEED</color></link>
-    equal to base damage\r"
-  icon: {fileID: 21300000, guid: ad3ddb72662d0304d877d4c4610b9a28, type: 3}
+  description: 'HIGHROLL: Deal %% damage then heal self %%'
+  icon: {fileID: 0}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1
@@ -23,3 +22,4 @@ MonoBehaviour:
   cooldownCounter: 0
   uses: 0
   usesCounter: 0
+  baseDamageMultiplier: 1

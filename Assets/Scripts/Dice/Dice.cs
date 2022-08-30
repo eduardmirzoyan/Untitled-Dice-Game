@@ -25,6 +25,15 @@ public class Dice : ScriptableObject
         return value;
     }
 
+    public void Grow() {
+        value = value % maxValue + 1;
+    }
+
+    public void Shrink() {
+        value -= 1;
+        if (value == 0) value = maxValue;
+    }
+
     public int GetExpectedValue() {
         // CS70 coming in clutch
         int result = 0;

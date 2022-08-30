@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
 {
+    // MODULARIZE CLASS!
+
     public static float rollDuration = 0.1f;
 
     [Header("Visuals")]
@@ -33,12 +35,14 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
     }
-    
+    // REMOVE THIS CLASS FOR IMPROVEMENTS!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     private void Update() {
         // For debugging
         if (Input.GetKeyDown(KeyCode.F)) {
             Roll();
         }
+        // For debugging
         if (Input.GetKeyDown(KeyCode.L)) {
             Replenish();
         }
@@ -52,7 +56,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         isActive = true;
 
         // Display the current state of the die
-        DrawVisuals();
+        UpdateVisuals();
     }
 
     public void SetInteractive(bool state) {
@@ -63,16 +67,31 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         if (rollRoutine != null) {
             StopCoroutine(rollRoutine);
         }
-        rollRoutine = StartCoroutine(RollDice(rollDuration));
+        rollRoutine = StartCoroutine(RollVisuals(rollDuration));
     }
 
     public void Replenish() {
         isActive = true;
-        // Update visuals
-        DrawVisuals();
+        UpdateVisuals();
     }
 
-    private void DrawVisuals() {
+    public void Grow() {
+        dice.Grow();
+        UpdateVisuals();
+        
+        // Visual feedback
+        animator.Play("Selected");
+    }
+
+    public void Shrink() {
+        dice.Shrink();
+        UpdateVisuals();
+
+        // Visual feedback
+        animator.Play("Selected");
+    }
+
+    private void UpdateVisuals() {
         // Draw the physical die
         ValueToUI(dice.GetValue());  
 
@@ -89,7 +108,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         return dice;
     }
 
-    private IEnumerator RollDice(float duration) {
+    private IEnumerator RollVisuals(float duration) {
 
         float elapsedTime = 0;
         // Smoothly move to target
@@ -99,7 +118,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             dice.Roll();
 
             // Update visuals
-            DrawVisuals();
+            UpdateVisuals();
 
             elapsedTime += 0.1f;
             yield return new WaitForSeconds(0.1f);
@@ -228,7 +247,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             // Reset position
             transform.localPosition = Vector3.zero;
 
-            DrawVisuals();
+            UpdateVisuals();
         }
     }
 
@@ -257,7 +276,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     public void SetActive(bool active) {
         isActive = active;
         // Update visuals
-        DrawVisuals();
+        UpdateVisuals();
     }
 
     public bool IsActive() {

@@ -19,5 +19,6 @@ MonoBehaviour:
   dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
   weapons: []
   speed: 2
-  prefab: {fileID: 5022865214254826152, guid: 81cddae49021ca44ab347417abeb8a48, type: 3}
+  modelPrefab: {fileID: 5022865214254826152, guid: 81cddae49021ca44ab347417abeb8a48, type: 3}
   isNPC: 1
+  innatePassives: []

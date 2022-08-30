@@ -36,12 +36,8 @@ public class CombatManagerUI : MonoBehaviour
 
     [Header("State Indicator UI")]
     [SerializeField] private StateIndicatorUI stateIndicatorUI;
-
-    [SerializeField] private List<DiceUI> allyDiceUI;
-    [SerializeField] private List<DiceUI> enemyDiceUI;
-
-    [SerializeField] private List<GameObject> allyOutlineUI;
-    [SerializeField] private List<GameObject> enemyOutlineUI;
+    [SerializeField] public List<DiceUI> dieUIs;
+    [SerializeField] private List<GameObject> dieOutlineUIs;
 
     [Header("Healthbar UI")]
     [SerializeField] private GameObject healthbarPrefab;
@@ -67,6 +63,9 @@ public class CombatManagerUI : MonoBehaviour
         // Default value for turn
         turnPosition = Vector3Int.back;
         actionUIs = new List<ActionUI>();
+
+        // Initialize
+        dieUIs = new List<DiceUI>();
 
         // Reset world selection
         ResetSelection();
@@ -156,44 +155,65 @@ public class CombatManagerUI : MonoBehaviour
         print(result);
     }
 
-    public void GenerateOutlineUI(int numAllyDice, int numEnemyDice) {
-        allyOutlineUI = new List<GameObject>();
-        for (int i = 0; i < numAllyDice; i++) {
-            var dieOutline = Instantiate(diceOutlinePrefab, allyDiceGroup.transform);
-            allyOutlineUI.Add(dieOutline);
-        }
+    public void SpawnDiceOutlines(List<Combatant> combatants)
+    {
+        //allyOutlineUI = new List<GameObject>();
+        //enemyOutlineUI = new List<GameObject>();
+        dieOutlineUIs = new List<GameObject>();
 
-        enemyOutlineUI = new List<GameObject>();
-        for (int i = 0; i < numEnemyDice; i++) {
-            var dieOutline = Instantiate(diceOutlinePrefab, enemyDiceGroup.transform);
-            enemyOutlineUI.Add(dieOutline);
+        GameObject dieOutline;
+        Transform groupTransform;
+        foreach (var combatant in combatants) {
+            if (combatant != null) {
+                // Spawn outline in ally zone or enemy zone depending on combatant
+                groupTransform = combatant.isAlly() ? allyDiceGroup.transform : enemyDiceGroup.transform;
+                dieOutline = Instantiate(diceOutlinePrefab, groupTransform);
+                dieOutlineUIs.Add(dieOutline);
+            }
         }
     }
 
-    public void SpawnNewDice(Dice dice, bool isAlly, int index) {
-        if (isAlly) {
-            // Get corresponding outline
-            var dieOutline = allyOutlineUI[index];
+    public void SpawnDie(Combatant combatant) {
+        
+        // Get corresponding outline based on index
+        var dieOutlineUI = dieOutlineUIs[combatant.partyIndex];
+        // Set color based on alligence
+        Color dieColor = combatant.isAlly() ? Color.red : Color.blue;
 
-            // Create the UI
-            var dieUI = Instantiate(dicePrefab, dieOutline.transform).GetComponent<DiceUI>();
-            dieUI.transform.position = dieOutline.transform.position;
-            dieUI.Initialize(dice, Color.red, dieOutline.GetComponent<RectTransform>());
+        // Create the UI
+        var dieUI = Instantiate(dicePrefab, dieOutlineUI.transform).GetComponent<DiceUI>();
+        dieUI.transform.position = dieOutlineUI.transform.position;
+        dieUI.Initialize(combatant.unit.dice, dieColor, dieOutlineUI.GetComponent<RectTransform>());
 
-            // Store
-            allyDiceUI.Add(dieUI);
-        }
-        else {
-            // Get corresponding outline
-            var dieOutline = enemyOutlineUI[index];
+        // Store
+        dieUIs.Add(dieUI);
+    }
 
-            // Create the UI
-            var dieUI = Instantiate(dicePrefab, dieOutline.transform).GetComponent<DiceUI>();
-            dieUI.transform.position = dieOutline.transform.position;
-            dieUI.Initialize(dice, Color.blue, dieOutline.GetComponent<RectTransform>());
+    public void SpawnModels(List<Combatant> combatants)
+    {
+        // Stores the center of the hex to spawn model
+        Vector3 centeredPosition = Vector3.zero;
+        Transform parent = null;
 
-            // Store
-            enemyDiceUI.Add(dieUI);
+        // Loop through all combatants
+        foreach (var combatant in combatants)
+        {
+            // Get center of world position
+            centeredPosition = GetCellCenter(combatant.worldPosition);
+
+            // Set parent based on allegiance
+            parent = combatant.isAlly() ? allyModels : enemyModels;
+
+            // Spawn unit's model prefab and store it's canvas
+            var canvas = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent).GetComponentInChildren<Canvas>();
+
+            // Spawn healthbar
+            var healthbar = Instantiate(healthbarPrefab, canvas.transform).GetComponent<HealthbarUI>();
+
+            // Assign healthbar
+            combatant.AssignHealthbar(healthbar);
+
+            // TODO Spawn animation?
         }
     }
 
@@ -211,7 +231,7 @@ public class CombatManagerUI : MonoBehaviour
             parent = combatant.isAllyAllegiance ? allyModels : enemyModels;
 
             // Spawn unit's model prefab and store it's canvas
-            var canvas = Instantiate(combatant.unit.prefab, centeredPosition, Quaternion.identity, parent).GetComponentInChildren<Canvas>();
+            var canvas = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent).GetComponentInChildren<Canvas>();
         
             // Spawn healthbar
             var healthbar = Instantiate(healthbarPrefab, canvas.transform).GetComponent<HealthbarUI>();
@@ -223,76 +243,36 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    public void RollDice(bool isAlly, int index) {
-        // Check if dice is ally
-        if (isAlly) {
-            // Check if index is in bounds
-            if (index >= 0 && index < allyDiceUI.Count) {
-                // Roll dice
-                allyDiceUI[index].Roll();
-            }
-        }
-        else {
-            // Check if index is in bounds
-            if (index >= 0 && index < enemyDiceUI.Count) {
-                // Roll dice
-                enemyDiceUI[index].Roll();
-            }
+    public void RollDie(int index) {
+        if (dieUIs[index] != null) {
+            dieUIs[index].Roll();
         }
     }
 
     public void EnableAllyDice() {
-        foreach (var diceUI in allyDiceUI) {
+        // Set the first 4 die active
+        for (int i = 0; i < 4; i++) {
             // Enable moving the die
-            diceUI.SetInteractive(true);
+            dieUIs[i].SetInteractive(true);
         }
     }
 
 
     /// Clears all dice and outline UI
-    public void ClearAllDiceUI() {
-        // Clear ally UI
-        for (int i = 0; i < allyDiceUI.Count; i++)
-        {
-            if (allyDiceUI[i] != null) {
+    public void DespawnDice() {
+        // Destroy all the dice and their outlines
+        for (int i = 0; i < dieUIs.Count; i++) {
+            if (dieUIs[i] != null) {
                 // Destroy Dice UI
-                Destroy(allyDiceUI[i].gameObject);     
+                Destroy(dieUIs[i].gameObject);
             }
             // Destroy Ouline
-            Destroy(allyOutlineUI[i].gameObject);
+            Destroy(dieOutlineUIs[i].gameObject);
         }
-        allyDiceUI.Clear();
-        allyOutlineUI.Clear();
 
-        // Clear ally UI
-        for (int i = 0; i < enemyDiceUI.Count; i++)
-        {
-            // Destroy Dice UI
-            Destroy(enemyDiceUI[i].gameObject);
-            // Destroy Ouline
-            Destroy(enemyOutlineUI[i].gameObject);
-        }
-        enemyDiceUI.Clear();
-        enemyOutlineUI.Clear();
-    }
-
-    public void DeleteDiceUI(bool isAlly, int index) {
-        // Check if dice is ally
-        if (isAlly) {
-            // Check if index is in bounds
-            if (index >= 0 && index < allyDiceUI.Count) {
-                // Roll dice
-                Destroy(allyDiceUI[index]);
-                allyDiceUI.Remove(allyDiceUI[index]);
-            }
-        }
-        else {
-            // Check if index is in bounds
-            if (index >= 0 && index < enemyDiceUI.Count) {
-                Destroy(enemyDiceUI[index]);
-                allyDiceUI.Remove(enemyDiceUI[index]);
-            }
-        }
+        // Clear lists
+        dieOutlineUIs.Clear();
+        dieUIs.Clear();
     }
 
     public void DisplayUnitActions(Unit unit) {

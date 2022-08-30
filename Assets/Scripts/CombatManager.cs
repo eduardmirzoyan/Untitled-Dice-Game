@@ -16,8 +16,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private CombatState state;
     [SerializeField] private Party allyParty;
     [SerializeField] private Party enemyParty;
-    [SerializeField] private List<Dice> allyDice; // Remove this as soon as all units have their own dice
-    [SerializeField] private List<Dice> enemyDice; // Remove this as soon as all units have their own dice
     [SerializeField] private Combatant currentCombatant;
     [SerializeField] private Queue<Combatant> turnQueue;
     [SerializeField] private int roundNumber;
@@ -26,12 +24,13 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Vector3Int[] allyPositions;
     [SerializeField] private Vector3Int[] enemyPositions;
 
-    [SerializeField] private List<Combatant> allyCombatants;
-    [SerializeField] private List<Combatant> enemyCombatants;
+    [Header("Combatants")]
+    [SerializeField] private List<Combatant> combatants;
 
+    [Header("Selection")]
     [SerializeField] private Dice selectedDie;
     [SerializeField] private Action selectedAction;
-    [SerializeField] private List<Combatant> selectedTargets;
+    [SerializeField] private Combatant selectedTarget;
 
     private Coroutine coroutine;
 
@@ -44,7 +43,7 @@ public class CombatManager : MonoBehaviour
         instance = this;
         
         // Initialize to null
-        selectedTargets = null;
+        selectedTarget = null;
 
         // Set starting state
         state = CombatState.CombatStart;
@@ -60,7 +59,7 @@ public class CombatManager : MonoBehaviour
                 StopCoroutine(coroutine);
             }
 
-            if (selectedTargets != null) {
+            if (selectedTarget != null) {
                 coroutine = StartCoroutine(ConfirmAction());
             }
             else {
@@ -79,11 +78,7 @@ public class CombatManager : MonoBehaviour
     
     private IEnumerator StartCombat() {
         // Debug Feedback
-        print("Combat Start");
-
-        // Visuals
-        CombatManagerUI.instance.EnterState("Combat Start");
-        yield return new WaitForSeconds(0.5f);
+        print("Combat Start"); 
 
         // Change state
         state = CombatState.RoundStart;
@@ -93,6 +88,13 @@ public class CombatManager : MonoBehaviour
 
         // Set up board
         yield return SetupCombat();
+
+        // Visuals
+        CombatManagerUI.instance.EnterState("Combat Start");
+        yield return new WaitForSeconds(0.5f);
+
+        // Trigger event
+        CombatEvents.instance.TriggerCombatStart(0);
 
         // Start the first round
         yield return StartRound();
@@ -120,7 +122,8 @@ public class CombatManager : MonoBehaviour
         yield return GenerateDiceRolls();
 
         // Activate any "on round-start" passives
-        // TODO
+        // Trigger event
+        CombatEvents.instance.TriggerRoundStart(0);
 
         // Generate turn order as a queue
         GenerateTurnOrder();
@@ -189,10 +192,11 @@ public class CombatManager : MonoBehaviour
         state = CombatState.RoundEnd;
         
         // Clear visuals
-        CombatManagerUI.instance.ClearAllDiceUI();
+        CombatManagerUI.instance.DespawnDice();
 
         // Trigger round end effects
-        // TODO
+        // Trigger event
+        CombatEvents.instance.TriggerRoundEnd(0);
 
         // Start new round
         yield return StartRound();
@@ -205,7 +209,15 @@ public class CombatManager : MonoBehaviour
         // Change state
         state = CombatState.CombatEnd;
 
-        // TODO
+        // Trigger event
+        CombatEvents.instance.TriggerCombatEnd(0);
+
+        // Terminate passives
+        foreach (var combatant in combatants) {
+            foreach (var passive in combatant.unit.GetPassives()) {
+                passive.Terminate();
+            }
+        }
 
         // End, for now
         yield return null;
@@ -215,109 +227,100 @@ public class CombatManager : MonoBehaviour
 
     /// Helper functions ~~~~~~~~~~~~~~~~~~~~~~~~
 
+    /// Give the party members important info regarding current combat
+    private void GenerateCombatants()
+    {
+        // Location of the unit on the battle field
+        Vector3Int worldPosition;
+        combatants = new List<Combatant>();
+
+        // Turn allies into combatants, giving them index 0-3
+        for (int i = 0; i < allyPositions.Length; i++) {
+            if (allyParty[i] != null) {
+                // Assign model's location in this combat
+                worldPosition = allyPositions[i];
+
+                var combatant = ScriptableObject.CreateInstance<Combatant>();
+                combatant.Initialize(allyParty[i], i, worldPosition);
+                combatants.Add(combatant);
+
+                // Initialize passives
+                foreach (var passive in allyParty[i].GetPassives()) {
+                    passive.Initialize(combatant);
+                }
+            }
+            else {
+                // Make sure to add null spot if no combatant exists in that location
+                combatants.Add(null);
+            }
+        }
+
+        // Turn allies into combatants, giving them index 4-7
+        for (int i = 0; i < enemyPositions.Length; i++) {
+            if (enemyParty[i] != null) {
+                // Assign model's location in this combat
+                worldPosition = enemyPositions[i];
+
+                var combatant = ScriptableObject.CreateInstance<Combatant>();
+                // Make sure to offset index by 4 since they are on the enemy team
+                combatant.Initialize(enemyParty[i], i + 4, worldPosition);
+                combatants.Add(combatant);
+
+                // Initialize passives
+                foreach (var passive in enemyParty[i].GetPassives()) {
+                    passive.Initialize(combatant);
+                }
+            }
+            else {
+                // Make sure to add null spot if no combatant exists in that location
+                combatants.Add(null);
+            }
+        }
+    }
+
+    /// Spawn models
     private IEnumerator SetupCombat()
     {
-        // TODO Finish
-
         // Generate combatants for this particular combat
         GenerateCombatants();
 
-        // Spawn ally models onto map
-        CombatManagerUI.instance.SpawnCombatants(allyCombatants);
-
-        // Spawn enemy models onto map
-        CombatManagerUI.instance.SpawnCombatants(enemyCombatants);
+        // Spawn all combatants models onto map
+        CombatManagerUI.instance.SpawnModels(combatants);
 
         yield return null;
     }
 
-    /// Give the party members important info regarding current combat
-    private void GenerateCombatants() {
-
-        // Location of the unit in the battle field
-        Vector3Int worldPosition;
-        
-        // Generate ally combatants
-        allyCombatants = new List<Combatant>();
-        for (int i = 0; i < allyPositions.Length; i++) {
-            if (allyParty[i] != null) {
-                worldPosition = allyPositions[i];
-                var combatant = new Combatant(allyParty[i], i, worldPosition, true);
-                // var combatant = ScriptableObject.CreateInstance<Combatant>();
-                allyCombatants.Add(combatant);
-            }
-        }
-
-        // Generate enemy combatants
-        enemyCombatants = new List<Combatant>();
-        for (int i = 0; i < enemyPositions.Length; i++) {
-            if (enemyParty[i] != null) {
-                worldPosition = enemyPositions[i];
-                var combatant = new Combatant(enemyParty[i], i, worldPosition, false);
-                enemyCombatants.Add(combatant);
-            }
-        }
-    }
-
     private IEnumerator GenerateDiceRolls() {
-        // Empty current dice sets
-        allyDice = new List<Dice>();
-        enemyDice = new List<Dice>();
+        // Spawn die slot outlines
+        CombatManagerUI.instance.SpawnDiceOutlines(combatants);
 
-        // Create outline visuals
-        CombatManagerUI.instance.GenerateOutlineUI(allyCombatants.Count, enemyCombatants.Count);
-
-        // Generate ally dice
-        foreach (var combatant in allyCombatants) {
-            // If unit exists and has a die then add it
-            if (combatant.unit.dice != null) {
-                // Create temp die
-                // TODO: Change this
-                Dice dice = ScriptableObject.CreateInstance<Dice>();
-                allyDice.Add(dice);
-
+        foreach (var combatant in combatants) {
+            if (combatant != null && combatant.unit.dice != null) {
                 // Create UI
-                CombatManagerUI.instance.SpawnNewDice(dice, true, combatant.partyIndex);
+                CombatManagerUI.instance.SpawnDie(combatant);
                 // Roll animation
-                CombatManagerUI.instance.RollDice(true, combatant.partyIndex);
+                CombatManagerUI.instance.RollDie(combatant.partyIndex);
                 // Wait until animation is over
                 yield return new WaitForSeconds(DiceUI.rollDuration + 0.5f);
             }
         }
-
-        // Generate ally dice
-        foreach (var combatant in enemyCombatants) {
-            // If unit exists and has a die then add it
-            if (combatant.unit.dice != null) {
-                // Create temp die
-                // TODO: Change this
-                Dice dice = ScriptableObject.CreateInstance<Dice>();
-                enemyDice.Add(dice);
-
-                // Create UI
-                CombatManagerUI.instance.SpawnNewDice(dice, false, combatant.partyIndex);
-                // Roll animation
-                CombatManagerUI.instance.RollDice(false, combatant.partyIndex);
-                // Wait until animation is over
-                yield return new WaitForSeconds(DiceUI.rollDuration + 0.5f);
-            }
-        }
-
     }
 
     /// Generate turn order queue based on speed values of all combatants
     private void GenerateTurnOrder() {
-        // Get list of all combatants
-        List<Combatant> allCombatants = allyCombatants.Concat<Combatant>(enemyCombatants).ToList<Combatant>();
-        // Randomize list
-        allCombatants.Sort((combatant1, combatant2) => UnityEngine.Random.value.CompareTo(UnityEngine.Random.value));
-        // Sort by speed value
-        allCombatants.Sort((combatant1, combatant2) => combatant2.unit.speed.CompareTo(combatant1.unit.speed));
-        // Turn into queue
-        turnQueue = new Queue<Combatant>(allCombatants);
+        // CAREFUL DESTRUCTIVE!!!
 
+        // Randomize list
+        combatants.Sort((combatant1, combatant2) => UnityEngine.Random.value.CompareTo(UnityEngine.Random.value));
+        // Sort by speed value
+        combatants.Sort((combatant1, combatant2) => combatant2.unit.speed.CompareTo(combatant1.unit.speed));
+        // Turn into queue
+        turnQueue = new Queue<Combatant>(combatants);
         // Visuals
         CombatManagerUI.instance.SetUpTurnQueue(turnQueue);
+
+        // Restore original ordering
+        combatants.Sort((combatant1, combatant2) => combatant1.partyIndex.CompareTo(combatant2.partyIndex));
     }
 
     private IEnumerator EndTurn() {
@@ -365,7 +368,7 @@ public class CombatManager : MonoBehaviour
         }
         else {
             // Clear any targets
-            selectedTargets = null;
+            selectedTarget = null;
 
             // Update visuals
             CombatManagerUI.instance.ClearTargets();
@@ -376,60 +379,35 @@ public class CombatManager : MonoBehaviour
     }
 
     private void SelectDefaultTarget() {
-        // Loop through all possible slots
-        if (selectedAction.canTargetSelf) {
+        // Check self
+        if (selectedAction.canTargetSelf && selectedAction.checkTargetConstraints(currentCombatant)) {
             // Select self
             SelectTarget(currentCombatant);
             return;
         }
-        else if (selectedAction.canTargetEnemies) {
-            foreach (var enemy in enemyCombatants) {
-                bool result = SelectTarget(enemy);
-                // If a valid target has been chosen, then dip
-                if (result)
+
+        foreach (var combatant in combatants) {
+            if (combatant != null && combatant.partyIndex != currentCombatant.partyIndex) {
+                if (selectedAction.canTargetAllies && combatant.isAlly() && selectedAction.checkTargetConstraints(combatant)) {
+                    // Select target
+                    SelectTarget(combatant);
                     return;
+                }
+                else if (selectedAction.canTargetEnemies && !combatant.isAlly() && selectedAction.checkTargetConstraints(combatant)) {
+                    // Select target
+                    SelectTarget(combatant);
+                    return;
+                }
             }
         }
-        else if (selectedAction.canTargetAllies) {
-            foreach (var ally in allyCombatants) {
-                bool result = SelectTarget(ally);
-                // If a valid target has been chosen, then dip
-                if (result)
-                    return;
-            }
-        }
-    }
 
-    public bool isValidTarget(Combatant sourceCombatant, Combatant targetCombatant, Action action) {
-        
-        // If action cannot target allies, and the units are from the same side, then invalid
-        if (!action.canTargetAllies && sourceCombatant.isAllyAllegiance == targetCombatant.isAllyAllegiance) {
-            return false;
-        }
-
-        // If action cannot target enemies, and the units are from different sides, then invalid
-        if (!action.canTargetEnemies && sourceCombatant.isAllyAllegiance != targetCombatant.isAllyAllegiance) {
-            return false;
-        }
-
-        // Should not be able to target self if not allowed
-        if (!action.canTargetSelf && sourceCombatant.isAllyAllegiance == targetCombatant.isAllyAllegiance && sourceCombatant.partyIndex == targetCombatant.partyIndex) {
-            return true;
-        }
-
-        return true;
+        print("NO DEFAULT TARGET WAS ABLE TO BE CHOSEN FOR: " + selectedAction.name);
     }
 
     public Combatant GetCombatantAtPosition(Vector3Int position) {
-        foreach (var ally in allyCombatants) {
-            if (ally.worldPosition == position) {
-                return ally;
-            }
-        }
-
-        foreach (var enemy in enemyCombatants) {
-            if (enemy.worldPosition == position) {
-                return enemy;
+        foreach (var combatant in combatants) {
+            if (combatant.worldPosition == position) {
+                return combatant;
             }
         }
 
@@ -437,39 +415,23 @@ public class CombatManager : MonoBehaviour
         return null;
     }
 
-    public bool SelectTarget(Combatant combatant) {
+    public void SelectTarget(Combatant combatant) {
         // Check if target is valid
         // TODO
 
-        // Clear any current targets if possible
-        if (selectedTargets != null) {
+        // Clear any previous targets if possible
+        if (selectedTarget != null) {
             // Clear visuals
             CombatManagerUI.instance.ClearTargets();
             // Reset list of targets
-            selectedTargets = null;
+            selectedTarget = null;
         }
 
-        // Initialize
-        selectedTargets = new List<Combatant>();
-
-        // If the target is not valid
-        if (!isValidTarget(currentCombatant, combatant, selectedAction)) {
-            return false;
-        }
-
-        selectedTargets.Add(combatant);
-        
-        // If no valid targets were chosen
-        if (selectedTargets.Count == 0) {
-            return false;
-        }
+        // Set new selected target
+        selectedTarget = combatant;
 
         // Update visuals
-        foreach (var target in selectedTargets) {
-            CombatManagerUI.instance.HighlightTarget(target.worldPosition);
-        }
-
-        return true;
+        CombatManagerUI.instance.HighlightTarget(selectedTarget.worldPosition);
     }
 
     private IEnumerator ConfirmAction() {
@@ -478,13 +440,13 @@ public class CombatManager : MonoBehaviour
             throw new Exception("Action has been confirmed without selecting an action");
         }
 
-        if (selectedTargets == null) {
+        if (selectedTarget == null) {
             throw new Exception("Action has been confirmed without selecting any targets");
         }
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        // Perform action on targets
-        selectedAction.Perform(selectedTargets, selectedDie);
+        // Perform selected action on selected target using selected die
+        selectedAction.Perform(selectedTarget.partyIndex, combatants, selectedDie);
 
         // Change state of selected die
         CombatManagerUI.instance.PerformAction(selectedAction);
@@ -495,8 +457,8 @@ public class CombatManager : MonoBehaviour
         // Clear action
         selectedAction = null;
 
-        // Clear targets
-        selectedTargets = null;
+        // Clear target
+        selectedTarget = null;
 
         // Change state?
 

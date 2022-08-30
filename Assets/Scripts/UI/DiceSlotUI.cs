@@ -27,7 +27,7 @@ public class DiceSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
             var action = actionUI.GetAction();
             var dice = diceUI.GetDice();
 
-            if (action.passesContraints(dice)) {
+            if (action.checkDieConstraints(dice)) {
                // Sets a new parent for the dice to snap back to
                diceUI.SetParent(gameObject.transform);
                

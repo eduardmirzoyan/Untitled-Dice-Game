@@ -12,8 +12,9 @@ public abstract class Unit : ScriptableObject
     public Dice dice;
     public Weapon[] weapons;
     public int speed;
-    public GameObject prefab;
+    public GameObject modelPrefab;
     public bool isNPC;
+    public List<Passive> innatePassives;
 
     public List<Action> GetActions() {
         List<Action> result = new List<Action>();
@@ -24,20 +25,33 @@ public abstract class Unit : ScriptableObject
                 result.AddRange(weapon.actions);
         }
         
-        // Get actions from passives
+        // Get innate actions
         // TODO
 
         // Get actions from other sources
         // TODO
 
-        // Get default action, Pass
-        // TODO
 
         return result;
     }
 
-    public void TakeDamage(int value) {
-        currentHealth = Mathf.Max(currentHealth - value, 0);
+    public List<Passive> GetPassives() {
+        // Get innate passives
+
+        // Get passives from equipment
+
+        // Get passives from other sources
+        // TODO
+
+        return innatePassives;
+    }
+
+    public void TakeDamage(int amount) {
+        currentHealth = Mathf.Max(currentHealth - amount, 0);
+    }
+
+    public void Heal(int amount) {
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
     }
 
     public virtual bool IsDead() {

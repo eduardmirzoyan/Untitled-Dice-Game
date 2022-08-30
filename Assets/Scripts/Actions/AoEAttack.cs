@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Actions/AoE Attack")]
-public class AoEAttack : Action
+public class AoEAttack : AttackAction
 {
-    public override void Perform(List<Combatant> targets, Dice dice) {
-        // TODO
+    // TODO ?
+    public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)
+    {
+        throw new System.NotImplementedException();
     }
-
-    // TODO
 }

@@ -62,7 +62,6 @@ public class HyperlinkTooltipTrigger : MonoBehaviour  //IPointerClickHandler
                 return;
             }
                 
-
             // Get the keyword, capitalized
             string keyword = linkInfo.GetLinkText().ToUpper();
             // Get description from dictionary

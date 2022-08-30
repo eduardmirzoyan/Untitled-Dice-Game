@@ -43,30 +43,18 @@ public class ActionUI : MonoBehaviour
         UpdateText();
     }
 
-    private string Change(Match m) {
-        // Get 2XB in match for example
-        string input = m.ToString();
-
-        // Gets the 2 from 2XB
-        float multiplier = float.Parse(m.Groups[2].Value);
-
-        // Round down
-        int finalDamageValue = (int) (multiplier * action.sourceWeapon.baseDamage);
-
-        string result = "<link=\"" + "Modifed damage" + " \"><color=red>" + finalDamageValue + "</color></link>";
-        return result;
-    }
-
-
     private void UpdateText() {
         // Update text
         actionName.text = action.name;
         actionDescription.text = action.GetDynamicDescription();
 
         // Update source
-        if (action.sourceWeapon != null) {
-            sourceImage.enabled = true;
-            sourceImage.sprite = action.sourceWeapon.sprite;
+        if (action is AttackAction) {
+            AttackAction attackAction = (AttackAction) action;
+            if (attackAction.sourceWeapon != null) {
+                sourceImage.enabled = true;
+                sourceImage.sprite = attackAction.sourceWeapon.sprite;
+            }   
         }
         else {
             sourceImage.enabled = false;
