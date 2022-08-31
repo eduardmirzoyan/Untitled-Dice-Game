@@ -14,13 +14,15 @@ public class ItemDisplayUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI flavorText;
     [SerializeField] private TextMeshProUGUI itemDescription;
     [SerializeField] private Image lockImage;
+    [SerializeField] private GameObject actionHolderPrefab;
+    [SerializeField] private LayoutGroup actionsLayoutGroup;
 
     [Header("Adjustments")]
     [SerializeField] private Vector3 offset;
-    [SerializeField] private bool isActive;
+    [SerializeField] private bool isVisible;
     [SerializeField] private bool isLocked;
 
-    private List<ActionUI> actionUIs;
+    private List<ActionHolderUI> actionHolderUIs;
 
     private void Awake() {
         // Singleton logic
@@ -31,7 +33,7 @@ public class ItemDisplayUI : MonoBehaviour
         instance = this;
 
         lockImage.enabled = false;
-        actionUIs = new List<ActionUI>();
+        actionHolderUIs = new List<ActionHolderUI>();
     }
 
     private void Update() {
@@ -44,7 +46,7 @@ public class ItemDisplayUI : MonoBehaviour
 
     public void Lock() {
         // Make sure the display is active
-        if (isActive) {
+        if (isVisible) {
             // Make sure it doesn't go away when you hover out
             isLocked = true;
             lockImage.enabled = true;
@@ -63,23 +65,24 @@ public class ItemDisplayUI : MonoBehaviour
 
         // Update information
         itemName.text = item.itemName;
-        flavorText.text = "Generic flavor text here";
-        itemDescription.text = item.itemDescription;
+        flavorText.text = item.itemDescription;
+        itemDescription.text = "";
 
         // If item is a weapon then display it's actions
         if (item is Weapon) {
             var weapon = (Weapon) item;
-            itemDescription.text = "Base damage: " + weapon.baseDamage;
+            itemDescription.text = "Base Damage: " + weapon.baseDamage;
 
             // Display all the actions
             foreach (var action in weapon.actions) {
-                var ui = Instantiate(CombatManagerUI.instance.actionUIPrefab, window.transform).GetComponent<ActionUI>();
-                ui.JustDisplay(action);
-                actionUIs.Add(ui);
+                // Spawn visuals of actions
+                var actionHolderUI = Instantiate(actionHolderPrefab, actionsLayoutGroup.transform).GetComponent<ActionHolderUI>();
+                actionHolderUI.Initialize(action, false);
+                actionHolderUIs.Add(actionHolderUI);
             }
         }
 
-        isActive = true;
+        isVisible = true;
     }
 
     public void Hide() {
@@ -87,15 +90,15 @@ public class ItemDisplayUI : MonoBehaviour
         if (isLocked) return;
 
         // Destroy all the ui
-        foreach (var ui in actionUIs) {
+        foreach (var ui in actionHolderUIs) {
             Destroy(ui.gameObject);
         }
-        actionUIs.Clear();
+        actionHolderUIs.Clear();
 
         // Then disable window
         window.SetActive(false);
 
-        isActive = false;
+        isVisible = false;
     }
     
 }

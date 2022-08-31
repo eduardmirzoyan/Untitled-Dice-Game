@@ -23,13 +23,7 @@ public abstract class Action : ScriptableObject
         return true;
     }
 
-    // public abstract void Perform(int targetIndex, bool targetIsAlly, List<Combatant> allies, List<Combatant> enemies, Dice dice);
     public abstract void Perform(int targetIndex, List<Combatant> combatants, Dice dice);
-
-    public virtual List<Combatant> getSecondaryTargets() {
-        // Returns empty list by default
-        return new List<Combatant>();
-    }
 
     public virtual string GetDynamicDescription() {
         return description;

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97632bb79c7feae448cb6885acde5a3d, type: 3}
   m_Name: Even Attack 1
   m_EditorClassIdentifier: 
-  description: 'Odd: Deal ##'
+  description: '<link><color=yellow>ODD</link></color>: Deal ##'
   icon: {fileID: 0}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1
-  sourceWeapon: {fileID: 0}
   cooldown: 0
   cooldownCounter: 0
   uses: 0
   usesCounter: 0
   baseDamageMultiplier: 1.5
+  sourceWeapon: {fileID: 0}

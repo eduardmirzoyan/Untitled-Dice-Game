@@ -58,20 +58,20 @@ public class Dice : ScriptableObject
         return maxValue - value + 1;
     }
 
-    public bool isHighroll() {
+    public bool IsHighroll() {
         return value == maxValue;
     }
 
-    public bool isLowroll() {
+    public bool IsLowroll() {
         return value == 1;
     }
 
-    public bool isEven() {
+    public bool IsEven() {
         return value % 2 == 0;
     }
 
-    public bool isOdd() {
-        return !isEven();
+    public bool IsOdd() {
+        return !IsEven();
     }
 
 }

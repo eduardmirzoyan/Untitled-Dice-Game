@@ -11,7 +11,7 @@ public class LowrollAttack3 : AttackAction
         combatants[targetIndex].TakeDamage(FinalDamageValue());
 
         // Do it again
-        if (dice.isLowroll()) {
+        if (dice.IsLowroll()) {
             combatants[targetIndex].TakeDamage(FinalDamageValue());
         }
     }

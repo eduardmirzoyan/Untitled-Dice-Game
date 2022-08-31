@@ -8,12 +8,12 @@ public class LowrollAttack1 : AttackAction
 {
     public override bool checkDieConstraints(Dice dice)
     {
-        return dice.isLowroll();
+        return dice.IsLowroll();
     }
 
     public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)
     {
-        if (dice.isLowroll())
+        if (dice.IsLowroll())
         {
             // Deal damage
             combatants[targetIndex].TakeDamage(FinalDamageValue());

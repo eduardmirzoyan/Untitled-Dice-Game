@@ -8,7 +8,7 @@ public class EvenAttack1 : AttackAction
 {
     public override bool checkDieConstraints(Dice dice)
     {
-        return dice.isEven();
+        return dice.IsEven();
     }
 
     public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)

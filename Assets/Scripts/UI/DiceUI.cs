@@ -63,6 +63,11 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         isInteractable = state;
     }
 
+    public void SetActive(bool state) {
+        isActive = state;
+        UpdateVisuals();
+    }
+
     public void Roll() {
         if (rollRoutine != null) {
             StopCoroutine(rollRoutine);
@@ -80,7 +85,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         UpdateVisuals();
         
         // Visual feedback
-        animator.Play("Selected");
+        animator.Play("Selected"); // MAKE THIS GREEN
     }
 
     public void Shrink() {
@@ -88,23 +93,18 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         UpdateVisuals();
 
         // Visual feedback
-        animator.Play("Selected");
+        animator.Play("Selected"); // MAKE THIS RED
     }
 
     private void UpdateVisuals() {
         // Draw the physical die
-        ValueToUI(dice.GetValue());  
+        ValueToUI(dice.GetValue());
 
         // Update transparancy depending if die is active
-        if (isActive) {
-            canvasGroup.alpha = 1f;
-        }
-        else {
-            canvasGroup.alpha = 0.5f;
-        }
+        canvasGroup.alpha = isActive ? 1f : 0.5f;
     }
 
-    public Dice GetDice() {
+    public Dice GetDie() {
         return dice;
     }
 
@@ -124,6 +124,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             yield return new WaitForSeconds(0.1f);
         }
 
+        // Visual feedback
         animator.Play("Selected");
     }
 
@@ -255,9 +256,10 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         // Return to origin on right click
         if (eventData.button == PointerEventData.InputButton.Right) {
             // If it is currently in a dice slot, attempt to remove itself
-            if (transform.parent.TryGetComponent(out DiceSlotUI diceSlotUI)) {
+            if (transform.parent.TryGetComponent(out ActionHolderUI actionHolderUI)) {
                 // Deselect the action
-                CombatManager.instance.SelectAction(null, null);
+                // CombatManager.instance.SelectAction(null, null);
+                CombatEvents.instance.TriggerDieInsert(null, null);
             }
         }
     }
@@ -271,16 +273,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     public void SetParent(Transform transform) {
         currentParent = transform;
-    }
-
-    public void SetActive(bool active) {
-        isActive = active;
-        // Update visuals
-        UpdateVisuals();
-    }
-
-    public bool IsActive() {
-        return isActive;
     }
 
     public void DisplayValue(int value) {

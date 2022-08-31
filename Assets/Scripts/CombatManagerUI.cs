@@ -25,8 +25,8 @@ public class CombatManagerUI : MonoBehaviour
 
     [Header("Actions UI")]
     [SerializeField] private LayoutGroup actionLayoutGroup;
-    [SerializeField] public GameObject actionUIPrefab;
-    [SerializeField] private List<ActionUI> actionUIs;
+    [SerializeField] private GameObject actionHolderPrefab;
+    [SerializeField] private List<ActionHolderUI> actionHolders;
 
     [Header("Dice UI")]
     [SerializeField] private HorizontalLayoutGroup allyDiceGroup;
@@ -62,7 +62,6 @@ public class CombatManagerUI : MonoBehaviour
 
         // Default value for turn
         turnPosition = Vector3Int.back;
-        actionUIs = new List<ActionUI>();
 
         // Initialize
         dieUIs = new List<DiceUI>();
@@ -217,32 +216,6 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    public void SpawnCombatants(List<Combatant> combatants) {
-        // Stores the center of the hex to spawn model
-        Vector3 centeredPosition = Vector3.zero;
-        Transform parent = null;
-
-        // Loop through all combatants
-        foreach (var combatant in combatants) {
-            // Get center of world position
-            centeredPosition = GetCellCenter(combatant.worldPosition);
-
-            // Set parent based on allegiance
-            parent = combatant.isAllyAllegiance ? allyModels : enemyModels;
-
-            // Spawn unit's model prefab and store it's canvas
-            var canvas = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent).GetComponentInChildren<Canvas>();
-        
-            // Spawn healthbar
-            var healthbar = Instantiate(healthbarPrefab, canvas.transform).GetComponent<HealthbarUI>();
-
-            // Assign healthbar
-            combatant.AssignHealthbar(healthbar);
-
-            // TODO Spawn animation?
-        }
-    }
-
     public void RollDie(int index) {
         if (dieUIs[index] != null) {
             dieUIs[index].Roll();
@@ -275,31 +248,33 @@ public class CombatManagerUI : MonoBehaviour
         dieUIs.Clear();
     }
 
-    public void DisplayUnitActions(Unit unit) {
-        // Clear any existing actions if exists
-        ClearUnitActions();
+    public void DisplayActions(Unit unit) {
+        // Make new list
+        actionHolders = new List<ActionHolderUI>();
 
         // Get all weapons equipped to the unit
         foreach (var action in unit.GetActions()) {
             // Create UI gameobject
-                var actionUI = Instantiate(actionUIPrefab, actionLayoutGroup.transform).GetComponent<ActionUI>();
-                // Initalize it
-                actionUI.Initialize(action);
-                // Add to list
-                actionUIs.Add(actionUI);
+            var actionHolder = Instantiate(actionHolderPrefab, actionLayoutGroup.transform).GetComponent<ActionHolderUI>();
+            // Initalize it
+            actionHolder.Initialize(action);
+            // Add to list
+            actionHolders.Add(actionHolder);
         }
     }
 
-    public void ClearUnitActions() {
+    public void ClearActions() {
         // If there is no UI displaying, do nothing
-        if (actionUIs.Count == 0) 
+        if (actionHolders.Count == 0) 
             return;
         
-        foreach (var actionUI in actionUIs) {
+        // Delete each holder
+        foreach (var actionHolder in actionHolders) {
             // Destroy gameobject
-            Destroy(actionUI.gameObject);
+            Destroy(actionHolder.gameObject);
         }
-        actionUIs.Clear();
+        // Clear list
+        actionHolders.Clear();
     }
 
     public void PopFromTurnQueue() {
@@ -323,30 +298,6 @@ public class CombatManagerUI : MonoBehaviour
         // Turn hex color to red
         foreach (var position in targetIndicatorTilemap.cellBounds.allPositionsWithin) {
             targetIndicatorTilemap.SetTile(position, null);
-        }
-    }
-
-    public void DeSelectOtherActions(Action action) {
-        
-        // Unselect all other actions
-        for (int i = 0; i < actionUIs.Count; i++) {
-            var actionUI = actionUIs[i];
-            
-            // Attempt to un-select every action
-            if (actionUI.GetAction() != action && actionUI.ContainsDie()) {
-                actionUI.DeSelect();
-            }
-        }
-    }
-
-    public void PerformAction(Action action) {
-        foreach (var actionUI in actionUIs) {
-            if (actionUI.ContainsDie()) {
-                if (actionUI.GetAction() == action) {
-                    actionUI.DeactivateDie();
-                }
-                actionUI.DeSelect();
-            }
         }
     }
 

@@ -24,8 +24,8 @@ public class DiceSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
          if (eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI) && containedDiceUI == null) {
             
             // Check for any constraints
-            var action = actionUI.GetAction();
-            var dice = diceUI.GetDice();
+            Action action = null;                     // THIS IS GOING TO CAUSE PROBLEMS!!
+            var dice = diceUI.GetDie();
 
             if (action.checkDieConstraints(dice)) {
                // Sets a new parent for the dice to snap back to
@@ -39,9 +39,6 @@ public class DiceSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
                // Select this
                CombatManager.instance.SelectAction(action, dice);
-               
-               // Update visuals
-               actionUI.Update();
             }
             else {
                print("Dice does not pass contraints of selected action");
@@ -64,10 +61,6 @@ public class DiceSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
             if (eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI)) {
                image.color = defaultColor;
             }
-      }
-
-      public Dice GetContainedDice() {
-         return containedDiceUI.GetDice();
       }
 
       public DiceUI GetDiceUI() {

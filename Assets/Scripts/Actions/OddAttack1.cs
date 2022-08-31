@@ -8,7 +8,7 @@ public class OddAttack1 : AttackAction
 {
     public override bool checkDieConstraints(Dice dice)
     {
-        return dice.isOdd();
+        return dice.IsOdd();
     }
 
     public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)

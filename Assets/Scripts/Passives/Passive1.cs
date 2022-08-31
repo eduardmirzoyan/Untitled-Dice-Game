@@ -19,7 +19,7 @@ public class Passive1 : Passive
         CombatEvents.instance.onRoundStart += GrowSmallestDie;
     }
 
-    private void GrowSmallestDie(int value)
+    private void GrowSmallestDie(ActionInfo info)
     {
         Debug.Log("Passive 1 trigger!");
 
@@ -30,7 +30,7 @@ public class Passive1 : Passive
         DiceUI smallestUI = null;
         for (int i = range.Item1; i < range.Item2; i++)
         {
-            if (smallestUI == null || CombatManagerUI.instance.dieUIs[i].GetDice().GetValue() < smallestUI.GetDice().GetValue()) {
+            if (smallestUI == null || CombatManagerUI.instance.dieUIs[i].GetDie().GetValue() < smallestUI.GetDie().GetValue()) {
                 smallestUI = CombatManagerUI.instance.dieUIs[i];
             }
         }
@@ -42,5 +42,8 @@ public class Passive1 : Passive
         else {
             throw new System.Exception("SMALLEST UI NOT FOUND?!");
         }
+
+        // Update info to choose how long to wait
+        info.waitTime = 0.5f;
     }
 }

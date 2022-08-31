@@ -13,8 +13,8 @@ public abstract class Unit : ScriptableObject
     public Weapon[] weapons;
     public int speed;
     public GameObject modelPrefab;
-    public bool isNPC;
     public List<Passive> innatePassives;
+    public SlimeAI ai;
 
     public List<Action> GetActions() {
         List<Action> result = new List<Action>();
@@ -30,7 +30,6 @@ public abstract class Unit : ScriptableObject
 
         // Get actions from other sources
         // TODO
-
 
         return result;
     }

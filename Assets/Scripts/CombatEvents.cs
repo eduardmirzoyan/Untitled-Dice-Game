@@ -3,6 +3,19 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+public class ActionInfo 
+{
+    public float waitTime;
+
+    public ActionInfo(float value) {
+        this.waitTime = value;
+    }
+
+    public ActionInfo() {
+        this.waitTime = 0f;
+    }
+}
+
 public class CombatEvents : MonoBehaviour
 {
     public static CombatEvents instance;
@@ -18,59 +31,139 @@ public class CombatEvents : MonoBehaviour
         instance = this;
     }
 
-    public Action<int> onCombatStart;
-    public Action<int> onRoundStart;
-    public Action<Combatant> onTurnStart;
-    public Action<int> onRoundEnd;
-    public Action<int> onCombatEnd;
+    public event Action<ActionInfo> onCombatStart;
+    public event Action<ActionInfo> onRoundStart;
+    public event Action<ActionInfo, Combatant> onTurnStart; // Update
+    public event Action<ActionInfo> onRoundEnd;
+    public event Action<ActionInfo> onCombatEnd;
+    public event Action<ActionInfo> onReroll;
+    public event Action<Action, Dice> onDieInsert;
+    public event Action<Action> onActionConfirm;
 
-    public Action<int> onReroll;
+    public void TriggerDieInsert(Action action, Dice dice) {
+        if (onDieInsert != null) {
+            onDieInsert(action, dice);
+        }
+    }
 
-    public void TriggerCombatStart(int value)
+    public void TriggerActionConfirm(Action action) {
+        if (onActionConfirm != null) {
+            onActionConfirm(action);
+        }
+    }
+
+    // Turn state events
+    public IEnumerator TriggerCombatStart(ActionInfo info)
     {
+        // Wait for some time first
+        yield return new WaitForSeconds(info.waitTime);
+
+        // If there are any subscribers
         if (onCombatStart != null)
         {
-            onCombatStart(value);
+            // Invoke all the subscribers
+            foreach (var invocation in onCombatStart.GetInvocationList())
+            {
+                // Call invokation and update info values
+                invocation.DynamicInvoke(info);
+                // Wait an amount of time
+                yield return new WaitForSeconds(info.waitTime);
+            }
         }
     }
 
-    public void TriggerRoundStart(int value)
+
+    public IEnumerator TriggerRoundStart(ActionInfo info)
     {
+        // Wait for some time first
+        yield return new WaitForSeconds(info.waitTime);
+
+        // If there are any subscribers
         if (onRoundStart != null)
         {
-            onRoundStart(value);
+            // Invoke all the subscribers
+            foreach (var invocation in onRoundStart.GetInvocationList()) {
+                // Call invokation and update info values
+                invocation.DynamicInvoke(info);
+                // Wait an amount of time
+                yield return new WaitForSeconds(info.waitTime);
+            }
         }
     }
 
-    public void TriggerTurnStart(Combatant combatant) 
+    public IEnumerator TriggerTurnStart(ActionInfo info, Combatant combatant) 
     {
-        if (onTurnStart != null) 
+        // Wait for some time first
+        yield return new WaitForSeconds(info.waitTime);
+
+        // If there are any subscribers
+        if (onTurnStart != null)
         {
-            onTurnStart(combatant);
+            // Invoke all the subscribers
+            foreach (var invocation in onTurnStart.GetInvocationList())
+            {
+                // Call invokation and update info values
+                invocation.DynamicInvoke(info, combatant);
+                // Wait an amount of time
+                yield return new WaitForSeconds(info.waitTime);
+            }
         }
     }
 
-    public void TriggerRoundEnd(int value)
+    public IEnumerator TriggerRoundEnd(ActionInfo info)
     {
+        // Wait for some time first
+        yield return new WaitForSeconds(info.waitTime);
+
+        // If there are any subscribers
         if (onRoundEnd != null)
         {
-            onRoundEnd(value);
+            // Invoke all the subscribers
+            foreach (var invocation in onRoundEnd.GetInvocationList())
+            {
+                // Call invokation and update info values
+                invocation.DynamicInvoke(info);
+                // Wait an amount of time
+                yield return new WaitForSeconds(info.waitTime);
+            }
         }
     }
 
-    public void TriggerCombatEnd(int value)
+    public IEnumerator TriggerCombatEnd(ActionInfo info)
     {
+        // Wait for some time first
+        yield return new WaitForSeconds(info.waitTime);
+
+        // If there are any subscribers
         if (onCombatEnd != null)
         {
-            onCombatEnd(value);
+            // Invoke all the subscribers
+            foreach (var invocation in onCombatEnd.GetInvocationList())
+            {
+                // Call invokation and update info values
+                invocation.DynamicInvoke(info);
+                // Wait an amount of time
+                yield return new WaitForSeconds(info.waitTime);
+            }
         }
     }
 
-    public void TriggerReroll(int value) 
+    public IEnumerator TriggerReroll(ActionInfo info)
     {
+        // Wait for some time first
+        yield return new WaitForSeconds(info.waitTime);
+
+        // If there are any subscribers
         if (onReroll != null)
         {
-            onReroll(value);
+            // Invoke all the subscribers
+            foreach (var invocation in onReroll.GetInvocationList())
+            {
+                // Call invokation and update info values
+                invocation.DynamicInvoke(info);
+                // Wait an amount of time
+                yield return new WaitForSeconds(info.waitTime);
+            }
         }
     }
 

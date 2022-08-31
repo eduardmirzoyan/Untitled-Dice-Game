@@ -16,9 +16,9 @@ MonoBehaviour:
   icon: {fileID: 1579739818, guid: 90c0630c81187e14f80d4956326c961a, type: 3}
   currentHealth: 3
   maxHealth: 3
-  dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
+  dice: {fileID: 11400000, guid: e21ebfb5f3c6c624aa3a9a3f91d50a72, type: 2}
   weapons: []
   speed: 1
   modelPrefab: {fileID: 5022865214254826152, guid: 81cddae49021ca44ab347417abeb8a48, type: 3}
-  isNPC: 0
   innatePassives: []
+  ai: {fileID: 11400000, guid: 04ae4891a8290b64e92dda6826309a8c, type: 2}
