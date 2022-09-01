@@ -5,31 +5,25 @@ using UnityEngine;
 public class Combatant : ScriptableObject
 {
     public Unit unit;
-    public int partyIndex;
+    public int index;
     public Vector3Int worldPosition;
-    public bool isAllyAllegiance;
+    public DicePool dicePool;
     
-    public HealthbarUI healthbar;
+    public HealthbarUI healthbar; // Change this to event based
 
-    public Combatant(Unit unit, int partyIndex, Vector3Int worldPosition, bool isAllyAllegiance) {
+    public void Initialize(Unit unit, DicePool dicePool, int index, Vector3Int worldPosition) {
         this.unit = unit;
-        this.partyIndex = partyIndex;
+        this.dicePool = dicePool;
         this.worldPosition = worldPosition;
-        this.isAllyAllegiance = isAllyAllegiance;
-    }
-
-    public void Initialize(Unit unit, int index, Vector3Int worldPosition) {
-        this.unit = unit;
-        this.worldPosition = worldPosition;
-        this.partyIndex = index;
+        this.index = index;
     }
 
     public bool isAlly() {
-        return partyIndex < 4;
+        return index < 4;
     }
 
     public int GetLocalIndex() {
-        return partyIndex % 4;
+        return index % 4;
     }
 
     public void AssignHealthbar(HealthbarUI healthbar) {
@@ -51,6 +45,14 @@ public class Combatant : ScriptableObject
 
         // Updates health bar UI
         healthbar.UpdateHealth(unit.currentHealth);
+
+        // Trigger approperiate event
+        if (unit.IsDead()) {
+            CombatEvents.instance.TriggerOnDie(this);
+        }   
+        else {
+            CombatEvents.instance.TriggerOnTakeDamage(this);
+        }
     }
 
     public void Heal(int amount) {

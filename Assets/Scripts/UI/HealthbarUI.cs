@@ -8,7 +8,6 @@ public class HealthbarUI : MonoBehaviour
     [SerializeField] public Slider slider;
 
     // Stores entity its tracking
-
     private void Awake()
     {
         slider = GetComponent<Slider>();

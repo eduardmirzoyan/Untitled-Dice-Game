@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7345522cff55bf348b5f981fdd5d6e26, type: 3}
+  m_Name: Armor 1
+  m_EditorClassIdentifier: 
+  name: Armor!
+  description: This is basic armor
+  sprite: {fileID: 540338769, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  passives:
+  - {fileID: 11400000, guid: 2655abc57572d074cbbd3bdbfd4dcf72, type: 2}

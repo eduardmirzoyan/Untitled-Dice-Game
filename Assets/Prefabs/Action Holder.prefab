@@ -206,13 +206,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43b5d33d848869945995b323ad06105c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionIcon: {fileID: 5915709136074221095}
-  action: {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
-  highlightAlpha: 0.5
+  icon: {fileID: 5915709136074221095}
   containedDiceUI: {fileID: 0}
+  actionInspectUI: {fileID: 5504897299527612531}
+  action: {fileID: 0}
+  passive: {fileID: 0}
+  highlightAlpha: 0.5
   isFunctional: 0
-  actionInspectUI: {fileID: 0}
-  actionUIPrefab: {fileID: 2575155993055371478, guid: 6153261e1963fd6469376239f79330ef, type: 3}
 --- !u!114 &5504897299527612531
 MonoBehaviour:
   m_ObjectHideFlags: 0

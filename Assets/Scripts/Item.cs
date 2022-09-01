@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class Item : ScriptableObject
 {
-    public string itemName;
+    public new string name;
     [TextArea(10, 20)]
-    public string itemDescription;
+    public string description;
     public Sprite sprite;
 }

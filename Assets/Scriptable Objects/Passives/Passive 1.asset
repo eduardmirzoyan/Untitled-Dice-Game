@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a296031b7aa1ae47a81f0624ff344a1, type: 3}
   m_Name: Passive 1
   m_EditorClassIdentifier: 
-  name: Highroll?
-  description: 
-  possessor: {fileID: 0}
+  name: Highroll Passive
+  description: does shit
+  icon: {fileID: 21300000, guid: c76c279909b2d42499ed173495b7afa2, type: 3}
+  combatant: {fileID: 0}

@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Fast Slime
   icon: {fileID: -1676362213, guid: 90c0630c81187e14f80d4956326c961a, type: 3}
-  currentHealth: 15
+  currentHealth: 0
   maxHealth: 30
   dice: {fileID: 11400000, guid: 5ec1bb32c4d39f04299f0244e1fd40d5, type: 2}
   weapons:
   - {fileID: 11400000, guid: 4f547578ff1dbf647b4932e94e779897, type: 2}
+  armors: []
   speed: 4
   modelPrefab: {fileID: 5022865214254826152, guid: 81cddae49021ca44ab347417abeb8a48, type: 3}
+  maskPrefab: {fileID: 5102376380853684863, guid: 1fd411f4f65d8f8499c272f8b4fdd248, type: 3}
   innatePassives: []
   ai: {fileID: 11400000, guid: 04ae4891a8290b64e92dda6826309a8c, type: 2}

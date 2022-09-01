@@ -10,11 +10,12 @@ public class ActionUI : MonoBehaviour
     [SerializeField] private RectTransform window;
     [SerializeField] private TextMeshProUGUI actionName;
     [SerializeField] private TextMeshProUGUI actionDescription;
-    [SerializeField] private Image actionIcon;
+    [SerializeField] private Image icon;
     [SerializeField] private Image sourceImage;
     [SerializeField] private Image selfTargetIcon;
     [SerializeField] private Image allyTargetIcon;
     [SerializeField] private Image enemyTargetIcon;
+    [SerializeField] private Image passiveIcon;
     [SerializeField] private Image lockIcon;
 
     public void Initialize(Action action, bool showIcon = true) {
@@ -41,12 +42,45 @@ public class ActionUI : MonoBehaviour
         selfTargetIcon.gameObject.SetActive(action.canTargetAllies);
         allyTargetIcon.gameObject.SetActive(action.canTargetAllies);
         enemyTargetIcon.gameObject.SetActive(action.canTargetEnemies);
+        passiveIcon.gameObject.SetActive(false);
 
         // Update the icon of the action
-        actionIcon.sprite = action.icon;
+        icon.sprite = action.icon;
         if (!showIcon)
-            actionIcon.transform.parent.gameObject.SetActive(false);
+            icon.transform.parent.gameObject.SetActive(false);
         
+        // Default state is unlocked
+        SetLocked(false);
+    }
+
+    public void Initialize(Passive passive) {
+        // Move to center
+        window.anchoredPosition = new Vector3(0, window.rect.size.y / 2);
+
+        // Update text
+        actionName.text = passive.name;
+        actionDescription.text = passive.GetDynamicDescription();
+
+        // Update source
+        if (passive.sourceArmor != null) {
+            sourceImage.sprite = passive.sourceArmor.sprite;
+            sourceImage.enabled = true;
+        }
+        else {
+            sourceImage.enabled = false;
+        }
+
+        // Toggle icons based on what action can do
+        selfTargetIcon.gameObject.SetActive(false);
+        allyTargetIcon.gameObject.SetActive(false);
+        enemyTargetIcon.gameObject.SetActive(false);
+        passiveIcon.gameObject.SetActive(true);
+
+        // Update the icon of the action
+        icon.sprite = passive.icon;
+        //if (!showIcon)
+            //icon.transform.parent.gameObject.SetActive(false);
+
         // Default state is unlocked
         SetLocked(false);
     }

@@ -12,43 +12,69 @@ public class SlidingWindow : MonoBehaviour, IPointerClickHandler
     [SerializeField] private RectTransform lowerRect;
 
     [Header("Settings")]
+    [SerializeField] private bool isInteractable = true;
     [SerializeField] private float transitionTime = 3f;
     [SerializeField] private float raisedHeight;
     [SerializeField] private float loweredHeight;
+
+    [Header("State")]
+    [SerializeField] private bool isRasied = false;
     private Coroutine transitionRoutine;
-    private bool isRasied = false;
 
     public void OnPointerClick(PointerEventData eventData)
     {
         // Check if left click and on toggle rect
-        if (eventData.button == PointerEventData.InputButton.Left 
+        if (isInteractable && eventData.button == PointerEventData.InputButton.Left 
             && RectTransformUtility.RectangleContainsScreenPoint(toggleRaiseRect, Input.mousePosition, Camera.main)) {
-            // Stop any coroutines first
-            if (transitionRoutine != null) StopCoroutine(transitionRoutine);
-
-            // Raise or lower based on current state
-            if (isRasied) {
-                transitionRoutine = StartCoroutine(LowerUI());
-            }
-            else {
-                transitionRoutine = StartCoroutine(RaiseUI());
-            }
+            // Toggle state
+            Toggle();
         }
 
         // if you ever right click window, attempt to lower
-        if (eventData.button == PointerEventData.InputButton.Right
+        if (isInteractable && eventData.button == PointerEventData.InputButton.Right
             && RectTransformUtility.RectangleContainsScreenPoint(lowerRect, Input.mousePosition, Camera.main)) {
-    
-            // Lower if possible
-            if (isRasied) {
-                // Stop any coroutines first
-                if (transitionRoutine != null) StopCoroutine(transitionRoutine);
-
-                // Lower
-                transitionRoutine = StartCoroutine(LowerUI());
-            }
+            // Attempt to lower
+            Lower();
         }
+    }
 
+    public void Toggle() {
+        // Stop any coroutines first
+        if (transitionRoutine != null) StopCoroutine(transitionRoutine);
+
+        // Raise or lower based on current state
+        if (isRasied)
+        {
+            transitionRoutine = StartCoroutine(LowerUI());
+        }
+        else
+        {
+            transitionRoutine = StartCoroutine(RaiseUI());
+        }
+    }
+
+    public void Raise() {
+        // Raise if possible
+        if (!isRasied)
+        {
+            // Stop any coroutines first
+            if (transitionRoutine != null) StopCoroutine(transitionRoutine);
+
+            // Raise
+            transitionRoutine = StartCoroutine(RaiseUI());
+        }
+    }
+
+    public void Lower() {
+        // Lower if possible
+        if (isRasied)
+        {
+            // Stop any coroutines first
+            if (transitionRoutine != null) StopCoroutine(transitionRoutine);
+
+            // Lower
+            transitionRoutine = StartCoroutine(LowerUI());
+        }
     }
 
     private IEnumerator RaiseUI() {

@@ -48,23 +48,19 @@ public class CombatManager : MonoBehaviour
         // Set starting state
         state = CombatState.CombatStart;
 
+        // TEMP ~~~~~~~~~~~~~~~~~~~~~
+        allyParty.FormPool();
+        // enemyParty.FormPoll();
+        // TEMP ~~~~~~~~~~~~~~~~~~~~~
+
         // Start combat
         coroutine = StartCoroutine(StartCombat());
     }
 
     private void Update() {
         // Temp confirm action
-        if (Input.GetKeyDown(KeyCode.Return) && state == CombatState.TurnStart) {
-            if (coroutine != null) {
-                StopCoroutine(coroutine);
-            }
-
-            if (selectedTarget != null) {
-                coroutine = StartCoroutine(ConfirmAction());
-            }
-            else {
-                coroutine = StartCoroutine(EndTurn());
-            }
+        if (Input.GetKeyDown(KeyCode.Space) && state == CombatState.TurnStart) {
+            Confirm();
         }
     }
 
@@ -111,7 +107,7 @@ public class CombatManager : MonoBehaviour
         roundNumber++;
 
         // Update visuals
-        CombatManagerUI.instance.SetUpRound(roundNumber);
+        // CombatManagerUI.instance.SetUpRound(roundNumber);
 
         // Roll Dice in sequence
         yield return GenerateDiceRolls();
@@ -155,18 +151,10 @@ public class CombatManager : MonoBehaviour
 
         // If Unit is NPC then let it decide its own action
         if (currentCombatant.unit.ai != null) {
-            // TODO AI shit
-            List<Dice> dicepool = new List<Dice>();
-            for (int i = 4; i < 8; i++)
-            {
-                dicepool.Add(combatants[i].unit.dice);
-            }
-
-            
-
+        
             // Find best triple
             (Action, Dice, Combatant) bestChoice = 
-                    currentCombatant.unit.ai.SelectBestActionAndTarget(combatants, currentCombatant.unit.GetActions(), dicepool);
+                    currentCombatant.unit.ai.SelectBestActionAndTarget(combatants, currentCombatant.unit.GetActions(), currentCombatant.dicePool);
             print(currentCombatant.unit.unitName + " is deciding it's action...");
 
             yield return new WaitForSeconds(1f);
@@ -202,14 +190,7 @@ public class CombatManager : MonoBehaviour
         }
 
         // Figure out from here cuz after this another coroutine should be started after turn is chosen
-        yield return null;
-
-        // If enemy turn, then do AI turn
-        // If player turn, enable UI interaction for player
-        // After turn,
-            // queue is empty, then change state to round end
-            // else set turn to next entity in queue
-            
+        yield return null; 
     }
 
     private IEnumerator EndRound() {
@@ -268,7 +249,7 @@ public class CombatManager : MonoBehaviour
                 worldPosition = allyPositions[i];
 
                 var combatant = ScriptableObject.CreateInstance<Combatant>();
-                combatant.Initialize(allyParty[i], i, worldPosition);
+                combatant.Initialize(allyParty[i], allyParty.dicePool, i, worldPosition);
                 combatants.Add(combatant);
 
                 // Initialize passives
@@ -290,7 +271,7 @@ public class CombatManager : MonoBehaviour
 
                 var combatant = ScriptableObject.CreateInstance<Combatant>();
                 // Make sure to offset index by 4 since they are on the enemy team
-                combatant.Initialize(enemyParty[i], i + 4, worldPosition);
+                combatant.Initialize(enemyParty[i], enemyParty.dicePool, i + 4, worldPosition);
                 combatants.Add(combatant);
 
                 // Initialize passives
@@ -322,11 +303,18 @@ public class CombatManager : MonoBehaviour
         CombatManagerUI.instance.SpawnDiceOutlines(combatants);
 
         foreach (var combatant in combatants) {
-            if (combatant != null && combatant.unit.dice != null) {
-                // Create UI
+            var die = combatant.unit.dice;
+            if (combatant != null && die != null) {
+                // Spawn die (UI)
                 CombatManagerUI.instance.SpawnDie(combatant);
-                // Roll animation
-                CombatManagerUI.instance.RollDie(combatant.partyIndex);
+
+                // Roll die (logic)
+                die.Roll();
+                
+                // Roll die (UI)
+                CombatEvents.instance.TriggerOnRoll(die);
+                // CombatManagerUI.instance.RollDie(combatant.partyIndex);
+
                 // Wait until animation is over
                 yield return new WaitForSeconds(DiceUI.rollDuration + 0.5f);
             }
@@ -335,19 +323,18 @@ public class CombatManager : MonoBehaviour
 
     /// Generate turn order queue based on speed values of all combatants
     private void GenerateTurnOrder() {
-        // CAREFUL DESTRUCTIVE!!!
+        // Filter out dead combatants
+        List<Combatant> livingCombatants = combatants.Where(combatant => !combatant.unit.IsDead()).ToList();
 
         // Randomize list
-        combatants.Sort((combatant1, combatant2) => UnityEngine.Random.value.CompareTo(UnityEngine.Random.value));
+        livingCombatants.Sort((combatant1, combatant2) => UnityEngine.Random.value.CompareTo(UnityEngine.Random.value));
         // Sort by speed value
-        combatants.Sort((combatant1, combatant2) => combatant2.unit.speed.CompareTo(combatant1.unit.speed));
+        livingCombatants.Sort((combatant1, combatant2) => combatant2.unit.speed.CompareTo(combatant1.unit.speed));
         // Turn into queue
-        turnQueue = new Queue<Combatant>(combatants);
-        // Visuals
-        CombatManagerUI.instance.SetUpTurnQueue(turnQueue);
+        turnQueue = new Queue<Combatant>(livingCombatants);
 
-        // Restore original ordering
-        combatants.Sort((combatant1, combatant2) => combatant1.partyIndex.CompareTo(combatant2.partyIndex));
+        // Trigger event
+        CombatEvents.instance.TriggerFormQueue(turnQueue);
     }
 
     private IEnumerator EndTurn() {
@@ -365,8 +352,10 @@ public class CombatManager : MonoBehaviour
             // Remove the current unit from queue
             turnQueue.Dequeue();
 
+            // Trigger event
+            CombatEvents.instance.TriggerDequeue(currentCombatant);
+
             // Handle visuals
-            CombatManagerUI.instance.PopFromTurnQueue();
             CombatManagerUI.instance.ClearActions();
 
             // If all units took their turn, start new round if possible or end combat
@@ -400,9 +389,6 @@ public class CombatManager : MonoBehaviour
             // Update visuals
             CombatManagerUI.instance.ClearTargets();
         }
-
-        // Unselect other actions if possible
-        // CombatManagerUI.instance.DeSelectOtherActions(action);
     }
 
     private void SelectDefaultTarget() {
@@ -414,7 +400,10 @@ public class CombatManager : MonoBehaviour
         }
 
         foreach (var combatant in combatants) {
-            if (combatant != null && combatant.partyIndex != currentCombatant.partyIndex) {
+            // Skip combatant if it's dead
+            if (combatant.unit.IsDead()) continue;
+
+            if (combatant != null && combatant.index != currentCombatant.index) {
                 if (selectedAction.canTargetAllies && combatant.isAlly() && selectedAction.checkTargetConstraints(combatant)) {
                     // Select target
                     SelectTarget(combatant);
@@ -434,6 +423,11 @@ public class CombatManager : MonoBehaviour
     public Combatant GetCombatantAtPosition(Vector3Int position) {
         foreach (var combatant in combatants) {
             if (combatant.worldPosition == position) {
+                // Check if target is dead
+                if (combatant.unit.IsDead()) {
+                    CombatEvents.instance.TriggerOnFeedback("You cannot target DEAD units.");
+                    return null;
+                }
                 return combatant;
             }
         }
@@ -461,6 +455,19 @@ public class CombatManager : MonoBehaviour
         CombatManagerUI.instance.HighlightTarget(selectedTarget.worldPosition);
     }
 
+    public void Confirm() {
+        if (coroutine != null) {
+            StopCoroutine(coroutine);
+        }
+
+        if (selectedTarget != null) {
+            coroutine = StartCoroutine(ConfirmAction());
+        }
+        else {
+            coroutine = StartCoroutine(EndTurn());
+        }
+    }
+
     private IEnumerator ConfirmAction() {
         // Error handling ~~~~~~~~~~~~~~~~~~
         if (selectedAction == null) {
@@ -476,13 +483,10 @@ public class CombatManager : MonoBehaviour
         CombatEvents.instance.onDieInsert -= SelectAction;
 
         // Perform selected action on selected target using selected die
-        selectedAction.Perform(selectedTarget.partyIndex, combatants, selectedDie);
-
-        // Change state of selected die
-        // CombatManagerUI.instance.PerformAction(selectedAction);
+        selectedAction.Perform(selectedTarget.index, combatants, selectedDie);
 
         // Trigger event
-        CombatEvents.instance.TriggerActionConfirm(selectedAction);
+        CombatEvents.instance.TriggerOnActionConfirm(selectedAction);
 
         // Clear visuals
         CombatManagerUI.instance.ClearTargets();
@@ -493,7 +497,20 @@ public class CombatManager : MonoBehaviour
         // Clear target
         selectedTarget = null;
 
-        // Change state?
+        // Check if enemies are all dead
+        if (enemyParty.IsDead()) {
+            // Win combat
+            CombatManagerUI.instance.EnterState("YOU WIN!");
+
+            yield return EndCombat();
+        }
+        // Check if allies are all dead
+        else if (allyParty.IsDead()) {
+            // Lose combat
+            CombatManagerUI.instance.EnterState("YOU LOSE :(");
+
+            yield return EndCombat();
+        }
 
         // End Turn
         yield return EndTurn();

@@ -11,8 +11,10 @@ public abstract class Unit : ScriptableObject
     public int maxHealth;
     public Dice dice;
     public Weapon[] weapons;
+    public Armor[] armors;
     public int speed;
     public GameObject modelPrefab;
+    public GameObject maskPrefab;
     public List<Passive> innatePassives;
     public SlimeAI ai;
 
@@ -35,14 +37,23 @@ public abstract class Unit : ScriptableObject
     }
 
     public List<Passive> GetPassives() {
+        List<Passive> result = new List<Passive>();
+
         // Get innate passives
+        result.AddRange(innatePassives);
+
+        // Get actions from armor
+        foreach (var armor in armors) {
+            if (armor != null)
+                result.AddRange(armor.passives);
+        }
 
         // Get passives from equipment
 
         // Get passives from other sources
         // TODO
 
-        return innatePassives;
+        return result;
     }
 
     public void TakeDamage(int amount) {
@@ -51,6 +62,10 @@ public abstract class Unit : ScriptableObject
 
     public void Heal(int amount) {
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+    }
+
+    public string GetHealthStatus() {
+        return currentHealth + " / " + maxHealth;
     }
 
     public virtual bool IsDead() {

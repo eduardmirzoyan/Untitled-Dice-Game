@@ -20,9 +20,6 @@ public class CombatManagerUI : MonoBehaviour
     [SerializeField] private Vector3Int selectionPosition;
     [SerializeField] private Vector3Int turnPosition;
 
-    [Header("Queue UI")]
-    [SerializeField] private QueueUI queueUI;
-
     [Header("Actions UI")]
     [SerializeField] private LayoutGroup actionLayoutGroup;
     [SerializeField] private GameObject actionHolderPrefab;
@@ -35,7 +32,6 @@ public class CombatManagerUI : MonoBehaviour
     [SerializeField] private GameObject dicePrefab;
 
     [Header("State Indicator UI")]
-    [SerializeField] private StateIndicatorUI stateIndicatorUI;
     [SerializeField] public List<DiceUI> dieUIs;
     [SerializeField] private List<GameObject> dieOutlineUIs;
 
@@ -110,6 +106,11 @@ public class CombatManagerUI : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && SelectionExists()) {
             ResetSelection();
         }
+
+        // DEUBUGGING
+        if (Input.GetKeyDown(KeyCode.H)) {
+            SpawnFloatingNumber("10", Vector3.zero);
+        }
     }
 
     private bool SelectionExists() {
@@ -137,27 +138,8 @@ public class CombatManagerUI : MonoBehaviour
         turnIndicatorTilemap.SetTile(vector3Int, turnTile);
     }
 
-    public void SetUpRound(int roundNumber) {
-        // Display visual feedback
-        queueUI.SetRoundCounter("Round " + roundNumber);
-    }
-
-    public void SetUpTurnQueue(Queue<Combatant> queue) {
-        // Debug print queue order
-        string result = "";
-        foreach (var combatant in queue.ToList()) {
-            // Update UI
-            queueUI.Enqueue(combatant.unit, Color.clear);
-
-            result += combatant.unit.unitName + " -> ";
-        }
-        print(result);
-    }
-
     public void SpawnDiceOutlines(List<Combatant> combatants)
     {
-        //allyOutlineUI = new List<GameObject>();
-        //enemyOutlineUI = new List<GameObject>();
         dieOutlineUIs = new List<GameObject>();
 
         GameObject dieOutline;
@@ -175,7 +157,7 @@ public class CombatManagerUI : MonoBehaviour
     public void SpawnDie(Combatant combatant) {
         
         // Get corresponding outline based on index
-        var dieOutlineUI = dieOutlineUIs[combatant.partyIndex];
+        var dieOutlineUI = dieOutlineUIs[combatant.index];
         // Set color based on alligence
         Color dieColor = combatant.isAlly() ? Color.red : Color.blue;
 
@@ -204,13 +186,17 @@ public class CombatManagerUI : MonoBehaviour
             parent = combatant.isAlly() ? allyModels : enemyModels;
 
             // Spawn unit's model prefab and store it's canvas
-            var canvas = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent).GetComponentInChildren<Canvas>();
+            var modelObject = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent);
+            var canvas = modelObject.GetComponentInChildren<Canvas>();
 
             // Spawn healthbar
             var healthbar = Instantiate(healthbarPrefab, canvas.transform).GetComponent<HealthbarUI>();
 
             // Assign healthbar
             combatant.AssignHealthbar(healthbar);
+
+            // Initialize model
+            modelObject.GetComponent<ModelUI>().Initialize(combatant);
 
             // TODO Spawn animation?
         }
@@ -277,10 +263,6 @@ public class CombatManagerUI : MonoBehaviour
         actionHolders.Clear();
     }
 
-    public void PopFromTurnQueue() {
-        queueUI.Dequeue();
-    }
-
     public Vector3 GetCellCenter(Vector3Int position) {
         return worldGrid.GetCellCenterWorld(position);
     }
@@ -302,15 +284,12 @@ public class CombatManagerUI : MonoBehaviour
     }
 
     public void SpawnFloatingNumber(string damageText, Vector3 position) {
-        var floatingNum = Instantiate(floatingNumberPrefab, position, Quaternion.identity).GetComponent<FloatingNumberUI>();
+        var floatingNum = Instantiate(floatingNumberPrefab, position, Quaternion.identity, GameManager.instance.playerScreen.transform).GetComponent<FloatingNumberUI>();
         floatingNum.Initialize(damageText);
     }
 
     public void EnterState(string text) {
-        StartCoroutine(stateIndicatorUI.EnterState(text));
+        // StartCoroutine(stateIndicatorUI.EnterState(text));
     }
 
-    public void ExitState() {
-        StartCoroutine(stateIndicatorUI.ExitState());
-    }
 }

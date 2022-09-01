@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
         // Initialize library
         dictionary = new Dictionary<string, string>();
-        dictionary["KEYWORD"] = "This is a test.";
+        dictionary["REROLL"] = "Rolls the dice to a new value (The new value can be same as it was previously)";
         dictionary["HIGHROLL"] = "The value of the die is at its maximum.";
         dictionary["LOWROLL"] = "The value of the die is at its minimum.";
         dictionary["EVEN"] = "The value of the die is an even number.";

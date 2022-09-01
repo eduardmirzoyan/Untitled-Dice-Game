@@ -13,10 +13,10 @@ public class DiceBoardUI : MonoBehaviour
     [SerializeField] private GameObject dicePrefab;
 
     public void CreateAllyDie() {
-
+        // TODO?
     }
 
     public void CreateEnemyDie() {
-        
+        // TODO?
     }
 }

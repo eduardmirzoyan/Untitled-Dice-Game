@@ -693,6 +693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 5106957762916780005}
+  selectionOutline: {fileID: 5106957764132142766}
   dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
   animator: {fileID: 5106957764423059706}
   pipHolders:

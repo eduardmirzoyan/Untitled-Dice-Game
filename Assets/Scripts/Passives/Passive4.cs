@@ -10,27 +10,34 @@ public class Passive4 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onTurnStart += CheckPool;
+        CombatEvents.instance.onRoundStart += CheckPool;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onTurnStart += CheckPool;
+        CombatEvents.instance.onRoundStart -= CheckPool;
     }
 
-    private void CheckPool(ActionInfo info, Combatant combatant)
+    private void CheckPool(ActionInfo info)
     {
         Debug.Log("Passive 4 trigger!");
+        
         // Set wait to 0
         info.waitTime = 0f;
 
-        if (this.combatant == combatant)
+        // Dice pool concept?
+        if (combatant.dicePool.OddCount() == 0)
         {
-            // Dice pool concept?
+            // Reroll own die
+            combatant.unit.dice.Roll();
+            // Trigger event
+            CombatEvents.instance.TriggerReroll(info);
 
             // If effect triggers, then increase wait time
             info.waitTime = 0.5f;
         }
+
+        
     }
 }

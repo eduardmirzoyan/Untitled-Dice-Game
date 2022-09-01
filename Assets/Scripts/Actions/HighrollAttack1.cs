@@ -8,7 +8,11 @@ public class HighrollAttack1 : AttackAction
 {
     public override bool checkDieConstraints(Dice dice) 
     {
-        return dice.IsHighroll();
+        if (!dice.IsHighroll()) {
+            CombatEvents.instance.TriggerOnFeedback("The selected die is not a HIGHROLL.");
+            return false;
+        }
+        return true;
     }
 
     public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice) 

@@ -12,6 +12,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     [Header("Visuals")]
     [SerializeField] private Image background;
+    [SerializeField] private Image selectionOutline;
 
     [Header("Components")]
     [SerializeField] private Dice dice;
@@ -30,6 +31,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     private Coroutine rollRoutine;
     private bool isBeingDragged;
+    private int rotationDirection = 1;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
@@ -37,26 +39,71 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     }
     // REMOVE THIS CLASS FOR IMPROVEMENTS!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    private void Update() {
-        // For debugging
-        if (Input.GetKeyDown(KeyCode.F)) {
-            Roll();
-        }
-        // For debugging
-        if (Input.GetKeyDown(KeyCode.L)) {
-            Replenish();
-        }
-    }
-
-    public void Initialize(Dice dice, Color color, RectTransform origin, bool interactable = false) {
+    public void Initialize(Dice dice, Color color, RectTransform origin, bool interactable = false)
+    {
         this.dice = dice;
         this.origin = origin;
         this.isInteractable = interactable;
         background.color = color;
         isActive = true;
 
+        // Subscribe to events
+        CombatEvents.instance.onRoll += OnRoll;
+        CombatEvents.instance.onGrow += OnGrow;
+        CombatEvents.instance.onShrink += OnShrink;
+        CombatEvents.instance.onSetActive += OnSetActive;
+
         // Display the current state of the die
         UpdateVisuals();
+    }
+
+    private void OnRoll(Dice dice) {
+        // If this die was rolled
+        if (this.dice == dice) {
+            Roll();
+        }
+    }
+
+    private void OnGrow(Dice dice) {
+        // If this die was rolled
+        if (this.dice == dice) {
+            // Update visuals
+            DrawValue(dice.GetValue());
+
+            // Do green animation
+            selectionOutline.color = Color.green;
+            animator.Play("Selected"); // MAKE THIS GREEN
+        }
+    }
+
+    private void OnShrink(Dice dice) {
+        // If this die was rolled
+        if (this.dice == dice) {
+            // Update visuals
+            DrawValue(dice.GetValue());
+
+            // Do green animation
+            selectionOutline.color = Color.red;
+            animator.Play("Selected"); // MAKE THIS GREEN
+        }
+    }
+
+    private void OnSetActive(Dice dice, bool state)
+    {
+        // If this die was rolled
+        if (this.dice == dice)
+        {
+            // Change state of the die
+            isActive = state;
+            canvasGroup.alpha = isActive ? 1f : 0.5f;
+        }
+    }
+
+    private void Update() {
+        // For debugging
+        if (Input.GetKeyDown(KeyCode.F)) {
+            Roll();
+        }
     }
 
     public void SetInteractive(bool state) {
@@ -75,30 +122,34 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         rollRoutine = StartCoroutine(RollVisuals(rollDuration));
     }
 
-    public void Replenish() {
-        isActive = true;
-        UpdateVisuals();
-    }
+    private IEnumerator RollVisuals(float duration)
+    {
+        float elapsedTime = 0;
+        // Randomly roll through numbers and then finally land on the final die value
 
-    public void Grow() {
-        dice.Grow();
-        UpdateVisuals();
-        
+        // Smoothly move to target
+        while (elapsedTime < duration)
+        {
+            // Lerp target item to its spot
+            int random = Random.Range(1, dice.maxValue + 1);
+
+            // Draw the die value
+            DrawValue(random);
+
+            elapsedTime += 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // At the end draw the true number that was rolled
+        DrawValue(dice.GetValue());
+
         // Visual feedback
-        animator.Play("Selected"); // MAKE THIS GREEN
-    }
-
-    public void Shrink() {
-        dice.Shrink();
-        UpdateVisuals();
-
-        // Visual feedback
-        animator.Play("Selected"); // MAKE THIS RED
+        animator.Play("Selected");
     }
 
     private void UpdateVisuals() {
         // Draw the physical die
-        ValueToUI(dice.GetValue());
+        DrawValue(dice.GetValue());
 
         // Update transparancy depending if die is active
         canvasGroup.alpha = isActive ? 1f : 0.5f;
@@ -106,98 +157,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     public Dice GetDie() {
         return dice;
-    }
-
-    private IEnumerator RollVisuals(float duration) {
-
-        float elapsedTime = 0;
-        // Smoothly move to target
-        while (elapsedTime < duration)
-        {
-            // Lerp target item to its spot
-            dice.Roll();
-
-            // Update visuals
-            UpdateVisuals();
-
-            elapsedTime += 0.1f;
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        // Visual feedback
-        animator.Play("Selected");
-    }
-
-    private void ValueToUI(int value) {
-        if (pipHolders == null) {
-            throw new System.Exception("Dice render not set");
-        }
-
-        // Display certain pips depending on die value
-        switch (value) {
-            case 1:
-            pipHolders[0].enabled = false;
-            pipHolders[1].enabled = true;
-            pipHolders[2].enabled = false;
-            pipHolders[3].enabled = false;
-            pipHolders[4].enabled = false;
-            pipHolders[5].enabled = false;
-            pipHolders[6].enabled = false;
-            break;
-
-            case 2:
-            pipHolders[0].enabled = true;
-            pipHolders[1].enabled = false;
-            pipHolders[2].enabled = true;
-            pipHolders[3].enabled = false;
-            pipHolders[4].enabled = false;
-            pipHolders[5].enabled = false;
-            pipHolders[6].enabled = false;
-            break;
-
-            case 3:
-            pipHolders[0].enabled = true;
-            pipHolders[1].enabled = true;
-            pipHolders[2].enabled = true;
-            pipHolders[3].enabled = false;
-            pipHolders[4].enabled = false;
-            pipHolders[5].enabled = false;
-            pipHolders[6].enabled = false;
-            break;
-
-            case 4:
-            pipHolders[0].enabled = true;
-            pipHolders[1].enabled = false;
-            pipHolders[2].enabled = true;
-            pipHolders[3].enabled = true;
-            pipHolders[4].enabled = true;
-            pipHolders[5].enabled = false;
-            pipHolders[6].enabled = false;
-            break;
-
-            case 5:
-            pipHolders[0].enabled = true;
-            pipHolders[1].enabled = true;
-            pipHolders[2].enabled = true;
-            pipHolders[3].enabled = true;
-            pipHolders[4].enabled = true;
-            pipHolders[5].enabled = false;
-            pipHolders[6].enabled = false;
-            break;
-
-            case 6:
-            pipHolders[0].enabled = true;
-            pipHolders[1].enabled = false;
-            pipHolders[2].enabled = true;
-            pipHolders[3].enabled = true;
-            pipHolders[4].enabled = true;
-            pipHolders[5].enabled = true;
-            pipHolders[6].enabled = true;
-            break;
-
-            default:
-            throw new System.Exception("Dice value is not displayable: " + dice.GetValue());
-        }
     }
 
     // Dragging helper functions
@@ -214,6 +173,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             rectTransform.SetParent(GameManager.instance.playerScreen.transform);
 
             isBeingDragged = true;
+            rotationDirection = Random.Range(0, 2) == 0 ? 1 : -1;
         }
     }
 
@@ -259,7 +219,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             if (transform.parent.TryGetComponent(out ActionHolderUI actionHolderUI)) {
                 // Deselect the action
                 // CombatManager.instance.SelectAction(null, null);
-                CombatEvents.instance.TriggerDieInsert(null, null);
+                CombatEvents.instance.TriggerOnDieInsert(null, null);
             }
         }
     }
@@ -275,10 +235,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         currentParent = transform;
     }
 
-    public void DisplayValue(int value) {
-        ValueToUI(value);
-    }
-
     private void FollowAndRotate() {
         // Make Die smoothly travel towards mouse
         var point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -286,6 +242,82 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         transform.position = Vector3.Lerp(transform.position, point, travelRate);
 
         // Rotate Die
-        transform.Rotate(0, 0, spinRate); //rotates 50 degrees per second around z axis
+        transform.Rotate(0, 0, rotationDirection * spinRate); //rotates 50 degrees per second around z axis
+    }
+
+    /// This should always be at the end
+    public void DrawValue(int value)
+    {
+        if (pipHolders == null)
+        {
+            throw new System.Exception("Dice render not set");
+        }
+
+        // Display certain pips depending on die value
+        switch (value)
+        {
+            case 1:
+                pipHolders[0].enabled = false;
+                pipHolders[1].enabled = true;
+                pipHolders[2].enabled = false;
+                pipHolders[3].enabled = false;
+                pipHolders[4].enabled = false;
+                pipHolders[5].enabled = false;
+                pipHolders[6].enabled = false;
+                break;
+
+            case 2:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = false;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = false;
+                pipHolders[4].enabled = false;
+                pipHolders[5].enabled = false;
+                pipHolders[6].enabled = false;
+                break;
+
+            case 3:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = true;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = false;
+                pipHolders[4].enabled = false;
+                pipHolders[5].enabled = false;
+                pipHolders[6].enabled = false;
+                break;
+
+            case 4:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = false;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = true;
+                pipHolders[4].enabled = true;
+                pipHolders[5].enabled = false;
+                pipHolders[6].enabled = false;
+                break;
+
+            case 5:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = true;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = true;
+                pipHolders[4].enabled = true;
+                pipHolders[5].enabled = false;
+                pipHolders[6].enabled = false;
+                break;
+
+            case 6:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = false;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = true;
+                pipHolders[4].enabled = true;
+                pipHolders[5].enabled = true;
+                pipHolders[6].enabled = true;
+                break;
+
+            default:
+                throw new System.Exception("Dice value is not displayable: " + dice.GetValue());
+        }
     }
 }

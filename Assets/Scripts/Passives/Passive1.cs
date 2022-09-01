@@ -23,25 +23,9 @@ public class Passive1 : Passive
     {
         Debug.Log("Passive 1 trigger!");
 
-        // Define range to check depending on alligence
-        (int, int) range = combatant.isAlly() ? (0, 4) : (4, 8);
-
-        // Find the smallest die by value
-        DiceUI smallestUI = null;
-        for (int i = range.Item1; i < range.Item2; i++)
-        {
-            if (smallestUI == null || CombatManagerUI.instance.dieUIs[i].GetDie().GetValue() < smallestUI.GetDie().GetValue()) {
-                smallestUI = CombatManagerUI.instance.dieUIs[i];
-            }
-        }
-
-        // After finding die, grow it
-        if (smallestUI != null) {
-            smallestUI.Grow();
-        }
-        else {
-            throw new System.Exception("SMALLEST UI NOT FOUND?!");
-        }
+        var die = combatant.dicePool.GetSmallest();
+        die.Grow();
+        CombatEvents.instance.TriggerOnGrow(die);
 
         // Update info to choose how long to wait
         info.waitTime = 0.5f;

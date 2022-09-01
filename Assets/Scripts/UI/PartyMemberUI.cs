@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using TMPro;
 
 public class PartyMemberUI : MonoBehaviour
 {
 
     [Header("Displaying Components")]
-    [SerializeField] private Text displayName;
-    [SerializeField] private Image icon;
-    [SerializeField] private Slider healthBar;
+    [SerializeField] private TextMeshProUGUI unitName;
+    [SerializeField] private Image unitIcon;
     [SerializeField] private DiceUI diceUI;
-    [SerializeField] private Text speedStat;
+    [SerializeField] private TextMeshProUGUI healthStat;
+    [SerializeField] private TextMeshProUGUI speedStat;
     [SerializeField] private RectTransform weapon1Transform;
     [SerializeField] private RectTransform weapon2Transform;
     
@@ -34,18 +34,17 @@ public class PartyMemberUI : MonoBehaviour
         }
 
         // Update display name
-        displayName.text = unit.name;
+        unitName.text = unit.name;
 
         // Update icon
-        icon.sprite = unit.icon;
-        icon.color = Color.white;
+        unitIcon.sprite = unit.icon;
+        unitIcon.color = Color.white;
 
-        // Update healthbar
-        healthBar.maxValue = unit.maxHealth;
-        healthBar.value = unit.currentHealth;
+        // Update health
+        healthStat.text = unit.GetHealthStatus();
 
         // Update die
-        diceUI.DisplayValue(unit.dice.maxValue);
+        diceUI.DrawValue(unit.dice.maxValue);
 
         // Update speed stat
         speedStat.text = unit.speed.ToString();
@@ -62,6 +61,11 @@ public class PartyMemberUI : MonoBehaviour
 
         // Update equipped armors
         // TODO
+        if (unit.armors != null && unit.armors.Length > 0 && unit.armors[0] != null) {
+            print("armro!!");
+            var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
+            itemUI.Initialize(unit.armors[0]);
+        }
     }
 
 

@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Slow Slime
   icon: {fileID: -1676362213, guid: 90c0630c81187e14f80d4956326c961a, type: 3}
-  currentHealth: 3
+  currentHealth: 0
   maxHealth: 3
   dice: {fileID: 11400000, guid: 7d3726c8c6f6a304e9304541e97dbf48, type: 2}
   weapons: []
+  armors: []
   speed: 2
   modelPrefab: {fileID: 5022865214254826152, guid: 81cddae49021ca44ab347417abeb8a48, type: 3}
+  maskPrefab: {fileID: 5102376380853684863, guid: 1fd411f4f65d8f8499c272f8b4fdd248, type: 3}
   innatePassives: []
   ai: {fileID: 11400000, guid: 04ae4891a8290b64e92dda6826309a8c, type: 2}

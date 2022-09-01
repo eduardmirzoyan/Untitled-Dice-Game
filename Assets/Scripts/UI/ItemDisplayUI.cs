@@ -37,7 +37,7 @@ public class ItemDisplayUI : MonoBehaviour
     }
 
     private void Update() {
-        if (isLocked && Input.GetMouseButtonDown(0)) {
+        if (isLocked && Input.GetMouseButtonDown(1)) {
             isLocked = false;
             lockImage.enabled = false;
             Hide();
@@ -64,8 +64,8 @@ public class ItemDisplayUI : MonoBehaviour
         window.SetActive(true);
 
         // Update information
-        itemName.text = item.itemName;
-        flavorText.text = item.itemDescription;
+        itemName.text = item.name;
+        flavorText.text = item.description;
         itemDescription.text = "";
 
         // If item is a weapon then display it's actions
@@ -78,6 +78,18 @@ public class ItemDisplayUI : MonoBehaviour
                 // Spawn visuals of actions
                 var actionHolderUI = Instantiate(actionHolderPrefab, actionsLayoutGroup.transform).GetComponent<ActionHolderUI>();
                 actionHolderUI.Initialize(action, false);
+                actionHolderUIs.Add(actionHolderUI);
+            }
+        }
+        else if (item is Armor) {
+            var armor = (Armor) item;
+            itemDescription.text = armor.description;
+
+            // Display all the actions
+            foreach (var passive in armor.passives) {
+                // Spawn visuals of actions
+                var actionHolderUI = Instantiate(actionHolderPrefab, actionsLayoutGroup.transform).GetComponent<ActionHolderUI>();
+                actionHolderUI.Initialize(passive);
                 actionHolderUIs.Add(actionHolderUI);
             }
         }

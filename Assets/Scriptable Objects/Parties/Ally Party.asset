@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cc368e0cf81c759469acc30ce19c5084, type: 2}
   - {fileID: 11400000, guid: cbe6885e9d26c144a87daa43caa85db8, type: 2}
   - {fileID: 11400000, guid: 79a48578185f04a4581dd8973160bab2, type: 2}
+  dicePool: {fileID: 11400000, guid: a5b3045fc1fcdc04784c17ffb26bc69b, type: 2}
