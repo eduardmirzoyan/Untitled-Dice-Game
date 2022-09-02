@@ -159,6 +159,12 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         return dice;
     }
 
+    private void FixedUpdate() {
+        if (isBeingDragged) {
+            FollowAndRotate();
+        }
+    }
+
     // Dragging helper functions
     public void OnBeginDrag(PointerEventData eventData) {
         if (isInteractable) {
@@ -174,12 +180,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
             isBeingDragged = true;
             rotationDirection = Random.Range(0, 2) == 0 ? 1 : -1;
-        }
-    }
-
-    private void FixedUpdate() {
-        if (isBeingDragged) {
-            FollowAndRotate();
         }
     }
 

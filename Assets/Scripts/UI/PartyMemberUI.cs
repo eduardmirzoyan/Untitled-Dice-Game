@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class PartyMemberUI : MonoBehaviour
+public class PartyMemberUI : MonoBehaviour, IDropHandler
 {
 
     [Header("Displaying Components")]
@@ -15,6 +16,8 @@ public class PartyMemberUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI speedStat;
     [SerializeField] private RectTransform weapon1Transform;
     [SerializeField] private RectTransform weapon2Transform;
+    [SerializeField] private RectTransform unitModelTransform;
+    [SerializeField] private GameObject dropObject;
     
     [Header("Temporary")]
     [SerializeField] private GameObject itemPrefab;
@@ -27,18 +30,50 @@ public class PartyMemberUI : MonoBehaviour
         UpdateVisuals();
     }
 
+    public void OnDrop(PointerEventData eventData)
+    {
+        // Make sure there already isn't an item and it is an itemUI
+        if (eventData.pointerDrag != null && unit == null && eventData.pointerDrag.TryGetComponent(out UnitUI unitUI))
+        {
+            unitUI.SetParent(unitModelTransform);
+            Initialize(unitUI.GetUnit());
+        }
+    }
+
     public void UpdateVisuals() {
         // Make sure a unit exists
         if (unit == null) {
-            throw new System.Exception("No unit in this slot. " + gameObject.name);
+            // throw new System.Exception("No unit in this slot. " + gameObject.name);
+            // Set to default values
+            // Update display name
+            unitName.text = "[EMPTY]";
+
+            dropObject.SetActive(true);
+
+            // Update icon
+            //unitIcon.sprite = unit.icon;
+            //unitIcon.color = Color.white;
+
+            // Update health
+            healthStat.text = "0/0";
+
+            // Update die
+            diceUI.DrawValue(1);
+
+            // Update speed stat
+            speedStat.text = "" + 0;
+
+            return;
         }
 
         // Update display name
         unitName.text = unit.name;
 
+        dropObject.SetActive(false);
+
         // Update icon
-        unitIcon.sprite = unit.icon;
-        unitIcon.color = Color.white;
+        //unitIcon.sprite = unit.icon;
+        //unitIcon.color = Color.white;
 
         // Update health
         healthStat.text = unit.GetHealthStatus();

@@ -227,6 +227,8 @@ public class CombatManager : MonoBehaviour
             }
         }
 
+        //
+
         // End, for now
         yield return null;
     }

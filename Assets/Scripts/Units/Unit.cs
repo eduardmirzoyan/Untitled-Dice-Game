@@ -65,7 +65,7 @@ public abstract class Unit : ScriptableObject
     }
 
     public string GetHealthStatus() {
-        return currentHealth + " / " + maxHealth;
+        return currentHealth + "/" + maxHealth;
     }
 
     public virtual bool IsDead() {

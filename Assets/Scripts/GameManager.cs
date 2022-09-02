@@ -29,13 +29,14 @@ public class GameManager : MonoBehaviour
         dictionary["BLEED"] = "To be implemented.";
 
         if (partyMemberUIs == null) {
-            throw new System.Exception("Party Member UIs not assigned.");
+            //throw new System.Exception("Party Member UIs not assigned.");
+            return;
         }
 
-        for (int i = 0; i < party.Size(); i++)
-        {
-            partyMemberUIs[i].Initialize(party[i]);
-        }
+        // for (int i = 0; i < party.Size(); i++)
+        // {
+        //     partyMemberUIs[i].Initialize(party[i]);
+        // }
     }
 
 
