@@ -13,10 +13,12 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [SerializeField] private bool isInteractable;
     private bool isBeingDragged;
     private Transform currentParent;
+    private Canvas playerScreen;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
     }
 
     private void FixedUpdate() {
@@ -65,7 +67,7 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             currentParent = rectTransform.parent;
 
             // Remove parent
-            rectTransform.SetParent(GameManager.instance.playerScreen.transform);
+            rectTransform.SetParent(playerScreen.transform);
 
             isBeingDragged = true;
         }

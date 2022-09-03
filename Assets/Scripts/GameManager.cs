@@ -8,8 +8,10 @@ public class GameManager : MonoBehaviour
 
     public Canvas playerScreen; // Stores the player's screen for other classes to get
     public Dictionary<string, string> dictionary;
-    public PartyMemberUI[] partyMemberUIs;
-    public Party party;
+    public Party allyParty;
+    public Party enemyParty;
+
+    [SerializeField] private List<Unit> possibleEnemies;
 
     private void Awake() {
         // Singleton logic
@@ -28,16 +30,17 @@ public class GameManager : MonoBehaviour
         dictionary["ODD"] = "The value of the die is an odd number.";
         dictionary["BLEED"] = "To be implemented.";
 
-        if (partyMemberUIs == null) {
-            //throw new System.Exception("Party Member UIs not assigned.");
-            return;
+        // Initialize party
+        enemyParty = ScriptableObject.CreateInstance<Party>();
+        for (int i = 0; i < 4; i++)
+        {
+            enemyParty.Add(possibleEnemies[i], i);
         }
 
-        // for (int i = 0; i < party.Size(); i++)
-        // {
-        //     partyMemberUIs[i].Initialize(party[i]);
-        // }
+        DontDestroyOnLoad(this);
     }
 
-
+    public void SetParty(Party party) {
+        this.allyParty = party;
+    }
 }

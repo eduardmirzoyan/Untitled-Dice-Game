@@ -6,44 +6,60 @@ using System.Linq;
 [CreateAssetMenu(menuName = "Party")]
 public class Party : ScriptableObject
 {
-    public Unit[] partyMembers;
+    public List<Unit> partyMembers;
     public DicePool dicePool;
+    public int maxSize = 4;
     
     private void Awake() {
-        Debug.Log("test: " + name);
-    }
-
-    public void Create(Unit[] units) {
-        // TODO
-
-        // Set up party members
-        partyMembers = units;
-
-        // set up dice pool based on party members
-        foreach (var unit in partyMembers) {
-            // Fill die pool
+        // Initialize with null
+        partyMembers = new List<Unit>();
+        for (int i = 0; i < maxSize; i++)
+        {
+            partyMembers.Add(null);
         }
+        
+        // Create die pool
+        dicePool = ScriptableObject.CreateInstance<DicePool>();
     }
 
-    public void FormPool() {
-        dicePool.Fill(partyMembers);
+    public void Add(Unit unit, int index) {
+        // Error checking
+        if (index >= maxSize || index < 0) {
+            Debug.Log("Tried to add unit to an invalid index: " + index);
+            return;
+        }
+
+        // Check if a unit exists in that spot
+        if (partyMembers[index] != null) {
+            Debug.Log("Unit exists in this spot and was replaced.");
+        }
+
+        // Check if the same unit already exists in the party
+        for (int i = 0; i < maxSize; i++) {
+            if (partyMembers[i] == unit) {
+                partyMembers[i] = null;
+            }
+        }
+
+        // Add unit to party
+        partyMembers[index] = unit;
+
+        // Add unit's die to diepool
+        if (unit != null)
+            dicePool.Add(unit.dice, index);
     }
 
     public Unit this[int index] {
-        get {
-            return partyMembers[index];
-        }
-        set {
-            partyMembers[index] = value;
-        }
+        get { return partyMembers[index]; }
+        set { partyMembers[index] = value; }
     }
 
-    public Unit[] GetMembers() {
+    public List<Unit> GetMembers() {
         return partyMembers;
     }
 
-    public int Size() {
-        return partyMembers.Length;
+    public bool IsFull() {
+        return partyMembers.Count(unit => unit != null) == maxSize;
     }
 
     public bool IsDead() {

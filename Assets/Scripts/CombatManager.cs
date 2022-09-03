@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 
 public class CombatManager : MonoBehaviour
@@ -49,9 +48,13 @@ public class CombatManager : MonoBehaviour
         state = CombatState.CombatStart;
 
         // TEMP ~~~~~~~~~~~~~~~~~~~~~
-        allyParty.FormPool();
+        // allyParty.FormPool();
         // enemyParty.FormPoll();
         // TEMP ~~~~~~~~~~~~~~~~~~~~~
+        
+        // Get party from Game manager
+        allyParty = GameManager.instance.allyParty;
+        enemyParty = GameManager.instance.enemyParty;
 
         // Start combat
         coroutine = StartCoroutine(StartCombat());

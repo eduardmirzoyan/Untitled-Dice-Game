@@ -7,19 +7,44 @@ using System.Linq;
 public class DicePool : ScriptableObject
 {
     public List<Dice> dice;
+    public int maxSize = 4;
+    
+    private void Awake() {
+        dice = new List<Dice>();
+        for (int i = 0; i < maxSize; i++)
+        {
+            dice.Add(null);
+        }
+    }
+
+    public void Initialize() {
+        dice = new List<Dice>();
+        for (int i = 0; i < maxSize; i++)
+        {
+            dice.Add(null);
+        }
+    }
 
     public Dice this[int index] {
         get { return dice[index]; }
         set { dice[index] = value; }
     }
 
+    public void Add(Dice die, int index) {
+        // Error checking
+        if (index >= maxSize || index < 0)
+        {
+            Debug.Log("Tried to add unit to an invalid index: " + index);
+            return;
+        }
+
+        // Add die to pool
+        dice[index] = die;
+    }
+
     public List<Dice> GetDice()
     {
         return dice;
-    }
-
-    public void Fill(Unit[] units) {
-        dice = units.Select(unit => unit.dice).ToList();
     }
 
     public Dice GetSmallest() {

@@ -43,6 +43,7 @@
      <Compile Include="Assets\Scripts\UI\StateIndicatorUI.cs" />
      <Compile Include="Assets\Scripts\UI\QueueSlot.cs" />
      <Compile Include="Assets\Scripts\UI\ActionUI.cs" />
+     <Compile Include="Assets\Scripts\UI\Selection Scene\UnitUI.cs" />
      <Compile Include="Assets\Scripts\Actions\AoEAttack.cs" />
      <Compile Include="Assets\Scripts\CombatManager.cs" />
      <Compile Include="Assets\Scripts\UI\TooltipTrigger.cs" />
@@ -90,7 +91,16 @@
      <Compile Include="Assets\Scripts\Actions\HighrollAttack1.cs" />
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\UI\ConfirmButtonUI.cs" />
-     <Compile Include="Assets\Scripts\UI\Selection Scene\UnitUI.cs" />
+     <Compile Include="Assets\Scripts\SelectionManager.cs" />
+     <Compile Include="Assets\Scripts\SelectionEvents.cs" />
+     <Compile Include="Assets\Scripts\UI\Selection Scene\UnitHolderUI.cs" />
+     <Compile Include="Assets\Scripts\UI\Selection Scene\HolderHolder.cs" />
+     <Compile Include="Assets\Scripts\MainMenuManager.cs" />
+     <Compile Include="Assets\Scripts\TransitionManager.cs" />
+     <Compile Include="Assets\Scripts\UI\Main Menu\HelpUI.cs" />
+     <Compile Include="Assets\Scripts\UI\Selection Scene\StartButtonUI.cs" />
+     <Compile Include="Assets\Scripts\UI\UnitDisplayUI.cs" />
+     <Compile Include="Assets\Scripts\UI\PauseManager.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

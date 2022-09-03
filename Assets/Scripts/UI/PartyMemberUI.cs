@@ -5,12 +5,13 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class PartyMemberUI : MonoBehaviour, IDropHandler
+public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     [Header("Displaying Components")]
     [SerializeField] private TextMeshProUGUI unitName;
-    [SerializeField] private Image unitIcon;
+    [SerializeField] private int index;
+    [SerializeField] private Image dropIcon;
     [SerializeField] private DiceUI diceUI;
     [SerializeField] private TextMeshProUGUI healthStat;
     [SerializeField] private TextMeshProUGUI speedStat;
@@ -21,34 +22,76 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler
     
     [Header("Temporary")]
     [SerializeField] private GameObject itemPrefab;
+
+    [Header("Settings")]
+    [SerializeField] private Color emptyColor;
+    [SerializeField] private Color highlightColor;
+    [SerializeField] private Color fullColor;
     
     // Unit name
-    [SerializeField] private Unit unit;
+    [SerializeField] private UnitUI unitUI;
 
-    public void Initialize(Unit unit) {
-        this.unit = unit;
-        UpdateVisuals();
+    private void Start() {
+        SelectionEvents.instance.onAddUnitToParty += AddedUnit;
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         // Make sure there already isn't an item and it is an itemUI
-        if (eventData.pointerDrag != null && unit == null && eventData.pointerDrag.TryGetComponent(out UnitUI unitUI))
+        if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI))
         {
+            unitUI = newUnitUI;
             unitUI.SetParent(unitModelTransform);
-            Initialize(unitUI.GetUnit());
+
+            UpdateVisuals();
+
+            SelectionManager.instance.AddUnitToParty(unitUI.GetUnit(), index);
         }
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // Return to origin on right click
+        if (unitUI != null && eventData.button == PointerEventData.InputButton.Right)
+        {
+            unitUI.ResetLocation();
+            unitUI = null;
+
+            UpdateVisuals();
+
+            SelectionManager.instance.AddUnitToParty(null, index);
+        }
+    }
+
+    public void RemoveUnit() {
+        unitUI.ResetLocation();
+        SelectionManager.instance.AddUnitToParty(unitUI.GetUnit(), index);
+        unitUI = null;
+    }
+
+    private void AddedUnit(Unit unit, int index) {
+        if (unitUI != null) {
+            // Add unit
+            // unitUI = newUnitUI;
+            if (unitUI.GetUnit() == unit && this.index != index) {
+                unitUI = null;
+                UpdateVisuals();
+            }
+        }
+        
+    }
+
     public void UpdateVisuals() {
+        
         // Make sure a unit exists
-        if (unit == null) {
+        if (unitUI == null) {
             // throw new System.Exception("No unit in this slot. " + gameObject.name);
             // Set to default values
             // Update display name
             unitName.text = "[EMPTY]";
 
-            dropObject.SetActive(true);
+            dropIcon.color = emptyColor;
+            dropIcon.enabled = true;
 
             // Update icon
             //unitIcon.sprite = unit.icon;
@@ -66,10 +109,12 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler
             return;
         }
 
+        Unit unit = unitUI.GetUnit();
+
         // Update display name
         unitName.text = unit.name;
 
-        dropObject.SetActive(false);
+        dropIcon.enabled = false;
 
         // Update icon
         //unitIcon.sprite = unit.icon;
@@ -97,11 +142,27 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler
         // Update equipped armors
         // TODO
         if (unit.armors != null && unit.armors.Length > 0 && unit.armors[0] != null) {
-            print("armro!!");
             var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
             itemUI.Initialize(unit.armors[0]);
         }
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI)) {
+            unitName.color = highlightColor;
+            dropIcon.color = highlightColor;
+        }
+    }
 
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (unitUI != null) {
+            unitName.color = fullColor;
+        }
+        else {
+            unitName.color = emptyColor;
+            dropIcon.color = emptyColor;
+        }
+    }
 }

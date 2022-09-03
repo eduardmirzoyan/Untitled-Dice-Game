@@ -32,10 +32,12 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     private Coroutine rollRoutine;
     private bool isBeingDragged;
     private int rotationDirection = 1;
+    private Canvas playerScreen;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
     }
     // REMOVE THIS CLASS FOR IMPROVEMENTS!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -176,7 +178,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             currentParent = rectTransform.parent;
 
             // Remove parent
-            rectTransform.SetParent(GameManager.instance.playerScreen.transform);
+            rectTransform.SetParent(playerScreen.transform);
 
             isBeingDragged = true;
             rotationDirection = Random.Range(0, 2) == 0 ? 1 : -1;

@@ -47,7 +47,7 @@ public class CombatManagerUI : MonoBehaviour
     [Header("Damage number UI")]
     [SerializeField] private GameObject floatingNumberPrefab;
 
-
+    private Canvas playerScreen;
     private void Awake() {
         // Singleton logic
         if (instance != null) {
@@ -64,6 +64,8 @@ public class CombatManagerUI : MonoBehaviour
 
         // Reset world selection
         ResetSelection();
+
+        playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
     }
 
     # region Selection Logic
@@ -284,7 +286,7 @@ public class CombatManagerUI : MonoBehaviour
     }
 
     public void SpawnFloatingNumber(string damageText, Vector3 position) {
-        var floatingNum = Instantiate(floatingNumberPrefab, position, Quaternion.identity, GameManager.instance.playerScreen.transform).GetComponent<FloatingNumberUI>();
+        var floatingNum = Instantiate(floatingNumberPrefab, position, Quaternion.identity, playerScreen.transform).GetComponent<FloatingNumberUI>();
         floatingNum.Initialize(damageText);
     }
 

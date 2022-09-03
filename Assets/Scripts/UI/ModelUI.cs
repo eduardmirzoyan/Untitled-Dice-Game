@@ -18,7 +18,6 @@ public class ModelUI : MonoBehaviour
 
     private void Awake() {
         animator = GetComponentInChildren<Animator>();
-        animator.Play(idleState);
     }
 
     public void Initialize(Combatant combatant) {

@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Components")]
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private RectTransform origin;
+    [SerializeField] private Image image;
+
 
     [Header("Settings")]
     [SerializeField] private Unit unit;
@@ -16,9 +19,12 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     // Debugging
     private bool isBeingDragged;
     private Transform currentParent;
+    private Transform playerScreen;
 
     private void Awake() {
         canvasGroup = GetComponent<CanvasGroup>();
+        image = GetComponent<Image>();
+        playerScreen = transform.root;
     }
 
     private void FixedUpdate() {
@@ -29,12 +35,28 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         }
     }
 
+    public void Initialize(Unit unit, RectTransform parent) {
+        this.unit = unit;
+        origin = parent;
+        currentParent = parent;
+        image.sprite = unit.icon;
+        image.SetNativeSize();
+    }
+
     public Unit GetUnit() {
         return unit;
     }
 
     public void SetParent(Transform transform) {
         currentParent = transform;
+    }
+
+    public void ResetLocation()
+    {
+        // Reset parent to origin
+        rectTransform.SetParent(origin);
+        // Then relocate
+        transform.localPosition = Vector3.zero;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -50,7 +72,7 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         currentParent = rectTransform.parent;
 
         // Remove parent
-        rectTransform.SetParent(GameManager.instance.playerScreen.transform);
+        rectTransform.SetParent(playerScreen);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -80,18 +102,13 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         transform.localPosition = Vector3.zero;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        // Show character info?
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        UnitDisplayUI.instance.Show(unit, transform.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        UnitDisplayUI.instance.Hide();
     }
 }
