@@ -8,12 +8,14 @@ public class Dice : ScriptableObject, IComparable<Dice>
 {
     public int maxValue = 6;
     [SerializeField] private int value;
+    [SerializeField] private bool isActive;
 
     private void Awake() {
         if (maxValue < 1) {
             throw new System.Exception("Error: Dice is negative or 0");
         }
 
+        isActive = true;
         // Set default value to 1
         value = 1;
     }
@@ -24,6 +26,18 @@ public class Dice : ScriptableObject, IComparable<Dice>
 
         // Return value of roll
         return value;
+    }
+
+    public void Replenish() {
+        isActive = true;
+    }
+
+    public void SetActive(bool state) {
+        isActive = state;
+    }
+
+    public bool GetActive() {
+        return isActive;
     }
 
     public void Grow() {

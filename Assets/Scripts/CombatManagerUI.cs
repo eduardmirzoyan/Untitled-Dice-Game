@@ -224,6 +224,8 @@ public class CombatManagerUI : MonoBehaviour
         // Destroy all the dice and their outlines
         for (int i = 0; i < dieUIs.Count; i++) {
             if (dieUIs[i] != null) {
+                // Unsub
+                dieUIs[i].Uninit();
                 // Destroy Dice UI
                 Destroy(dieUIs[i].gameObject);
             }
@@ -288,10 +290,6 @@ public class CombatManagerUI : MonoBehaviour
     public void SpawnFloatingNumber(string damageText, Vector3 position) {
         var floatingNum = Instantiate(floatingNumberPrefab, position, Quaternion.identity, playerScreen.transform).GetComponent<FloatingNumberUI>();
         floatingNum.Initialize(damageText);
-    }
-
-    public void EnterState(string text) {
-        // StartCoroutine(stateIndicatorUI.EnterState(text));
     }
 
 }

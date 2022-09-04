@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Weapon 1
   m_EditorClassIdentifier: 
   name: Rusty Sword
-  description: A rusty ass sword
+  description: Flavor text
   sprite: {fileID: -1126272107, guid: 20597968d5281954482d5d148d07fa12, type: 3}
   baseDamage: 5
   actions:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
   - {fileID: 11400000, guid: e760e954560361246a3c8b36a11e54f3, type: 2}
-  - {fileID: 11400000, guid: f989fb2f27b1d7a4c998359a74ddc258, type: 2}
   - {fileID: 11400000, guid: 0af394f37864ba24fbebac3ee3269a0e, type: 2}

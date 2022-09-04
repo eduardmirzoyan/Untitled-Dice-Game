@@ -31,14 +31,29 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     
     // Unit name
     [SerializeField] private UnitUI unitUI;
+    private bool interact;
 
     private void Start() {
-        print("start");
-        
         SelectionEvents.instance.onAddUnitToParty += AddedUnit;
         SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
+        
+        SelectionEvents.instance.onFillParty += FillWithUnit;
+    }
 
-        CombatEvents.instance.onUpdateParty += AddedUnit;
+    public void FillWithUnit(Unit unit, int index) {
+        if (this.index != index) return;
+
+        var ui = Instantiate(GameManager.instance.unitUIprefab, unitModelTransform).GetComponent<UnitUI>();
+        ui.Initialize(unit, unitModelTransform, false);
+        EquipUnitUI(ui);
+        interact = false;
+    }
+
+    public void EquipUnitUI(UnitUI newUnitUI) {
+        unitUI = newUnitUI;
+        unitUI.SetParent(unitModelTransform);
+
+        UpdateVisuals();
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -46,10 +61,8 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         // Make sure there already isn't an item and it is an itemUI
         if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI))
         {
-            unitUI = newUnitUI;
-            unitUI.SetParent(unitModelTransform);
-
-            UpdateVisuals();
+            interact = true;
+            EquipUnitUI(newUnitUI);
 
             SelectionManager.instance.AddUnitToParty(unitUI.GetUnit(), index);
         }
@@ -58,7 +71,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     public void OnPointerClick(PointerEventData eventData)
     {
         // Return to origin on right click
-        if (unitUI != null && eventData.button == PointerEventData.InputButton.Right)
+        if (interact && unitUI != null && eventData.button == PointerEventData.InputButton.Right)
         {
             unitUI.ResetLocation();
             unitUI = null;
@@ -108,24 +121,6 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         // Else we don't care
     }
 
-    // private void HandleItemSwap(ItemUI newItemUI, ItemUI oldItemUI, ItemSlotUI itemSlotUI) {
-    //     // Get new items parent
-    //     var parent = newItemUI.transform.parent;
-        
-    //     // Change old items parent
-    //     oldItemUI.SetParent(parent);
-        
-    //     // Set new item's parent
-    //     newItemUI.SetParent(itemSlotUI.transform);
-    // }
-
-    // private void HandleWeaponEquippedInSlot(ItemUI itemUI, Weapon weapon, int slot, Unit unit) {
-    //     itemUI.SetParent(weaponSlots[slot].transform);
-    // }
-
-
-
-
 
     private void AddedUnit(Unit unit, int index) {
         if (unitUI != null) {
@@ -143,10 +138,11 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         
         // Make sure a unit exists
         if (unitUI == null) {
-            // throw new System.Exception("No unit in this slot. " + gameObject.name);
             // Set to default values
+
             // Update display name
             unitName.text = "[EMPTY]";
+            unitName.color = emptyColor;
 
             dropIcon.color = emptyColor;
             dropIcon.enabled = true;
@@ -171,6 +167,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
         // Update display name
         unitName.text = unit.name;
+        unitName.color = fullColor;
 
         dropIcon.enabled = false;
 

@@ -12,9 +12,11 @@ public class SlimeAI : ScriptableObject
         int heuristic = 0;
         foreach (var action in actions) {
             if (action is AttackAction) {
-
                 var attack = (AttackAction) action;
                 foreach (var die in dicepool.GetDice()) {
+                    // Skip if die is inactive
+                    if (!die.GetActive()) continue;
+
                     // Make sure die passes contraints
                     if (attack.checkDieConstraints(die)) {
                         // Check to see if attack is better than previous

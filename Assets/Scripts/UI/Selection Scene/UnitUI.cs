@@ -11,6 +11,7 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private RectTransform origin;
     [SerializeField] private Image image;
+    [SerializeField] private bool isInteractable;
 
 
     [Header("Settings")]
@@ -35,8 +36,9 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         }
     }
 
-    public void Initialize(Unit unit, RectTransform parent) {
+    public void Initialize(Unit unit, RectTransform parent, bool isInteractable = true) {
         this.unit = unit;
+        this.isInteractable = isInteractable;
         origin = parent;
         currentParent = parent;
         image.sprite = unit.icon;
@@ -61,6 +63,8 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!isInteractable) return;
+
         // Start dragging
         isBeingDragged = true;
 
@@ -82,6 +86,8 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!isInteractable) return;
+
         // Stop dragging
         isBeingDragged = false;
 
@@ -104,11 +110,15 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!isInteractable) return;
+        
         UnitDisplayUI.instance.Show(unit, transform.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (!isInteractable) return;
+
         UnitDisplayUI.instance.Hide();
     }
 }

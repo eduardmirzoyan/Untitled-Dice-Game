@@ -20,11 +20,14 @@ public class StateIndicatorUI : MonoBehaviour
     }
 
     private void Start() {
-        CombatEvents.instance.onCombatStart += StartCombat;
-        CombatEvents.instance.onRoundStart += StartRound;
-        CombatEvents.instance.onTurnStart += StartTurn;
-        CombatEvents.instance.onRoundEnd += EndRound;
-        CombatEvents.instance.onCombatEnd += EndCombat;
+        CombatEvents.instance.onShowBanner += ShowBanner;
+        CombatEvents.instance.onHideBanner += HideBanner;
+
+        // CombatEvents.instance.onCombatStart += StartCombat;
+        // CombatEvents.instance.onRoundStart += StartRound;
+        // CombatEvents.instance.onTurnStart += StartTurn;
+        // CombatEvents.instance.onRoundEnd += EndRound;
+        // CombatEvents.instance.onCombatEnd += EndCombat;
     }
 
     private void StartCombat(ActionInfo info) {
@@ -61,6 +64,18 @@ public class StateIndicatorUI : MonoBehaviour
         routine = StartCoroutine(EnterState("Combat End"));
     }
 
+    public void ShowBanner(string message) {
+        if (routine != null) StopCoroutine(routine);
+
+        routine = StartCoroutine(EnterState(message));
+    }
+
+    public void HideBanner(string message) {
+        if (routine != null) StopCoroutine(routine);
+
+        routine = StartCoroutine(ExitState());
+    }
+
     public IEnumerator EnterState(string text) {
         textBox.text = text;
 
@@ -80,11 +95,11 @@ public class StateIndicatorUI : MonoBehaviour
         main.localPosition = Vector3.zero;
         canvasGroup.alpha = 1;
 
-        // Wait for a bit before fading out
-        yield return new WaitForSeconds(pauseDuration);
+        // // Wait for a bit before fading out
+        // yield return new WaitForSeconds(pauseDuration);
 
-        // Now exit
-        yield return ExitState();
+        // // Now exit
+        // yield return ExitState();
     }
 
     public IEnumerator ExitState() {

@@ -2430,6 +2430,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f3215c9eb223d3e4f865abd6a9d75148, type: 2}
   - {fileID: 11400000, guid: efd56a15c6b75ad478069f4f3bbdcb90, type: 2}
   - {fileID: 11400000, guid: 44a26c3d2310d1f4589a904825358537, type: 2}
+  unitUIprefab: {fileID: 5177994696533219902, guid: e45949888fb061e4eb96e062090c52db, type: 3}
 --- !u!4 &598127922
 Transform:
   m_ObjectHideFlags: 0
@@ -4965,7 +4966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1329959786
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6948,7 +6949,6 @@ MonoBehaviour:
   travelRate: 0.1
   spinRate: 3
   isInteractable: 0
-  isActive: 0
 --- !u!222 &1821134116
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // On Round Start: SHRINK your largest die
-[CreateAssetMenu(menuName = "Passives/Passive 12")]
+[CreateAssetMenu(menuName = "Passives/Passive 2")]
 public class Passive2 : Passive
 {
     public override void Initialize(Combatant combatant)

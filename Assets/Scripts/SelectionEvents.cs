@@ -21,9 +21,16 @@ public class SelectionEvents : MonoBehaviour
     public event Action<Unit, int> onAddUnitToParty;
     public event Action<List<Unit>> onDisplayUnitOptions;
     public event Action<bool> onPartyFull;
+    public event Action<Unit, int> onFillParty;
 
     public event Action<Item> onItemEquip;
     public event Action<ItemUI, ItemSlotUI> onItemInsertIntoSlot;
+
+    public void TriggerOnFillParty(Unit unit, int index) {
+        if (onFillParty != null) {
+            onFillParty(unit, index);
+        }
+    }
 
     public void TriggerOnAddUnitToParty(Unit unit, int index) {
         if (onAddUnitToParty != null) {

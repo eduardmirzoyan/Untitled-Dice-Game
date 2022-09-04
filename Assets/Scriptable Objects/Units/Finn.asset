@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Finn
   icon: {fileID: -1193288918, guid: f9411099644ba7f48936e6764be7695e, type: 3}
-  currentHealth: 30
-  maxHealth: 30
+  currentHealth: 40
+  maxHealth: 40
   dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
   weapons:
-  - {fileID: 11400000, guid: 403918f3f017f3148931a68e5e74be38, type: 2}
+  - {fileID: 11400000, guid: 837e486dc43484046be91810295dba98, type: 2}
   - {fileID: 0}
   armors:
   - {fileID: 0}

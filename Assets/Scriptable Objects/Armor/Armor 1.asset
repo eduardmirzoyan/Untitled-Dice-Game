@@ -16,4 +16,4 @@ MonoBehaviour:
   description: This is basic armor
   sprite: {fileID: 540338769, guid: 20597968d5281954482d5d148d07fa12, type: 3}
   passives:
-  - {fileID: 11400000, guid: 2655abc57572d074cbbd3bdbfd4dcf72, type: 2}
+  - {fileID: 11400000, guid: 189a7d76969cdcd46baea97c2d8975de, type: 2}

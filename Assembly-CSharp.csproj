@@ -101,6 +101,12 @@
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
      <Compile Include="Assets\Scripts\UI\ConfirmButtonUI.cs" />
+     <Compile Include="Assets\Scripts\UI\ConfirmActionUI.cs" />
+     <Compile Include="Assets\Scripts\UI\PassUI.cs" />
+     <Compile Include="Assets\Scripts\Passives\Passive6.cs" />
+     <Compile Include="Assets\Scripts\Passives\Passive5.cs" />
+     <Compile Include="Assets\Scripts\Passives\Passive8.cs" />
+     <Compile Include="Assets\Scripts\Passives\Passive7.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

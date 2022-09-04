@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private List<Unit> possibleEnemies;
 
+    [SerializeField] public GameObject unitUIprefab;
+
     private void Awake() {
         // Singleton logic
         if (instance != null) {

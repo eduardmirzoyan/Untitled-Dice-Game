@@ -31,7 +31,10 @@ public class CombatEvents : MonoBehaviour
         instance = this;
     }
 
-    public event Action<Unit, int> onUpdateParty;
+    public event Action<string> onShowBanner;
+    public event Action<string> onHideBanner;
+    
+
 
     // Game states
     public event Action<ActionInfo> onCombatStart;
@@ -47,11 +50,13 @@ public class CombatEvents : MonoBehaviour
     public event Action<Dice> onShrink;
     public event Action<Dice, bool> onSetActive;
 
-    
+
     // Action events
+    public event Action<int> onPlayerTurnStart;
     public event Action<Action, Dice> onDieInsert;
-    public event Action<Action> onActionConfirm;
     public event Action<Combatant> onTargetSelect;
+    public event Action<Action> onActionConfirm;
+    public event Action<int> onPlayerTurnEnd;
 
     // General events
     public event Action<Combatant> onTakeDamage;
@@ -61,12 +66,30 @@ public class CombatEvents : MonoBehaviour
     public event Action<Queue<Combatant>> onFormQueue; // ?
     public event Action<Combatant> deQueue; // ?
     public event Action<int> onClearQueue; // ?
-
+    
     public event Action<string> onFeedback;
 
-    public void TriggerOnUpdateParty(Unit unit, int index) {
-        if (onUpdateParty != null) {
-            onUpdateParty(unit, index);
+    public void TriggerOnShowBanner(string message) {
+        if (onShowBanner != null) {
+            onShowBanner(message);
+        }
+    }
+
+    public void TriggerOnHideBanner(string message) {
+        if (onHideBanner != null) {
+            onHideBanner(message);
+        }
+    }
+
+    public void TriggerOnPlayerTurnStart(int value) {
+        if (onPlayerTurnStart != null) {
+            onPlayerTurnStart(value);
+        }
+    }
+
+    public void TriggerOnPlayerTurnEnd(int value) {
+        if (onPlayerTurnEnd != null) {
+            onPlayerTurnEnd(value);
         }
     }
 

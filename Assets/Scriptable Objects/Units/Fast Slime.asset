@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Fast Slime
   icon: {fileID: -1676362213, guid: 90c0630c81187e14f80d4956326c961a, type: 3}
-  currentHealth: 0
-  maxHealth: 30
+  currentHealth: 20
+  maxHealth: 20
   dice: {fileID: 11400000, guid: 5ec1bb32c4d39f04299f0244e1fd40d5, type: 2}
   weapons:
   - {fileID: 11400000, guid: 4f547578ff1dbf647b4932e94e779897, type: 2}

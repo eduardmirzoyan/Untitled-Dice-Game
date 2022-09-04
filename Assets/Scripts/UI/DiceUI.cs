@@ -27,7 +27,6 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     [SerializeField] private float travelRate = 0.1f;
     [SerializeField] private float spinRate = 3f;
     [SerializeField] private bool isInteractable;
-    [SerializeField] private bool isActive;
 
     private Coroutine rollRoutine;
     private bool isBeingDragged;
@@ -47,7 +46,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         this.origin = origin;
         this.isInteractable = interactable;
         background.color = color;
-        isActive = true;
+        dice.SetActive(true);
 
         // Subscribe to events
         CombatEvents.instance.onRoll += OnRoll;
@@ -57,6 +56,13 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
         // Display the current state of the die
         UpdateVisuals();
+    }
+
+    public void Uninit() {
+        CombatEvents.instance.onRoll -= OnRoll;
+        CombatEvents.instance.onGrow -= OnGrow;
+        CombatEvents.instance.onShrink -= OnShrink;
+        CombatEvents.instance.onSetActive -= OnSetActive;
     }
 
     private void OnRoll(Dice dice) {
@@ -96,8 +102,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         if (this.dice == dice)
         {
             // Change state of the die
-            isActive = state;
-            canvasGroup.alpha = isActive ? 1f : 0.5f;
+            dice.SetActive(state);
+            canvasGroup.alpha = state ? 1f : 0.5f;
         }
     }
 
@@ -113,7 +119,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     }
 
     public void SetActive(bool state) {
-        isActive = state;
+        dice.SetActive(state);
         UpdateVisuals();
     }
 
@@ -154,7 +160,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         DrawValue(dice.GetValue());
 
         // Update transparancy depending if die is active
-        canvasGroup.alpha = isActive ? 1f : 0.5f;
+        canvasGroup.alpha = dice.GetActive() ? 1f : 0.5f;
     }
 
     public Dice GetDie() {

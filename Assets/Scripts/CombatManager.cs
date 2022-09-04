@@ -32,6 +32,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Combatant selectedTarget;
 
     private Coroutine coroutine;
+    private string endMessage = "Draw";
 
     private void Awake() {
         // Singleton logic
@@ -56,8 +57,9 @@ public class CombatManager : MonoBehaviour
         allyParty = GameManager.instance.allyParty;
         enemyParty = GameManager.instance.enemyParty;
 
-        
+    }
 
+    private void Start() {
         // Start combat
         coroutine = StartCoroutine(StartCombat());
     }
@@ -74,11 +76,11 @@ public class CombatManager : MonoBehaviour
     
     private IEnumerator StartCombat() {
         // Debug Feedback
-        print("Combat Start"); 
+        print("Combat Start");
 
-        for (int i = 0; i < allyParty.maxSize; i++) {
-            if (allyParty[i] != null)
-                CombatEvents.instance.TriggerOnUpdateParty(allyParty[i], i);
+        for (int i = 0; i < 4; i++)
+        {
+            SelectionEvents.instance.TriggerOnFillParty(allyParty[i], i);
         }
 
         // Change state
@@ -91,11 +93,15 @@ public class CombatManager : MonoBehaviour
         yield return SetupCombat();
 
         // Visuals
-        CombatManagerUI.instance.EnterState("Combat Start");
+        CombatEvents.instance.TriggerOnShowBanner("Combat Start");
         yield return new WaitForSeconds(0.5f);
 
         // Trigger event
         yield return CombatEvents.instance.TriggerCombatStart(new ActionInfo(0.5f));
+
+        // Visuals
+        CombatEvents.instance.TriggerOnHideBanner("Combat Start");
+        yield return new WaitForSeconds(0.5f);
 
         // Start the first round
         yield return StartRound();
@@ -107,7 +113,7 @@ public class CombatManager : MonoBehaviour
         print("Round Start");
 
         // Visuals
-        CombatManagerUI.instance.EnterState("Round Start");
+        CombatEvents.instance.TriggerOnShowBanner("Round Start");
         yield return new WaitForSeconds(0.5f);
 
         // Change state
@@ -128,6 +134,10 @@ public class CombatManager : MonoBehaviour
 
         // Generate turn order as a queue
         GenerateTurnOrder();
+
+        // Visuals
+        CombatEvents.instance.TriggerOnHideBanner("Round Start");
+        yield return new WaitForSeconds(0.5f);
 
         // Check if queue is empty
         if (turnQueue.Count <= 0) {
@@ -153,8 +163,11 @@ public class CombatManager : MonoBehaviour
         print("Turn Start: " + currentCombatant.unit.name);
 
         // Visuals
-        CombatManagerUI.instance.EnterState(currentCombatant.unit.name + "'s Turn");
+        CombatEvents.instance.TriggerOnShowBanner("Turn Start: " + currentCombatant.unit.name);
         yield return new WaitForSeconds(0.5f);
+
+        // Passives
+        yield return CombatEvents.instance.TriggerTurnStart(new ActionInfo(0.5f), currentCombatant);
 
         // Select (Outline) the tile that the unit is one, visual feedback
         CombatManagerUI.instance.SetTurn(currentCombatant.worldPosition);
@@ -174,7 +187,7 @@ public class CombatManager : MonoBehaviour
             print(currentCombatant.unit.unitName + " choose action: " + bestChoice.Item1.name 
                                                     + " with die value: " + bestChoice.Item2.GetValue());
             
-            yield return new WaitForSeconds(1f);
+            // yield return new WaitForSeconds(1f);
 
             // Select target
             SelectTarget(bestChoice.Item3);
@@ -196,6 +209,9 @@ public class CombatManager : MonoBehaviour
             // Start listening for events
             CombatEvents.instance.onDieInsert += SelectAction;
 
+            // Callevent
+            CombatEvents.instance.TriggerOnPlayerTurnStart(0);
+
             // Save reference
         }
 
@@ -207,6 +223,10 @@ public class CombatManager : MonoBehaviour
         // Debug Feedback
         print("Round End");
 
+        // Visuals
+        CombatEvents.instance.TriggerOnShowBanner("Round End");
+        yield return new WaitForSeconds(0.5f);
+
         // Change state to roundstart
         state = CombatState.RoundEnd;
         
@@ -216,6 +236,10 @@ public class CombatManager : MonoBehaviour
         // Trigger round end events
         yield return CombatEvents.instance.TriggerRoundEnd(new ActionInfo(0.5f));
 
+        // Visuals
+        CombatEvents.instance.TriggerOnHideBanner("Round End");
+        yield return new WaitForSeconds(0.5f);
+
         // Start new round
         yield return StartRound();
     }
@@ -223,6 +247,10 @@ public class CombatManager : MonoBehaviour
     private IEnumerator EndCombat() {
         // Debug Feedback
         print("Combat End");
+
+        // Visuals
+        CombatEvents.instance.TriggerOnShowBanner("Combat End: " + endMessage);
+        yield return new WaitForSeconds(0.5f);
 
         // Change state
         state = CombatState.CombatEnd;
@@ -236,8 +264,6 @@ public class CombatManager : MonoBehaviour
                 passive.Terminate();
             }
         }
-
-        //
 
         // End, for now
         yield return null;
@@ -317,6 +343,9 @@ public class CombatManager : MonoBehaviour
         foreach (var combatant in combatants) {
             var die = combatant.unit.dice;
             if (combatant != null && die != null) {
+                // Set the die to be active
+                die.SetActive(true);
+
                 // Spawn die (UI)
                 CombatManagerUI.instance.SpawnDie(combatant);
 
@@ -352,6 +381,13 @@ public class CombatManager : MonoBehaviour
     private IEnumerator EndTurn() {
         // If it is currently a unit's turn, then end it
         if (state == CombatState.TurnStart) {
+            
+            // Visuals
+            CombatEvents.instance.TriggerOnHideBanner("Turn End");
+            yield return new WaitForSeconds(0.5f);
+
+            // Event
+            CombatEvents.instance.TriggerOnPlayerTurnEnd(0);
 
             // First check if all allies or all enemies are dead
             if (allyParty.GetMembers().All(unit => unit.IsDead()) || enemyParty.GetMembers().All(unit => unit.IsDead())) {
@@ -369,6 +405,8 @@ public class CombatManager : MonoBehaviour
 
             // Handle visuals
             CombatManagerUI.instance.ClearActions();
+
+            
 
             // If all units took their turn, start new round if possible or end combat
             if (turnQueue.Count == 0) {
@@ -416,16 +454,37 @@ public class CombatManager : MonoBehaviour
             if (combatant.unit.IsDead()) continue;
 
             if (combatant != null && combatant.index != currentCombatant.index) {
-                if (selectedAction.canTargetAllies && combatant.isAlly() && selectedAction.checkTargetConstraints(combatant)) {
-                    // Select target
-                    SelectTarget(combatant);
-                    return;
+                
+                if (currentCombatant.isAlly()) {
+                    if (selectedAction.canTargetAllies && combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    {
+                        // Select target
+                        SelectTarget(combatant);
+                        return;
+                    }
+                    else if (selectedAction.canTargetEnemies && !combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    {
+                        // Select target
+                        SelectTarget(combatant);
+                        return;
+                    }
                 }
-                else if (selectedAction.canTargetEnemies && !combatant.isAlly() && selectedAction.checkTargetConstraints(combatant)) {
-                    // Select target
-                    SelectTarget(combatant);
-                    return;
+                else {
+                    if (selectedAction.canTargetAllies && !combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    {
+                        // Select target
+                        SelectTarget(combatant);
+                        return;
+                    }
+                    else if (selectedAction.canTargetEnemies && combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    {
+                        // Select target
+                        SelectTarget(combatant);
+                        return;
+                    }
                 }
+
+                
             }
         }
 
@@ -463,8 +522,22 @@ public class CombatManager : MonoBehaviour
         // Set new selected target
         selectedTarget = combatant;
 
+        // Event
+        CombatEvents.instance.TriggerOnTargetSelect(selectedTarget);
+
         // Update visuals
         CombatManagerUI.instance.HighlightTarget(selectedTarget.worldPosition);
+    }
+
+    public void Pass() {
+        // Clear action
+        selectedAction = null;
+
+        // Clear target
+        selectedTarget = null;
+
+        // Change to confirm
+        Confirm();
     }
 
     public void Confirm() {
@@ -497,6 +570,10 @@ public class CombatManager : MonoBehaviour
         // Perform selected action on selected target using selected die
         selectedAction.Perform(selectedTarget.index, combatants, selectedDie);
 
+        // Set selected die innactive
+        selectedDie.SetActive(false);
+        CombatEvents.instance.TriggerSetActive(selectedDie, false);
+
         // Trigger event
         CombatEvents.instance.TriggerOnActionConfirm(selectedAction);
 
@@ -512,14 +589,16 @@ public class CombatManager : MonoBehaviour
         // Check if enemies are all dead
         if (enemyParty.IsDead()) {
             // Win combat
-            CombatManagerUI.instance.EnterState("YOU WIN!");
+            //CombatManagerUI.instance.EnterState("YOU WIN!");
+            endMessage = "YOU WIN!";
 
             yield return EndCombat();
         }
         // Check if allies are all dead
         else if (allyParty.IsDead()) {
             // Lose combat
-            CombatManagerUI.instance.EnterState("YOU LOSE :(");
+            //CombatManagerUI.instance.EnterState("YOU LOSE :(");
+            endMessage = "YOU LOSE :(";
 
             yield return EndCombat();
         }
