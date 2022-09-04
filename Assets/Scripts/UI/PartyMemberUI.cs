@@ -18,7 +18,8 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     [SerializeField] private RectTransform weapon1Transform;
     [SerializeField] private RectTransform weapon2Transform;
     [SerializeField] private RectTransform unitModelTransform;
-    [SerializeField] private GameObject dropObject;
+    [SerializeField] private List<ItemSlotUI> weaponSlots;
+    [SerializeField] private List<ItemSlotUI> armorSlots;
     
     [Header("Temporary")]
     [SerializeField] private GameObject itemPrefab;
@@ -32,7 +33,12 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     [SerializeField] private UnitUI unitUI;
 
     private void Start() {
+        print("start");
+        
         SelectionEvents.instance.onAddUnitToParty += AddedUnit;
+        SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
+
+        CombatEvents.instance.onUpdateParty += AddedUnit;
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -63,11 +69,63 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         }
     }
 
-    public void RemoveUnit() {
-        unitUI.ResetLocation();
-        SelectionManager.instance.AddUnitToParty(unitUI.GetUnit(), index);
-        unitUI = null;
+
+    private void HandleItemInsertedIntoItemSlot(ItemUI itemUI, ItemSlotUI itemSlotUI) {
+        // Check if item is weapon
+        int wpnIndex = weaponSlots.IndexOf(itemSlotUI);
+        if (wpnIndex != -1) {
+            
+            // Item wants to be removed
+            if (itemUI == null) {
+                unitUI.GetUnit().EquipWeapon(null, wpnIndex);
+                return;
+            }
+
+            var weapon = (Weapon) itemUI.GetItem();
+
+            // Equip weapon logic
+            unitUI.GetUnit().EquipWeapon(weapon, wpnIndex);
+            return;
+        }
+
+        // Check if item is armor
+        int amrIndex = armorSlots.IndexOf(itemSlotUI);
+        if (amrIndex != -1) {
+
+            // Item wants to be removed
+            if (itemUI == null) {
+                unitUI.GetUnit().EquipArmor(null, wpnIndex);
+                return;
+            }
+
+            var armor = (Armor) itemUI.GetItem();
+
+            // Equip weapon logic
+            unitUI.GetUnit().EquipArmor(armor, wpnIndex);
+            return;
+        }
+
+        // Else we don't care
     }
+
+    // private void HandleItemSwap(ItemUI newItemUI, ItemUI oldItemUI, ItemSlotUI itemSlotUI) {
+    //     // Get new items parent
+    //     var parent = newItemUI.transform.parent;
+        
+    //     // Change old items parent
+    //     oldItemUI.SetParent(parent);
+        
+    //     // Set new item's parent
+    //     newItemUI.SetParent(itemSlotUI.transform);
+    // }
+
+    // private void HandleWeaponEquippedInSlot(ItemUI itemUI, Weapon weapon, int slot, Unit unit) {
+    //     itemUI.SetParent(weaponSlots[slot].transform);
+    // }
+
+
+
+
 
     private void AddedUnit(Unit unit, int index) {
         if (unitUI != null) {
@@ -118,7 +176,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
         // Update icon
         //unitIcon.sprite = unit.icon;
-        //unitIcon.color = Color.white;
+        //unitIcon.color = Color.white; 
 
         // Update health
         healthStat.text = unit.GetHealthStatus();
@@ -129,22 +187,38 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         // Update speed stat
         speedStat.text = unit.speed.ToString();
 
-        // Update equipped weapons
-        if (unit.weapons[0] != null) {
-            var itemUI = Instantiate(itemPrefab, weapon1Transform).GetComponent<ItemUI>();
-            itemUI.Initialize(unit.weapons[0]);
+        // Check for weapons
+        for (int i = 0; i < weaponSlots.Count; i++) {
+            if (unit.weapons[i] != null) {
+                var itemUI = Instantiate(itemPrefab, weaponSlots[i].transform).GetComponent<ItemUI>();
+                itemUI.Initialize(unit.weapons[i], weaponSlots[i]);
+            }
         }
-        if (unit.weapons[1] != null) {
-            var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
-            itemUI.Initialize(unit.weapons[1]);
+        
+        // Check for armor
+        for (int i = 0; i < armorSlots.Count; i++) {
+            if (unit.armors[i] != null) {
+                var itemUI = Instantiate(itemPrefab, armorSlots[i].transform).GetComponent<ItemUI>();
+                itemUI.Initialize(unit.armors[i], armorSlots[i]);
+            }
         }
 
-        // Update equipped armors
-        // TODO
-        if (unit.armors != null && unit.armors.Length > 0 && unit.armors[0] != null) {
-            var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
-            itemUI.Initialize(unit.armors[0]);
-        }
+        // // Update equipped weapons
+        // if (unit.weapons[0] != null) {
+        //     var itemUI = Instantiate(itemPrefab, weapon1Transform).GetComponent<ItemUI>();
+        //     itemUI.Initialize(unit.weapons[0]);
+        // }
+        // if (unit.weapons[1] != null) {
+        //     var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
+        //     itemUI.Initialize(unit.weapons[1]);
+        // }
+
+        // // Update equipped armors
+        // // TODO
+        // if (unit.armors != null && unit.armors.Count > 0 && unit.armors[0] != null) {
+        //     var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
+        //     itemUI.Initialize(unit.armors[0]);
+        // }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

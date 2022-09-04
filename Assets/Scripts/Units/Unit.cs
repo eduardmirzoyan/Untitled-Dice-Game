@@ -10,8 +10,8 @@ public abstract class Unit : ScriptableObject
     public int currentHealth;
     public int maxHealth;
     public Dice dice;
-    public Weapon[] weapons;
-    public Armor[] armors;
+    public List<Weapon> weapons;
+    public List<Armor> armors;
     public int speed;
     public GameObject modelPrefab;
     public GameObject maskPrefab;
@@ -70,5 +70,53 @@ public abstract class Unit : ScriptableObject
 
     public virtual bool IsDead() {
         return currentHealth <= 0;
+    }
+
+    public void EquipWeapon(Weapon weapon, int slot) {
+        if (slot < 0 || slot >= weapons.Count) {
+            throw new System.Exception("WEAPON ATTEMPTED TO BE EQUIPPED TO AN INVALID INDEX: " + slot);
+        }
+
+        // Weapon in slot is being removed
+        if (weapon == null) {
+            weapons[slot] = null;
+        }
+
+        // Check if weapon already exists
+        int index = weapons.IndexOf(weapon);
+
+        // If weapon is NOT already equipped
+        if (index == -1) {
+            // Check if there is already a weapon at the slot it wants to be at
+            if (weapons[slot] != null) {
+                // Replace the equipped weapon with this one
+                // But idk how to make sure the previous weapon is not lost...
+            }
+            // Equip the weapon
+            weapons[slot] = weapon;
+        }
+        // If the weapon IS equipped
+        else {
+            // If the slot is the same, then player wants to UN-equip
+            if (slot == index) {
+                // Unequip
+                weapons[slot] = null;
+            }
+            // Else you are trying to move the weapon to a different slot 
+            else {
+                // Swap the values of the two slots then
+                var temp = weapons[slot];
+                weapons[slot] = weapons[index];
+                weapons[index] = temp;
+            }
+        }
+    }
+    
+    public void EquipArmor(Armor armor, int slot) {
+        for (int i = 0; i < armors.Count; i++) {
+            if (armors[i] == armor) {
+                // You already have this armor equipped
+            }
+        }
     }
 }

@@ -820,14 +820,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7778510078217583685, guid: 66dc8508586cf2e40883307a6334e675, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -86
-      objectReference: {fileID: 0}
-    - target: {fileID: 7778510078217583685, guid: 66dc8508586cf2e40883307a6334e675, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 125
-      objectReference: {fileID: 0}
     - target: {fileID: 7778510078313090607, guid: 66dc8508586cf2e40883307a6334e675, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2431,7 +2423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e9d8bef07b87b4481d25b3edbcab4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerScreen: {fileID: 330638736}
   allyParty: {fileID: 0}
   enemyParty: {fileID: 0}
   possibleEnemies:
@@ -3664,6 +3655,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911626155}
   m_CullTransparentMesh: 1
+--- !u!1 &943060608 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7778510077534757001, guid: 66dc8508586cf2e40883307a6334e675, type: 3}
+  m_PrefabInstance: {fileID: 47423430}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &943060612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943060608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEquipSlot: 0
+  itemUI: {fileID: 0}
 --- !u!1 &969880588
 GameObject:
   m_ObjectHideFlags: 0

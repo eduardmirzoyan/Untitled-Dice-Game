@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public Canvas playerScreen; // Stores the player's screen for other classes to get
     public Dictionary<string, string> dictionary;
     public Party allyParty;
     public Party enemyParty;

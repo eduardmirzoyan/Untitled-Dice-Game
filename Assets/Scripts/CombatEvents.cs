@@ -31,6 +31,8 @@ public class CombatEvents : MonoBehaviour
         instance = this;
     }
 
+    public event Action<Unit, int> onUpdateParty;
+
     // Game states
     public event Action<ActionInfo> onCombatStart;
     public event Action<ActionInfo> onRoundStart;
@@ -61,6 +63,12 @@ public class CombatEvents : MonoBehaviour
     public event Action<int> onClearQueue; // ?
 
     public event Action<string> onFeedback;
+
+    public void TriggerOnUpdateParty(Unit unit, int index) {
+        if (onUpdateParty != null) {
+            onUpdateParty(unit, index);
+        }
+    }
 
     public void TriggerOnFeedback(string message) {
         if (onFeedback != null) {

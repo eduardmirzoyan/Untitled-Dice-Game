@@ -56,6 +56,8 @@ public class CombatManager : MonoBehaviour
         allyParty = GameManager.instance.allyParty;
         enemyParty = GameManager.instance.enemyParty;
 
+        
+
         // Start combat
         coroutine = StartCoroutine(StartCombat());
     }
@@ -73,6 +75,11 @@ public class CombatManager : MonoBehaviour
     private IEnumerator StartCombat() {
         // Debug Feedback
         print("Combat Start"); 
+
+        for (int i = 0; i < allyParty.maxSize; i++) {
+            if (allyParty[i] != null)
+                CombatEvents.instance.TriggerOnUpdateParty(allyParty[i], i);
+        }
 
         // Change state
         state = CombatState.RoundStart;

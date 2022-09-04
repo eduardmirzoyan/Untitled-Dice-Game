@@ -11,6 +11,7 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [SerializeField] private Item item;
     [SerializeField] private Image itemSprite;
     [SerializeField] private bool isInteractable;
+    [SerializeField] private ItemSlotUI itemSlotUI;
     private bool isBeingDragged;
     private Transform currentParent;
     private Canvas playerScreen;
@@ -29,10 +30,23 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         }
     }
 
-    public void Initialize(Item item) {
+    public void Initialize(Item item, ItemSlotUI itemSlotUI) {
         this.item = item;
+        this.itemSlotUI = itemSlotUI;
         itemSprite.sprite = item.sprite;
         isInteractable = true;
+    }
+
+    public Item GetItem() {
+        return item;
+    }
+
+    public void SetItemSlot(ItemSlotUI itemSlotUI) {
+        this.itemSlotUI = itemSlotUI;
+    }
+
+    public ItemSlotUI GetItemSlotUI() {
+        return itemSlotUI;
     }
 
     public void SetParent(Transform transform) {
@@ -41,6 +55,7 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // Display item info
         Vector3[] corners = new Vector3[4];
         GetComponent<RectTransform>().GetWorldCorners(corners);
         ItemDisplayUI.instance.Show(item, corners[3]);
@@ -48,11 +63,13 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        // HIde item info
         ItemDisplayUI.instance.Hide();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // Lock item info
         ItemDisplayUI.instance.Lock();
     }
 
@@ -71,6 +88,11 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
             isBeingDragged = true;
         }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        // Nothing
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -95,10 +117,5 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             // Reset position
             transform.localPosition = Vector3.zero;
         }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        // Nothing
     }
 }

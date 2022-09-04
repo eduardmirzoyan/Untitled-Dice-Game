@@ -22,6 +22,9 @@ public class SelectionEvents : MonoBehaviour
     public event Action<List<Unit>> onDisplayUnitOptions;
     public event Action<bool> onPartyFull;
 
+    public event Action<Item> onItemEquip;
+    public event Action<ItemUI, ItemSlotUI> onItemInsertIntoSlot;
+
     public void TriggerOnAddUnitToParty(Unit unit, int index) {
         if (onAddUnitToParty != null) {
             onAddUnitToParty(unit, index);
@@ -37,6 +40,18 @@ public class SelectionEvents : MonoBehaviour
     public void TriggerOnPartyFull(bool state) {
         if (onPartyFull != null) {
             onPartyFull(state);
+        }
+    }
+
+    public void TriggerOnItemEquip(Item item) {
+        if (onItemEquip != null) {
+            onItemEquip(item);
+        }
+    }
+
+    public void TriggerOnItemInsertIntoSlot(ItemUI itemUI, ItemSlotUI itemSlotUI) {
+        if (onItemInsertIntoSlot != null) {
+            onItemInsertIntoSlot(itemUI, itemSlotUI);
         }
     }
 }

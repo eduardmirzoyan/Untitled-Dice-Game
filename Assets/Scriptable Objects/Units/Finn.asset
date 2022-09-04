@@ -18,9 +18,11 @@ MonoBehaviour:
   maxHealth: 30
   dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
   weapons:
+  - {fileID: 11400000, guid: 403918f3f017f3148931a68e5e74be38, type: 2}
+  - {fileID: 0}
+  armors:
   - {fileID: 0}
   - {fileID: 0}
-  armors: []
   speed: 1
   modelPrefab: {fileID: 1920093304987095289, guid: 26756ec2e995ef34583a824f005646af, type: 3}
   maskPrefab: {fileID: 5795271740615880010, guid: a62c96a7e3919584da97dfc87b804379, type: 3}

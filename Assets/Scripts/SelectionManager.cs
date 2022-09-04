@@ -21,11 +21,10 @@ public class SelectionManager : MonoBehaviour
 
         // Create a new party for the player to fill
         playerParty = ScriptableObject.CreateInstance<Party>();
-
-        // Trigger event to spawn all the units to choose from
     }
 
     private void Start() {
+        // Trigger event to spawn all the units to choose from
         SelectionEvents.instance.TriggerOnDisplayUnitOptions(unitsToChooseFrom);
     }
 

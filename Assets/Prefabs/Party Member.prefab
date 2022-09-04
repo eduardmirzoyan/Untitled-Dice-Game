@@ -693,6 +693,7 @@ GameObject:
   - component: {fileID: 7778510077534757002}
   - component: {fileID: 7778510077534757004}
   - component: {fileID: 7778510077534757003}
+  - component: {fileID: 1578394209}
   m_Layer: 5
   m_Name: Weapon 1 Slot Icon
   m_TagString: Untagged
@@ -759,6 +760,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
+--- !u!114 &1578394209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778510077534757001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEquipSlot: 1
+  itemUI: {fileID: 0}
 --- !u!1 &7778510077547248390
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,6 +1070,7 @@ GameObject:
   - component: {fileID: 7778510077831512471}
   - component: {fileID: 7778510077831512489}
   - component: {fileID: 7778510077831512488}
+  - component: {fileID: 976429747}
   m_Layer: 5
   m_Name: Armor 2 Slot
   m_TagString: Untagged
@@ -1121,6 +1137,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
+--- !u!114 &976429747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778510077831512470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEquipSlot: 0
+  itemUI: {fileID: 0}
 --- !u!1 &7778510077863168370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1261,7 +1291,12 @@ MonoBehaviour:
   weapon1Transform: {fileID: 7778510077534757002}
   weapon2Transform: {fileID: 7778510078058527437}
   unitModelTransform: {fileID: 7778510078217583685}
-  dropObject: {fileID: 1659364950}
+  weaponSlots:
+  - {fileID: 1578394209}
+  - {fileID: 1937791552}
+  armorSlots:
+  - {fileID: 1493931370}
+  - {fileID: 976429747}
   itemPrefab: {fileID: 3742355565742030271, guid: 28d81eabeb0eecc4db9019b7dfa64d23, type: 3}
   emptyColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1375,6 +1410,7 @@ GameObject:
   - component: {fileID: 7778510078058527437}
   - component: {fileID: 7778510078058527439}
   - component: {fileID: 7778510078058527438}
+  - component: {fileID: 1937791552}
   m_Layer: 5
   m_Name: Weapon 2 Slot Icon
   m_TagString: Untagged
@@ -1441,6 +1477,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
+--- !u!114 &1937791552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778510078058527436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEquipSlot: 1
+  itemUI: {fileID: 0}
 --- !u!1 &7778510078214170144
 GameObject:
   m_ObjectHideFlags: 0
@@ -1513,7 +1563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -90, y: 115.06}
+  m_AnchoredPosition: {x: -86, y: 125}
   m_SizeDelta: {x: 112.25, y: 230.13}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1620974323
@@ -1745,6 +1795,7 @@ GameObject:
   - component: {fileID: 7778510078624895563}
   - component: {fileID: 7778510078624895565}
   - component: {fileID: 7778510078624895564}
+  - component: {fileID: 1493931370}
   m_Layer: 5
   m_Name: Armor 1 Slot
   m_TagString: Untagged
@@ -1811,6 +1862,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
+--- !u!114 &1493931370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778510078624895562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEquipSlot: 0
+  itemUI: {fileID: 0}
 --- !u!1 &7778510078674082906
 GameObject:
   m_ObjectHideFlags: 0
