@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public Dictionary<string, string> dictionary;
     public Party allyParty;
     public Party enemyParty;
+    public Storage storage;
 
     [SerializeField] private List<Unit> possibleEnemies;
 
@@ -31,12 +32,17 @@ public class GameManager : MonoBehaviour
         dictionary["ODD"] = "The value of the die is an odd number.";
         dictionary["BLEED"] = "To be implemented.";
 
-        // Initialize party
+        // Create a player party (Which should be overwritten)
+        allyParty = ScriptableObject.CreateInstance<Party>();
+
+        // Create a enemy party (Which should be overwritten)
         enemyParty = ScriptableObject.CreateInstance<Party>();
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             enemyParty.Add(possibleEnemies[i], i);
         }
+
+        // Create storage (Which should be overwritten)
+        storage = ScriptableObject.CreateInstance<Storage>();
 
         DontDestroyOnLoad(this);
     }

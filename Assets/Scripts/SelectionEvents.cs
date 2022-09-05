@@ -26,6 +26,14 @@ public class SelectionEvents : MonoBehaviour
     public event Action<Item> onItemEquip;
     public event Action<ItemUI, ItemSlotUI> onItemInsertIntoSlot;
 
+    public event Action<Item, int> onAddItemToStorage;
+
+    public void TriggerOnAddItemToStorage(Item item, int index) {
+        if (onAddItemToStorage != null) {
+            onAddItemToStorage(item, index);
+        }
+    }
+
     public void TriggerOnFillParty(Unit unit, int index) {
         if (onFillParty != null) {
             onFillParty(unit, index);
