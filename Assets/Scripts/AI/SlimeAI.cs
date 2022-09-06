@@ -15,7 +15,7 @@ public class SlimeAI : ScriptableObject
                 var attack = (AttackAction) action;
                 foreach (var die in dicepool.GetDice()) {
                     // Skip if die is inactive
-                    if (!die.GetActive()) continue;
+                    if (!die.isActive) continue;
 
                     // Make sure die passes contraints
                     if (attack.checkDieConstraints(die)) {

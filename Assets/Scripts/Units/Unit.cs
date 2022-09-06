@@ -71,6 +71,20 @@ public abstract class Unit : ScriptableObject
         return currentHealth <= 0;
     }
 
+    public void ClearEquipment() {
+        // Set weapons to null
+        for (int i = 0; i < weapons.Count; i++)
+        {
+            weapons[i] = null;
+        }
+
+        // Set armors to null
+        for (int i = 0; i < armors.Count; i++)
+        {
+            armors[i] = null;
+        }
+    }
+
     public void EquipWeapon(Weapon weapon, int slot) {
         if (slot < 0 || slot >= weapons.Count) {
             throw new System.Exception("WEAPON ATTEMPTED TO BE EQUIPPED TO AN INVALID INDEX: " + slot);

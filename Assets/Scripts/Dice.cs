@@ -8,7 +8,7 @@ public class Dice : ScriptableObject, IComparable<Dice>
 {
     public int maxValue = 6;
     [SerializeField] private int value;
-    [SerializeField] private bool isActive;
+    public bool isActive;
 
     private void Awake() {
         if (maxValue < 1) {
@@ -34,10 +34,6 @@ public class Dice : ScriptableObject, IComparable<Dice>
 
     public void Exhaust() {
         isActive = false;
-    }
-
-    public bool GetActive() {
-        return isActive;
     }
 
     public void Grow() {

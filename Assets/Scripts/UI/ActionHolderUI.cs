@@ -28,6 +28,13 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
         }
     }
 
+    public void Deinitialize() {
+        if (isFunctional) {
+            CombatEvents.instance.onDieInsert -= OnDieInsert;
+            CombatEvents.instance.onPreActionConfirm -= ReleaseDieIfPossible;
+        }
+    }
+
     public void Initialize(Passive passive, bool isFunctional = true) {
         this.passive = passive;
         this.isFunctional = false;
@@ -41,8 +48,14 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
         if (isFunctional && eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI) && containedDiceUI == null) {
             var dice = diceUI.GetDie();
 
+            // Make sure die is active
+            if (!dice.isActive) {
+                CombatEvents.instance.TriggerOnFeedback("Must use NON-EXHAUSTED die.");
+                return;
+            }
+
             // Check for any constraints on the die
-            if (action.checkDieConstraints(dice)) {
+            if (dice.isActive && action.checkDieConstraints(dice)) {
                 // Stores UI
                 containedDiceUI = diceUI;
 

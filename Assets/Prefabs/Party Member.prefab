@@ -895,6 +895,7 @@ GameObject:
   - component: {fileID: 1440613643530970092}
   - component: {fileID: 1440613643530970089}
   - component: {fileID: 8311077686170416364}
+  - component: {fileID: 347190374}
   m_Layer: 0
   m_Name: Dice UI
   m_TagString: Untagged
@@ -1004,6 +1005,21 @@ SortingGroup:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
+--- !u!114 &347190374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440613643530970094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3834dc058516fd46aed9f64974e8519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  header: Die
+  description: This display the die currently held by this UNIT. A die is defined
+    by its largest possible roll,  shown here.
 --- !u!1 &1440613643574181310
 GameObject:
   m_ObjectHideFlags: 0

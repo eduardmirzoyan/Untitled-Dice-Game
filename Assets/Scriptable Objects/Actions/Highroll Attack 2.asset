@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 534f96c80fa2deb43aabe20876983e7b, type: 3}
   m_Name: Highroll Attack 2
   m_EditorClassIdentifier: 
+  name: Reaping Slash
   description: 'HIGHROLL: Deal %% damage then heal self %%'
-  icon: {fileID: 21300000, guid: d689cc603c575cb4d9fc7ebf62801771, type: 3}
+  icon: {fileID: 21300000, guid: 7a02dc250432e3d4dbb11a3aae180015, type: 3}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1

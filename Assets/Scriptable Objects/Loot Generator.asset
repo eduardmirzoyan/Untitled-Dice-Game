@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: Loot Generator
   m_EditorClassIdentifier: 
   weaponNames:
-  - Rusty Sword
-  - Cool Sword
-  - Hot Sword
+  - Rusty Weapon
+  - Worn Weapon
+  - Crude Weapon
+  - Sharp Weapon
+  - Heavy Weapon
+  - Strong Weapon
   weaponFlavorTexts:
-  - Flavor Text
-  - Flavor Text
-  - Flavor Text
+  - Flavor Text lol
+  - Flavor Text lol
+  - Flavor Text lol
   weaponSprites:
   - {fileID: -1126272107, guid: 20597968d5281954482d5d148d07fa12, type: 3}
   - {fileID: -1956281420, guid: 20597968d5281954482d5d148d07fa12, type: 3}
@@ -53,13 +56,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e2508c0ef559ea48922084cf702d3d6, type: 2}
   rangeOfSpecialsPerWeapon: {x: 1, y: 2}
   armorNames:
-  - Random 1
-  - Random 2
-  - Random 3
+  - Worn Armor
+  - Tattered Armor
+  - Tough Armor
+  - Hard Armor
+  - Heavy Armor
   armorFlavorTexts:
-  - Garb 1
-  - Garb 2
-  - Garb 3
+  - Flavor Text lol
+  - Flavor Text lol
+  - Flavor Text lol
   armorSprites:
   - {fileID: -1648529639, guid: 20597968d5281954482d5d148d07fa12, type: 3}
   - {fileID: 11224713, guid: 20597968d5281954482d5d148d07fa12, type: 3}

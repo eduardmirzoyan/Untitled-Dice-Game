@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97632bb79c7feae448cb6885acde5a3d, type: 3}
   m_Name: Even Attack 1
   m_EditorClassIdentifier: 
+  name: Pierce
   description: 'EVEN: Deal %%'
   icon: {fileID: 21300000, guid: 0abd9221fce33af458fe26844743318b, type: 3}
   canTargetSelf: 0

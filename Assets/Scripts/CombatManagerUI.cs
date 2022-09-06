@@ -47,6 +47,9 @@ public class CombatManagerUI : MonoBehaviour
     [Header("Damage number UI")]
     [SerializeField] private GameObject floatingNumberPrefab;
 
+    [SerializeField] private Color allyColor;
+    [SerializeField] private Color enemyColor;
+
     private Canvas playerScreen;
 
     private void Awake() {
@@ -75,7 +78,6 @@ public class CombatManagerUI : MonoBehaviour
         CombatEvents.instance.onPlayerTurnStart += EnableAllyDice;
         CombatEvents.instance.onPlayerTurnStart += ShowActions;
         CombatEvents.instance.onTargetSelect += HighlightTarget;
-        // CombatEvents.instance.onActionConfirm += ClearTargets;
         CombatEvents.instance.onActionConfirm += ClearActions;
         CombatEvents.instance.onActionConfirm += DisableAllyDice;
 
@@ -177,7 +179,7 @@ public class CombatManagerUI : MonoBehaviour
         // Get corresponding outline based on index
         var dieOutlineUI = dieOutlineUIs[combatant.index];
         // Set color based on alligence
-        Color dieColor = combatant.isAlly() ? Color.red : Color.blue;
+        Color dieColor = combatant.isAlly() ? allyColor : enemyColor;
 
         // Create the UI
         var dieUI = Instantiate(dicePrefab, dieOutlineUI.transform).GetComponent<DiceUI>();
@@ -214,6 +216,9 @@ public class CombatManagerUI : MonoBehaviour
 
             // Initialize model
             modelObject.GetComponent<ModelUI>().Initialize(combatant);
+
+            // Assign model
+            combatant.AssignModel(modelObject.transform);
 
             // TODO Spawn animation?
         }
@@ -257,10 +262,8 @@ public class CombatManagerUI : MonoBehaviour
     private void ShowActions(int value) {
         // Make new list
         actionHolders = new List<ActionHolderUI>();
-        print("show action 1");
         // Get all weapons equipped to the unit
         foreach (var action in CombatManager.instance.currentCombatant.unit.GetActions()) {
-            print("show action 2");
             // Create UI gameobject
             var actionHolder = Instantiate(actionHolderPrefab, actionLayoutGroup.transform).GetComponent<ActionHolderUI>();
             // Initalize it
@@ -270,8 +273,6 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    
-
     private void ClearActions(Action action) {
         // If there is no UI displaying, do nothing
         if (actionHolders.Count == 0) 
@@ -279,6 +280,8 @@ public class CombatManagerUI : MonoBehaviour
         
         // Delete each holder
         foreach (var actionHolder in actionHolders) {
+            // Unsub
+            actionHolder.Deinitialize();
             // Destroy gameobject
             Destroy(actionHolder.gameObject);
         }

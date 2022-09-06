@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b9540c127bbbe842bffa9bd69d71dbe, type: 3}
   m_Name: Highroll Attack 1
   m_EditorClassIdentifier: 
+  name: Overhead Swing
   description: 'HIGHROLL: Deal %% damage'
-  icon: {fileID: 21300000, guid: faa4f83657651d746b89d8217d6a086d, type: 3}
+  icon: {fileID: 21300000, guid: d689cc603c575cb4d9fc7ebf62801771, type: 3}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1

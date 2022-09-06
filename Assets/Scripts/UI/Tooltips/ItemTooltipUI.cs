@@ -93,7 +93,7 @@ public class ItemTooltipUI : MonoBehaviour
         }
         else if (item is Armor) {
             var armor = (Armor) item;
-            itemDescription.text = armor.description;
+            itemDescription.text = "";
 
             // Display all the actions
             foreach (var passive in armor.passives) {

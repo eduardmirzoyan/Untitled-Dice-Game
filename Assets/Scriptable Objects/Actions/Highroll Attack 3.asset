@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba87d0cbc462b940bad2748558b62cd, type: 3}
   m_Name: Highroll Attack 3
   m_EditorClassIdentifier: 
+  name: Cleave
   description: 'Deal %% damage
 
     HIGHROLL: Deal %% damage to adjacent units'
-  icon: {fileID: 21300000, guid: 99cd02529f84cba4286377957d4505bf, type: 3}
+  icon: {fileID: 21300000, guid: a84f2857919f5d64796271392949a7a0, type: 3}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1

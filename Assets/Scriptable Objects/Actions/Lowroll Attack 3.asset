@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e40fd27b7825c143b13eaec3d8df6b7, type: 3}
   m_Name: Lowroll Attack 3
   m_EditorClassIdentifier: 
+  name: Twin Strike
   description: "Deal %%\nLOWROLL: Do it again\r"
   icon: {fileID: 21300000, guid: f3695f1e849a01644bbff6c5f95b09db, type: 3}
   canTargetSelf: 0

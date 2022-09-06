@@ -18,7 +18,7 @@ MonoBehaviour:
   maxHealth: 30
   dice: {fileID: 11400000, guid: 0a550a1a7d495da4cb80950b98fdeec5, type: 2}
   weapons:
-  - {fileID: 11400000, guid: 4f547578ff1dbf647b4932e94e779897, type: 2}
+  - {fileID: 11400000, guid: 716acb8c19e69ae4db1a7fc5c36d5d47, type: 2}
   - {fileID: 0}
   armors:
   - {fileID: 0}

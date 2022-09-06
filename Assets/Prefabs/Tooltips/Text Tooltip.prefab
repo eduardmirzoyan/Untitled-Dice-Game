@@ -539,5 +539,5 @@ MonoBehaviour:
   header: {fileID: 2306258572363877645}
   description: {fileID: 2306258571661971076}
   layoutElement: {fileID: 2306258570957972915}
-  characterWrapLimit: 40
+  characterWrapLimit: 60
   windowTransform: {fileID: 2306258570957972909}

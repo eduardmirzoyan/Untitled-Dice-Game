@@ -23,7 +23,14 @@ public class TransitionManager : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
+    public int GetSceneIndex() {
+        return SceneManager.GetActiveScene().buildIndex;
+    }
+
     public void LoadNextScene() {
+        // Stop any background music
+        AudioManager.instance.Stop("Background " + GetSceneIndex());
+
         // Stop any transition if one was happening
         if (coroutine != null) StopCoroutine(coroutine);
 
@@ -32,6 +39,9 @@ public class TransitionManager : MonoBehaviour
     }
 
     public void LoadMainMenu() {
+        // Stop any background music
+        AudioManager.instance.Stop("Background " + GetSceneIndex());
+
         // Stop any transition if one was happening
         if (coroutine != null) StopCoroutine(coroutine);
 

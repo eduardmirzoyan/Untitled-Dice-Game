@@ -24,6 +24,7 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private Party playerParty;
     [SerializeField] private Storage playerStorage;
     [SerializeField] private float waitTilSpawn = 0.5f;
+    [SerializeField] private SlidingWindow slidingWindow;
 
     private void Awake()
     {
@@ -41,6 +42,9 @@ public class SelectionManager : MonoBehaviour
     }
 
     private void Start() {
+        // Lower window
+        slidingWindow.Lower();
+
         // Start routine
         StartCoroutine(WaitThenDisplay());
 
@@ -112,6 +116,9 @@ public class SelectionManager : MonoBehaviour
                 // Make copy of die
                 copy.dice = Instantiate(playerParty[i].dice);
 
+                // Clear the current unit
+                playerParty[i].ClearEquipment();
+
                 // Add the selected unit to party
                 playerParty.Set(copy, i);
             }
@@ -121,6 +128,9 @@ public class SelectionManager : MonoBehaviour
 
             // Set random encounter
             GameManager.instance.SetOpponent(combatEnounterGenerator.GenerateEnemyEncounter());
+
+            // Lower window
+            slidingWindow.Raise();
 
             // Transition to combat scene
             TransitionManager.instance.LoadNextScene();

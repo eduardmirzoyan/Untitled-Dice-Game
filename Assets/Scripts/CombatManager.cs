@@ -15,6 +15,7 @@ public class CombatManager : MonoBehaviour
     [Header("Combat Settings")]
     public float rollTime = 0.3f;
     public float waitTime = 1f;
+    public float attackTime = 1f;
 
     [SerializeField] private CombatState state;
     [SerializeField] private Party allyParty;
@@ -158,6 +159,11 @@ public class CombatManager : MonoBehaviour
         // Use the first entity in the queue
         currentCombatant = turnQueue.Peek();
 
+        // If unit is dead, then pass action
+        if (currentCombatant.unit.IsDead()) {
+            yield return ConfirmAction();
+        }
+
         // Check if it's a player turn
         isPlayerTurn = currentCombatant.isAlly();
 
@@ -195,24 +201,18 @@ public class CombatManager : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
+            // Trigger event
+            CombatEvents.instance.TriggerOnFeedback(currentCombatant.unit.name + " used " + bestChoice.Item1.name + " on " + bestChoice.Item3.unit.name);
+
             // Confirm
             yield return ConfirmAction();
         }
         else {
-            // Show visuals for what the current unit can do
-            // TODO
-            // CombatManagerUI.instance.DisplayActions(currentCombatant.unit);
-
-            // Allow the player to interact with dice now
-            // CombatManagerUI.instance.EnableAllyDice();
-
             // Start listening for events
             CombatEvents.instance.onDieInsert += SelectAction;
 
-            // Callevent
+            // Trigger event for visuals
             CombatEvents.instance.TriggerOnPlayerTurnStart(0);
-
-            // Save reference
         }
 
         // Figure out from here cuz after this another coroutine should be started after turn is chosen
@@ -232,7 +232,6 @@ public class CombatManager : MonoBehaviour
         
         // Clear visuals
         CombatEvents.instance.TriggerOnRoundEndUI(0);
-        // CombatManagerUI.instance.DespawnDice();
 
         // Trigger round end events
         yield return CombatEvents.instance.TriggerRoundEnd(new ActionInfo(0.5f));
@@ -389,6 +388,14 @@ public class CombatManager : MonoBehaviour
             if (isPlayerTurn)
                 CombatEvents.instance.TriggerOnPlayerTurnEnd(0);
 
+            // Remove the current unit from queue
+            turnQueue.Dequeue();
+
+            // Trigger event
+            CombatEvents.instance.TriggerDequeue(currentCombatant);
+
+            // If all units took their turn, start new round if possible or end combat
+            
             // Check if enemies are all dead
             if (enemyParty.IsDead()) {
                 // Win combat
@@ -403,14 +410,7 @@ public class CombatManager : MonoBehaviour
 
                 yield return EndCombat();
             }
-
-            // Remove the current unit from queue
-            turnQueue.Dequeue();
-            // Trigger event
-            CombatEvents.instance.TriggerDequeue(currentCombatant);
-
-            // If all units took their turn, start new round if possible or end combat
-            if (turnQueue.Count == 0) {
+            else if (turnQueue.Count == 0) {
                 // End the current round
                 yield return EndRound();
             }
@@ -510,7 +510,6 @@ public class CombatManager : MonoBehaviour
 
     public void SelectTarget(Combatant combatant) {
         // Check if target is valid
-        // TODO
 
         // Clear any previous targets if possible
         if (selectedTarget != null) {
@@ -525,9 +524,6 @@ public class CombatManager : MonoBehaviour
 
         // Event
         CombatEvents.instance.TriggerOnTargetSelect(selectedTarget);
-
-        // Update visuals
-        // CombatManagerUI.instance.HighlightTarget(selectedTarget.worldPosition);
     }
 
     public void Pass() {
@@ -580,14 +576,23 @@ public class CombatManager : MonoBehaviour
             selectedTarget = null;
             
             yield return EndTurn();
-            // throw new Exception("Action has been confirmed without selecting an action");
         }
+
+        // Perform animation
+        if (selectedAction is AttackAction)
+            yield return Attack();
 
         // Perform selected action on selected target using selected die
         selectedAction.Perform(selectedTarget.index, combatants, selectedDie);
 
         // Set selected die innactive
         selectedDie.Exhaust();
+
+        // Wait for dramatic effect
+        yield return new WaitForSeconds(0);
+
+        // Then return model
+        currentCombatant.modelTransform.position = CombatManagerUI.instance.GetCellCenter(currentCombatant.worldPosition);
 
         // Trigger event
         CombatEvents.instance.TriggerOnExhaust(selectedDie);
@@ -598,11 +603,29 @@ public class CombatManager : MonoBehaviour
         // Clear action
         selectedAction = null;
 
+        // Clear die
+        selectedDie = null;
+
         // Clear target
         selectedTarget = null;
 
         // End Turn
         yield return EndTurn();
+    }
+
+    private IEnumerator Attack() {
+        var startPos = currentCombatant.modelTransform.position;
+        var endPos = selectedTarget.modelTransform.position;
+        float timer = 0;
+        
+        while (timer < attackTime) {
+            // Lerp model towards other model
+            currentCombatant.modelTransform.position = Vector3.Lerp(startPos, endPos, timer / attackTime);
+
+            // Decrement time
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 
     public bool hasActionBeenChoosen() {

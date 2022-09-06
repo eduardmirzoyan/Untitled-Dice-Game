@@ -26,7 +26,8 @@ public class ConfirmActionUI : MonoBehaviour
     }
 
     public void ChangeState(Combatant combatant) {
-        button.interactable = combatant != null;
+        print("update!");
+        button.interactable = CombatManager.instance.selectedTarget != null;
     }
 
     public void Hide(Action action) {

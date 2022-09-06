@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5a63a940a25abe44a046a6f073a4d03, type: 3}
   m_Name: Passive 3
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  icon: {fileID: 0}
+  name: Revise
+  description: 'On Round Start: If your POOL has no EVEN die, REROLL my die'
+  icon: {fileID: 21300000, guid: e3e46e3c19de8c7469f583bfece74463, type: 3}
   combatant: {fileID: 0}
   sourceArmor: {fileID: 0}

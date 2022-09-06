@@ -69,7 +69,7 @@ MonoBehaviour:
   m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3848147ed109f454bbb6b9362cf208a0, type: 2}
-  m_sharedMaterial: {fileID: 2687402936931118099, guid: 3848147ed109f454bbb6b9362cf208a0, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 7b609c1dc51c87d48b13ac1c92043734, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -189,7 +189,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0.5
+  m_GravityScale: 0.35
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b01c6c9bcf556448234a5cdadc0508, type: 3}
   m_Name: Lowroll Attack 2
   m_EditorClassIdentifier: 
+  name: Rapid Slices
   description: 'LOWROLL: Deal %% to 3 random enemies'
   icon: {fileID: 21300000, guid: 99cd02529f84cba4286377957d4505bf, type: 3}
   canTargetSelf: 0

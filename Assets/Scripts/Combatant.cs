@@ -9,6 +9,7 @@ public class Combatant : ScriptableObject
     public Vector3Int worldPosition;
     public DicePool dicePool;
     
+    public Transform modelTransform; // Change this to event based
     public HealthbarUI healthbar; // Change this to event based
 
     public void Initialize(Unit unit, DicePool dicePool, int index, Vector3Int worldPosition) {
@@ -30,6 +31,10 @@ public class Combatant : ScriptableObject
         this.healthbar = healthbar;
 
         healthbar.Initialize(unit.maxHealth, unit.currentHealth);
+    }
+
+    public void AssignModel(Transform transform) {
+        this.modelTransform = transform;
     }
 
     public void TakeDamage(int amount) {

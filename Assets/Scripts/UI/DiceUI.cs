@@ -148,7 +148,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         DrawValue(dice.GetValue());
 
         // Update transparancy depending if die is active
-        canvasGroup.alpha = dice.GetActive() ? 1f : 0.5f;
+        canvasGroup.alpha = dice.isActive ? 1f : 0.5f;
     }
 
     public Dice GetDie() {
