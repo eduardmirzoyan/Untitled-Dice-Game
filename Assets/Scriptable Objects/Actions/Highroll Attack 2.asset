@@ -22,4 +22,4 @@ MonoBehaviour:
   uses: 0
   usesCounter: 0
   baseDamageMultiplier: 1
-  sourceWeapon: {fileID: 11400000, guid: 403918f3f017f3148931a68e5e74be38, type: 2}
+  sourceWeapon: {fileID: 0}

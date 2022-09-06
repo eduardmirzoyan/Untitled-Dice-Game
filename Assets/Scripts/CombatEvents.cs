@@ -31,10 +31,12 @@ public class CombatEvents : MonoBehaviour
         instance = this;
     }
 
+    // Banner events
     public event Action<string> onShowBanner;
     public event Action<string> onHideBanner;
+    public event Action<int> onRoundStartUI;
+    public event Action<int> onRoundEndUI;
     
-
 
     // Game states
     public event Action<ActionInfo> onCombatStart;
@@ -45,9 +47,11 @@ public class CombatEvents : MonoBehaviour
 
     // Die events
     public event Action<Dice> onRoll;
-    public event Action<ActionInfo> onReroll;
+    public event Action<Dice> onReroll;
     public event Action<Dice> onGrow;
     public event Action<Dice> onShrink;
+    public event Action<Dice> onReplenish;
+    public event Action<Dice> onExhaust;
     public event Action<Dice, bool> onSetActive;
 
 
@@ -55,6 +59,7 @@ public class CombatEvents : MonoBehaviour
     public event Action<int> onPlayerTurnStart;
     public event Action<Action, Dice> onDieInsert;
     public event Action<Combatant> onTargetSelect;
+    public event Action<Action> onPreActionConfirm;
     public event Action<Action> onActionConfirm;
     public event Action<int> onPlayerTurnEnd;
 
@@ -68,6 +73,18 @@ public class CombatEvents : MonoBehaviour
     public event Action<int> onClearQueue; // ?
     
     public event Action<string> onFeedback;
+
+    public void TriggerOnRoundStartUI(int value) {
+        if (onRoundStartUI != null) {
+            onRoundStartUI(value);
+        }
+    }
+
+    public void TriggerOnRoundEndUI(int value) {
+        if (onRoundEndUI != null) {
+            onRoundEndUI(value);
+        }
+    }
 
     public void TriggerOnShowBanner(string message) {
         if (onShowBanner != null) {
@@ -103,6 +120,12 @@ public class CombatEvents : MonoBehaviour
     public void TriggerOnDieInsert(Action action, Dice dice) {
         if (onDieInsert != null) {
             onDieInsert(action, dice);
+        }
+    }
+
+    public void TriggerOnPreActionConfirm(Action action) {
+        if (onPreActionConfirm != null) {
+            onPreActionConfirm(action);
         }
     }
 
@@ -154,23 +177,9 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    // FIGURE THIS SHIT OUT ?
-    public IEnumerator TriggerReroll(ActionInfo info)
-    {
-        // Wait for some time first
-        yield return new WaitForSeconds(info.waitTime);
-
-        // If there are any subscribers
-        if (onReroll != null)
-        {
-            // Invoke all the subscribers
-            foreach (var invocation in onReroll.GetInvocationList())
-            {
-                // Call invokation and update info values
-                invocation.DynamicInvoke(info);
-                // Wait an amount of time
-                yield return new WaitForSeconds(info.waitTime);
-            }
+    public void TriggerReroll(Dice dice) {
+        if (onReroll != null) {
+            onReroll(dice);
         }
     }
 
@@ -183,6 +192,18 @@ public class CombatEvents : MonoBehaviour
     public void TriggerOnShrink(Dice dice) {
         if (onShrink != null) {
             onShrink(dice);
+        }
+    }
+
+    public void TriggerOnReplenish(Dice dice) {
+        if (onReplenish != null) {
+            onReplenish(dice);
+        }
+    }
+
+    public void TriggerOnExhaust(Dice dice) {
+        if (onExhaust != null) {
+            onExhaust(dice);
         }
     }
 

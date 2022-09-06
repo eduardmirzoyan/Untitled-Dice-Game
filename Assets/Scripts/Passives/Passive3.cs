@@ -28,8 +28,10 @@ public class Passive3 : Passive
         // Dice pool concept?
         if (combatant.dicePool.EvenCount() == 0)
         {
+            // Reroll the die
             combatant.unit.dice.Roll();
-            CombatEvents.instance.TriggerReroll(info);
+            // Trigger event
+            CombatEvents.instance.TriggerReroll(combatant.unit.dice);
 
             // If effect triggers, then increase wait time
             info.waitTime = 0.5f;

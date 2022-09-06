@@ -13,6 +13,7 @@ public class HolderHolder : MonoBehaviour
     }
 
     public void DisplayUnits(List<Unit> units) {
+        print("displaying");
         foreach (var unit in units) {
             var holder = Instantiate(unitHolderPrefab, layoutGroup.transform).GetComponent<UnitHolderUI>();
             holder.Initialize(unit);

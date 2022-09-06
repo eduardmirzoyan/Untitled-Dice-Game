@@ -22,7 +22,7 @@ public class Party : ScriptableObject
         dicePool = ScriptableObject.CreateInstance<DicePool>();
     }
 
-    public void Add(Unit unit, int index) {
+    public void Set(Unit unit, int index) {
         // Error checking
         if (index >= maxSize || index < 0) {
             Debug.Log("Tried to add unit to an invalid index: " + index);

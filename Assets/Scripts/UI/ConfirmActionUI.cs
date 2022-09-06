@@ -16,23 +16,20 @@ public class ConfirmActionUI : MonoBehaviour
     private void Start() {
         CombatEvents.instance.onPlayerTurnStart += Show;
         CombatEvents.instance.onTargetSelect += ChangeState;
-        CombatEvents.instance.onPlayerTurnEnd += Hide;
+        CombatEvents.instance.onActionConfirm += Hide;
     }
 
     private void Show(int value) {
-        
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
 
     public void ChangeState(Combatant combatant) {
-        // print("Change : " +combatant.name);
-
         button.interactable = combatant != null;
     }
 
-    public void Hide(int value) {
+    public void Hide(Action action) {
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;

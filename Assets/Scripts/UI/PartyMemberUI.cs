@@ -15,8 +15,6 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     [SerializeField] private DiceUI diceUI;
     [SerializeField] private TextMeshProUGUI healthStat;
     [SerializeField] private TextMeshProUGUI speedStat;
-    [SerializeField] private RectTransform weapon1Transform;
-    [SerializeField] private RectTransform weapon2Transform;
     [SerializeField] private RectTransform unitModelTransform;
     [SerializeField] private List<ItemSlotUI> weaponSlots;
     [SerializeField] private List<ItemSlotUI> armorSlots;
@@ -34,7 +32,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     private bool interact;
 
     private void Start() {
-        SelectionEvents.instance.onAddUnitToParty += AddedUnit;
+        SelectionEvents.instance.onAddUnitToParty += AddUnit;
         SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
         
         SelectionEvents.instance.onFillParty += FillWithUnit;
@@ -44,7 +42,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         if (this.index != index) return;
 
         var ui = Instantiate(GameManager.instance.unitUIprefab, unitModelTransform).GetComponent<UnitUI>();
-        ui.Initialize(unit, unitModelTransform, false);
+        ui.Initialize(unit, index, unitModelTransform, false);
         EquipUnitUI(ui);
         interact = false;
     }
@@ -52,6 +50,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     public void EquipUnitUI(UnitUI newUnitUI) {
         unitUI = newUnitUI;
         unitUI.SetParent(unitModelTransform);
+        unitUI.SetIndex(index);
 
         UpdateVisuals();
     }
@@ -71,15 +70,14 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     public void OnPointerClick(PointerEventData eventData)
     {
         // Return to origin on right click
-        if (interact && unitUI != null && eventData.button == PointerEventData.InputButton.Right)
-        {
-            unitUI.ResetLocation();
-            unitUI = null;
+        // if (interact && unitUI != null && eventData.button == PointerEventData.InputButton.Right) {
+        //     unitUI.ResetLocation();
+        //     unitUI = null;
 
-            UpdateVisuals();
+        //     UpdateVisuals();
 
-            SelectionManager.instance.AddUnitToParty(null, index);
-        }
+        //     SelectionManager.instance.AddUnitToParty(null, index);
+        // }
     }
 
 
@@ -87,7 +85,6 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         // Check if item is weapon
         int wpnIndex = weaponSlots.IndexOf(itemSlotUI);
         if (wpnIndex != -1) {
-            
             // Item wants to be removed
             if (itemUI == null) {
                 unitUI.GetUnit().EquipWeapon(null, wpnIndex);
@@ -107,14 +104,14 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
             // Item wants to be removed
             if (itemUI == null) {
-                unitUI.GetUnit().EquipArmor(null, wpnIndex);
+                unitUI.GetUnit().EquipArmor(null, amrIndex);
                 return;
             }
 
             var armor = (Armor) itemUI.GetItem();
 
             // Equip weapon logic
-            unitUI.GetUnit().EquipArmor(armor, wpnIndex);
+            unitUI.GetUnit().EquipArmor(armor, amrIndex);
             return;
         }
 
@@ -122,14 +119,17 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     }
 
 
-    private void AddedUnit(Unit unit, int index) {
-        if (unitUI != null) {
-            // Add unit
-            // unitUI = newUnitUI;
-            if (unitUI.GetUnit() == unit && this.index != index) {
+    private void AddUnit(Unit unit, int index) {
+
+        if (this.index == index) {
+            if (unit == null) {
                 unitUI = null;
                 UpdateVisuals();
             }
+        }
+        else if (unitUI != null && unitUI.GetUnit() == unit) {
+            unitUI = null;
+            UpdateVisuals();
         }
         
     }
@@ -144,12 +144,9 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
             unitName.text = "[EMPTY]";
             unitName.color = emptyColor;
 
+            // Show "drop here" icon
             dropIcon.color = emptyColor;
             dropIcon.enabled = true;
-
-            // Update icon
-            //unitIcon.sprite = unit.icon;
-            //unitIcon.color = Color.white;
 
             // Update health
             healthStat.text = "0/0";
@@ -169,11 +166,8 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         unitName.text = unit.name;
         unitName.color = fullColor;
 
+        // Hide "drop here" icon
         dropIcon.enabled = false;
-
-        // Update icon
-        //unitIcon.sprite = unit.icon;
-        //unitIcon.color = Color.white; 
 
         // Update health
         healthStat.text = unit.GetHealthStatus();
@@ -199,23 +193,6 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
                 itemUI.Initialize(unit.armors[i], armorSlots[i]);
             }
         }
-
-        // // Update equipped weapons
-        // if (unit.weapons[0] != null) {
-        //     var itemUI = Instantiate(itemPrefab, weapon1Transform).GetComponent<ItemUI>();
-        //     itemUI.Initialize(unit.weapons[0]);
-        // }
-        // if (unit.weapons[1] != null) {
-        //     var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
-        //     itemUI.Initialize(unit.weapons[1]);
-        // }
-
-        // // Update equipped armors
-        // // TODO
-        // if (unit.armors != null && unit.armors.Count > 0 && unit.armors[0] != null) {
-        //     var itemUI = Instantiate(itemPrefab, weapon2Transform).GetComponent<ItemUI>();
-        //     itemUI.Initialize(unit.armors[0]);
-        // }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

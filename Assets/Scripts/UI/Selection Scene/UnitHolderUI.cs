@@ -13,7 +13,8 @@ public class UnitHolderUI : MonoBehaviour, IDropHandler
     public void Initialize(Unit unit) {
         // Spawn model
         unitUI = Instantiate(unitUIPrefab, unitModelTransform).GetComponent<UnitUI>();
-        unitUI.Initialize(unit, unitModelTransform);
+        // Initialize with -1 b/c not equipped
+        unitUI.Initialize(unit, -1, unitModelTransform);
     }
 
     public void OnDrop(PointerEventData eventData)

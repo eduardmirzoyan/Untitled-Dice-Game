@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5ac3a1ef76c45f459a7e2ce8596e95f, type: 3}
+  m_Name: Passive 8
+  m_EditorClassIdentifier: 
+  name: Shrink 2+
+  description: 'On Turn Start: If you have 2+ EVEN die, SHRINK the first one'
+  icon: {fileID: 21300000, guid: 71a85b827e33d8d4eb46c945c8ddbb34, type: 3}
+  combatant: {fileID: 0}
+  sourceArmor: {fileID: 0}

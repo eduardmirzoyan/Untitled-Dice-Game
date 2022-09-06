@@ -32,7 +32,7 @@ public class Passive4 : Passive
             // Reroll own die
             combatant.unit.dice.Roll();
             // Trigger event
-            CombatEvents.instance.TriggerReroll(info);
+            CombatEvents.instance.TriggerReroll(combatant.unit.dice);
 
             // If effect triggers, then increase wait time
             info.waitTime = 0.5f;

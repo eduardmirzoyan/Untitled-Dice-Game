@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("Components")]
     [SerializeField] private CanvasGroup canvasGroup;
@@ -12,7 +12,7 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     [SerializeField] private RectTransform origin;
     [SerializeField] private Image image;
     [SerializeField] private bool isInteractable;
-
+    [SerializeField] private int index;
 
     [Header("Settings")]
     [SerializeField] private Unit unit;
@@ -36,8 +36,9 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         }
     }
 
-    public void Initialize(Unit unit, RectTransform parent, bool isInteractable = true) {
+    public void Initialize(Unit unit, int index, RectTransform parent, bool isInteractable = true) {
         this.unit = unit;
+        this.index = index;
         this.isInteractable = isInteractable;
         origin = parent;
         currentParent = parent;
@@ -53,8 +54,11 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         currentParent = transform;
     }
 
-    public void ResetLocation()
-    {
+    public void SetIndex(int index) {
+        this.index = index;
+    }
+
+    public void ResetLocation() {
         // Reset parent to origin
         rectTransform.SetParent(origin);
         // Then relocate
@@ -112,13 +116,36 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     {
         if (!isInteractable) return;
         
-        UnitDisplayUI.instance.Show(unit, transform.position);
+        UnitTooltipUI.instance.Show(unit, transform.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!isInteractable) return;
 
-        UnitDisplayUI.instance.Hide();
+        UnitTooltipUI.instance.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!isInteractable) return;
+
+        // If left click
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            // Lock tooltip if possible
+            UnitTooltipUI.instance.Lock();
+        }
+
+        // If right click
+        if (eventData.button == PointerEventData.InputButton.Right && index != -1) {
+            // Reset location
+            ResetLocation();
+
+            // Trigger event
+            SelectionManager.instance.AddUnitToParty(null, index);
+
+            // Remove index
+            index = -1;
+        }
     }
 }

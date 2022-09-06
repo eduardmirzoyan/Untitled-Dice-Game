@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd19c83295f0f449b8c432dde280c1e, type: 3}
+  m_Name: Treant
+  m_EditorClassIdentifier: 
+  name: Treant
+  icon: {fileID: 21300000, guid: 8f101068bcf241b4c94aef14441e278c, type: 3}
+  currentHealth: 30
+  maxHealth: 30
+  dice: {fileID: 11400000, guid: 0a550a1a7d495da4cb80950b98fdeec5, type: 2}
+  weapons:
+  - {fileID: 11400000, guid: 4f547578ff1dbf647b4932e94e779897, type: 2}
+  - {fileID: 0}
+  armors:
+  - {fileID: 0}
+  - {fileID: 0}
+  speed: 7
+  modelPrefab: {fileID: 8575651604734794531, guid: c356db2d9a423bc4dbbf6445ba3bcef0, type: 3}
+  innatePassives: []
+  ai: {fileID: 11400000, guid: 04ae4891a8290b64e92dda6826309a8c, type: 2}

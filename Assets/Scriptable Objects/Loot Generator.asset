@@ -38,17 +38,54 @@ MonoBehaviour:
   - {fileID: -26448432, guid: 20597968d5281954482d5d148d07fa12, type: 3}
   - {fileID: 1798922490, guid: 20597968d5281954482d5d148d07fa12, type: 3}
   rangeOfBaseDamage: {x: 4, y: 6}
-  actionsToChooseFrom:
+  basicActionsToChooseFrom:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
-  - {fileID: 11400000, guid: 2350d4c3efec58445b14bdbbc5b91047, type: 2}
+  - {fileID: 11400000, guid: 0af394f37864ba24fbebac3ee3269a0e, type: 2}
+  - {fileID: 11400000, guid: 2f13d58c006bb0548b2b28f3a9c2a38a, type: 2}
+  specialActionsToChooseFrom:
+  - {fileID: 11400000, guid: d5ec2ecc7f8aa94448a7f585e80a4591, type: 2}
+  - {fileID: 11400000, guid: df8b85f4b19f47046a4ec51bb7117ac9, type: 2}
   - {fileID: 11400000, guid: e760e954560361246a3c8b36a11e54f3, type: 2}
   - {fileID: 11400000, guid: f989fb2f27b1d7a4c998359a74ddc258, type: 2}
-  - {fileID: 11400000, guid: 0af394f37864ba24fbebac3ee3269a0e, type: 2}
   - {fileID: 11400000, guid: 0429f13b5801f3c438bfeec4391f6a89, type: 2}
   - {fileID: 11400000, guid: 819fa6d1511f3ca48b63c598a657ae5b, type: 2}
-  - {fileID: 11400000, guid: 2f13d58c006bb0548b2b28f3a9c2a38a, type: 2}
-  rangeOfActionsPerWeapon: {x: 2, y: 3}
-  armorNames: []
-  armorFlavorTexts: []
-  armorSprites: []
-  passivesToChooseFrom: []
+  - {fileID: 11400000, guid: 320e9696fcc58ce4caa858f35d678009, type: 2}
+  - {fileID: 11400000, guid: 1e2508c0ef559ea48922084cf702d3d6, type: 2}
+  rangeOfSpecialsPerWeapon: {x: 1, y: 2}
+  armorNames:
+  - Random 1
+  - Random 2
+  - Random 3
+  armorFlavorTexts:
+  - Garb 1
+  - Garb 2
+  - Garb 3
+  armorSprites:
+  - {fileID: -1648529639, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 11224713, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -97396803, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 540338769, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 335946593, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 312658874, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -256555934, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 66394843, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 1145557461, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -884923210, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -1932250456, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -776140221, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 1206623059, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 485850052, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -145296397, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -1035556450, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 1012618117, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 1920210901, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: 557182477, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  - {fileID: -86908011, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  passivesToChooseFrom:
+  - {fileID: 11400000, guid: 2655abc57572d074cbbd3bdbfd4dcf72, type: 2}
+  - {fileID: 11400000, guid: 3ebe0eeb5c81d704bb300cf10346205a, type: 2}
+  - {fileID: 11400000, guid: 189a7d76969cdcd46baea97c2d8975de, type: 2}
+  - {fileID: 11400000, guid: 3aeb3001fc2e945468f40744e60e5a86, type: 2}
+  - {fileID: 11400000, guid: 2891f8773791f6b4bb8da145bad9f53f, type: 2}
+  - {fileID: 11400000, guid: 0e305f55113395f469987ba67a8d7329, type: 2}
+  - {fileID: 11400000, guid: 7f85e1ce616953d469f0d6b5e4b7adeb, type: 2}

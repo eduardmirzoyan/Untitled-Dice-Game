@@ -162,7 +162,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5915709135306995343}
   - component: {fileID: 5915709135306995340}
-  - component: {fileID: 5504897299527612531}
   m_Layer: 5
   m_Name: Action Holder
   m_TagString: Untagged
@@ -208,28 +207,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 5915709136074221095}
   containedDiceUI: {fileID: 0}
-  actionInspectUI: {fileID: 5504897299527612531}
   action: {fileID: 0}
   passive: {fileID: 0}
   highlightAlpha: 0.5
   isFunctional: 0
---- !u!114 &5504897299527612531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5915709135306995342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfc11eb4f1e66e44994bb9f7e73b449f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  action: {fileID: 0}
-  actionUIPrefab: {fileID: 2575155993055371478, guid: 6153261e1963fd6469376239f79330ef, type: 3}
-  displayLocation: {fileID: 653276564510533207}
-  isVisible: 0
-  isLocked: 0
 --- !u!1 &5915709136074221113
 GameObject:
   m_ObjectHideFlags: 0

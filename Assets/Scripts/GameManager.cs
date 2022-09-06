@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
     public Party enemyParty;
     public Storage storage;
 
-    [SerializeField] private List<Unit> possibleEnemies;
-
     [SerializeField] public GameObject unitUIprefab;
 
     private void Awake() {
@@ -25,11 +23,15 @@ public class GameManager : MonoBehaviour
 
         // Initialize library
         dictionary = new Dictionary<string, string>();
-        dictionary["REROLL"] = "Rolls the dice to a new value (The new value can be same as it was previously)";
-        dictionary["HIGHROLL"] = "The value of the die is at its maximum.";
-        dictionary["LOWROLL"] = "The value of the die is at its minimum.";
-        dictionary["EVEN"] = "The value of the die is an even number.";
-        dictionary["ODD"] = "The value of the die is an odd number.";
+        dictionary["REROLL"] = "ROLL the dice to a new value (The new value can be same as it was previously)";
+        dictionary["HIGHROLL"] = "The value of the die is at its MAXIMUM.";
+        dictionary["LOWROLL"] = "The value of the die is at its MINIMUM.";
+        dictionary["EVEN"] = "The value of the die is an EVEN number.";
+        dictionary["ODD"] = "The value of the die is an ODD number.";
+        dictionary["GROW"] = "INCREASE the value of the die by 1, with overflow";
+        dictionary["SHRINK"] = "DECREASE the value of the die by 1, with overflow";
+        dictionary["PAIR"] = "Your DICE POOL contains 2+ dice with the SAME value.";
+        dictionary["UNIQUE"] = "Every die in your DICE POOL has a UNIQUE value.";
         dictionary["BLEED"] = "To be implemented.";
 
         // Create a player party (Which should be overwritten)
@@ -37,9 +39,6 @@ public class GameManager : MonoBehaviour
 
         // Create a enemy party (Which should be overwritten)
         enemyParty = ScriptableObject.CreateInstance<Party>();
-        for (int i = 0; i < 4; i++) {
-            enemyParty.Add(possibleEnemies[i], i);
-        }
 
         // Create storage (Which should be overwritten)
         storage = ScriptableObject.CreateInstance<Storage>();
@@ -47,7 +46,11 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public void SetParty(Party party) {
+    public void SetPlayer(Party party) {
         this.allyParty = party;
+    }
+
+    public void SetOpponent(Party party) {
+        this.enemyParty = party;
     }
 }

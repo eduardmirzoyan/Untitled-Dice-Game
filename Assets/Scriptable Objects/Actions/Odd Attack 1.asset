@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bc355c0bedecaa46ab270c3da48c13c, type: 3}
   m_Name: Odd Attack 1
   m_EditorClassIdentifier: 
-  description: 'Odd: Deal %%'
-  icon: {fileID: 0}
+  description: 'ODD: Deal %%'
+  icon: {fileID: 21300000, guid: ce294509896c5124dba7f8c8b537e6f6, type: 3}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1

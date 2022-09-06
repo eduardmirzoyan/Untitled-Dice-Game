@@ -14,12 +14,12 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [SerializeField] private ItemSlotUI itemSlotUI;
     private bool isBeingDragged;
     private Transform currentParent;
-    private Canvas playerScreen;
+    private Transform playerScreen;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
+        playerScreen = transform.root;
     }
 
     private void FixedUpdate() {
@@ -58,19 +58,19 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         // Display item info
         Vector3[] corners = new Vector3[4];
         GetComponent<RectTransform>().GetWorldCorners(corners);
-        ItemDisplayUI.instance.Show(item, corners[3]);
+        ItemTooltipUI.instance.Show(item, corners[3]);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         // HIde item info
-        ItemDisplayUI.instance.Hide();
+        ItemTooltipUI.instance.Hide();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         // Lock item info
-        ItemDisplayUI.instance.Lock();
+        ItemTooltipUI.instance.Lock();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -84,9 +84,10 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             currentParent = rectTransform.parent;
 
             // Remove parent
-            rectTransform.SetParent(playerScreen.transform);
+            rectTransform.SetParent(playerScreen);
 
             isBeingDragged = true;
+
         }
     }
 

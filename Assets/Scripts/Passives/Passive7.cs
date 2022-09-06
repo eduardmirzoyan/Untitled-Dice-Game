@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// On Round Start: If your POOL has no ODD die, REROLL my die
+// On Turn Start: If you have 2+ ODD die, GROW the first one
 [CreateAssetMenu(menuName = "Passives/Passive 7")]
 public class Passive7 : Passive
 {
@@ -10,16 +10,16 @@ public class Passive7 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onRoundStart += CheckPool;
+        CombatEvents.instance.onTurnStart += Grow2Odd;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onRoundStart -= CheckPool;
+        CombatEvents.instance.onTurnStart -= Grow2Odd;
     }
 
-    private void CheckPool(ActionInfo info)
+    private void Grow2Odd(ActionInfo info, Combatant combatant)
     {
         Debug.Log("Passive 7 trigger!");
 
@@ -27,17 +27,23 @@ public class Passive7 : Passive
         info.waitTime = 0f;
 
         // Dice pool concept?
-        if (combatant.dicePool.OddCount() == 0)
+        if (this.combatant == combatant && combatant.dicePool.OddCount() >= 2)
         {
-            // Reroll own die
-            combatant.unit.dice.Roll();
+            // Get first Odd
+            var die = combatant.dicePool.GetFirstOdd();
+            
+            // Make sure it exists
+            if (die == null) throw new System.Exception("NO ODD FOUND?!");
+
+            // Reroll chosen die
+            die.Grow();
+
             // Trigger event
-            CombatEvents.instance.TriggerReroll(info);
+            CombatEvents.instance.TriggerOnGrow(die);
 
             // If effect triggers, then increase wait time
-            info.waitTime = 0.5f;
+            info.waitTime = CombatManager.instance.rollTime;
         }
-
 
     }
 }

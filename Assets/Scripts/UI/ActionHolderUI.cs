@@ -4,13 +4,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(ActionInspectUI))]
-public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("Components")]
     [SerializeField] private Image icon;
     [SerializeField] private DiceUI containedDiceUI;
-    [SerializeField] private ActionInspectUI actionInspectUI;
 
     [Header("States")]
     [SerializeField] private Action action;
@@ -18,19 +16,15 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
     [SerializeField] private float highlightAlpha = 0.5f;
     [SerializeField] private bool isFunctional;
 
-    private void Awake() {
-        actionInspectUI = GetComponent<ActionInspectUI>();
-    }
 
     public void Initialize(Action action, bool isFunctional = true) {
         this.action = action;
         this.isFunctional = isFunctional;
         icon.sprite = action.icon;
-        actionInspectUI.Initialize(action);
 
         if (isFunctional) {
             CombatEvents.instance.onDieInsert += OnDieInsert;
-            CombatEvents.instance.onActionConfirm += onActionConfirm;
+            CombatEvents.instance.onPreActionConfirm += ReleaseDieIfPossible;
         }
     }
 
@@ -38,7 +32,6 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
         this.passive = passive;
         this.isFunctional = false;
         icon.sprite = passive.icon;
-        actionInspectUI.Initialize(passive);
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -69,11 +62,28 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
         }
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // If left click
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            // Lock tooltip if possible
+            SkillTooltipUI.instance.Lock();
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         // If a die is hovered over, then reduce alpha
         if (isFunctional && eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI)) {
             icon.color = new Color(255, 255, 255, highlightAlpha);
+        }
+
+        // Show tooltip
+        if (action != null) {
+            SkillTooltipUI.instance.Show(action, transform.position);
+        }
+        else if (passive != null) {
+            SkillTooltipUI.instance.Show(passive, transform.position);
         }
     }
 
@@ -81,6 +91,9 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
     {
         // Make icon fully opaque if a point exits
         icon.color = new Color(255, 255, 255, 1);
+        
+        // Hide tooltip
+        SkillTooltipUI.instance.Hide();
     }
 
     private void OnDieInsert(Action action, Dice dice) {
@@ -97,12 +110,11 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
         }
     }
 
-    private void onActionConfirm(Action action) {
+    private void ReleaseDieIfPossible(Action action) {
         // If this action was confirmed, return die as unactive
         if (this.action == action) {
             if (containedDiceUI != null) {
-                // Set die inactive and reset it
-                containedDiceUI.SetActive(false);
+                // Reset die
                 containedDiceUI.ResetLocation();
                 containedDiceUI = null;
             }

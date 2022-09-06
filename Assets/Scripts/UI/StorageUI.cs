@@ -12,7 +12,6 @@ public class StorageUI : MonoBehaviour
     }
 
     private void SpawnItem(Item item, int index) {
-        print("trigg");
         // Spawn the item
         var itemUI = Instantiate(itemPrefab, itemSlotUIs[index].transform).GetComponent<ItemUI>();
         itemUI.Initialize(item, itemSlotUIs[index]);

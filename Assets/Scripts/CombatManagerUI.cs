@@ -48,6 +48,7 @@ public class CombatManagerUI : MonoBehaviour
     [SerializeField] private GameObject floatingNumberPrefab;
 
     private Canvas playerScreen;
+
     private void Awake() {
         // Singleton logic
         if (instance != null) {
@@ -66,6 +67,19 @@ public class CombatManagerUI : MonoBehaviour
         ResetSelection();
 
         playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
+    }
+
+    private void Start() {
+        CombatEvents.instance.onRoundStartUI += SpawnDiceOutlines;
+        
+        CombatEvents.instance.onPlayerTurnStart += EnableAllyDice;
+        CombatEvents.instance.onPlayerTurnStart += ShowActions;
+        CombatEvents.instance.onTargetSelect += HighlightTarget;
+        // CombatEvents.instance.onActionConfirm += ClearTargets;
+        CombatEvents.instance.onActionConfirm += ClearActions;
+        CombatEvents.instance.onActionConfirm += DisableAllyDice;
+
+        CombatEvents.instance.onRoundEndUI += DespawnDice;
     }
 
     # region Selection Logic
@@ -140,13 +154,16 @@ public class CombatManagerUI : MonoBehaviour
         turnIndicatorTilemap.SetTile(vector3Int, turnTile);
     }
 
-    public void SpawnDiceOutlines(List<Combatant> combatants)
-    {
+    private void SpawnDiceOutlines(int value) {
+        // Make new list
         dieOutlineUIs = new List<GameObject>();
 
+        // Cache
         GameObject dieOutline;
         Transform groupTransform;
-        foreach (var combatant in combatants) {
+
+        // Loop through all combatants
+        foreach (var combatant in CombatManager.instance.combatants) {
             if (combatant != null) {
                 // Spawn outline in ally zone or enemy zone depending on combatant
                 groupTransform = combatant.isAlly() ? allyDiceGroup.transform : enemyDiceGroup.transform;
@@ -157,7 +174,6 @@ public class CombatManagerUI : MonoBehaviour
     }
 
     public void SpawnDie(Combatant combatant) {
-        
         // Get corresponding outline based on index
         var dieOutlineUI = dieOutlineUIs[combatant.index];
         // Set color based on alligence
@@ -172,8 +188,7 @@ public class CombatManagerUI : MonoBehaviour
         dieUIs.Add(dieUI);
     }
 
-    public void SpawnModels(List<Combatant> combatants)
-    {
+    public void SpawnModels(List<Combatant> combatants) {
         // Stores the center of the hex to spawn model
         Vector3 centeredPosition = Vector3.zero;
         Transform parent = null;
@@ -204,13 +219,7 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    public void RollDie(int index) {
-        if (dieUIs[index] != null) {
-            dieUIs[index].Roll();
-        }
-    }
-
-    public void EnableAllyDice() {
+    private void EnableAllyDice(int value) {
         // Set the first 4 die active
         for (int i = 0; i < 4; i++) {
             // Enable moving the die
@@ -218,14 +227,21 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
+    private void DisableAllyDice(Action action) {
+        // Set the first 4 die active
+        for (int i = 0; i < 4; i++) {
+            // Enable moving the die
+            dieUIs[i].SetInteractive(false);
+        }
+    }
 
     /// Clears all dice and outline UI
-    public void DespawnDice() {
+    private void DespawnDice(int value) {
         // Destroy all the dice and their outlines
         for (int i = 0; i < dieUIs.Count; i++) {
             if (dieUIs[i] != null) {
                 // Unsub
-                dieUIs[i].Uninit();
+                dieUIs[i].Uninitialize();
                 // Destroy Dice UI
                 Destroy(dieUIs[i].gameObject);
             }
@@ -238,12 +254,13 @@ public class CombatManagerUI : MonoBehaviour
         dieUIs.Clear();
     }
 
-    public void DisplayActions(Unit unit) {
+    private void ShowActions(int value) {
         // Make new list
         actionHolders = new List<ActionHolderUI>();
-
+        print("show action 1");
         // Get all weapons equipped to the unit
-        foreach (var action in unit.GetActions()) {
+        foreach (var action in CombatManager.instance.currentCombatant.unit.GetActions()) {
+            print("show action 2");
             // Create UI gameobject
             var actionHolder = Instantiate(actionHolderPrefab, actionLayoutGroup.transform).GetComponent<ActionHolderUI>();
             // Initalize it
@@ -253,7 +270,9 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    public void ClearActions() {
+    
+
+    private void ClearActions(Action action) {
         // If there is no UI displaying, do nothing
         if (actionHolders.Count == 0) 
             return;
@@ -263,6 +282,7 @@ public class CombatManagerUI : MonoBehaviour
             // Destroy gameobject
             Destroy(actionHolder.gameObject);
         }
+
         // Clear list
         actionHolders.Clear();
     }
@@ -271,13 +291,13 @@ public class CombatManagerUI : MonoBehaviour
         return worldGrid.GetCellCenterWorld(position);
     }
 
-    public void HighlightTarget(Vector3Int position) {
+    public void HighlightTarget(Combatant combatant) {
         // Turn hex color to red
-        if (targetIndicatorTilemap.HasTile(position)) {
+        if (targetIndicatorTilemap.HasTile(combatant.worldPosition)) {
             print("This location is already targeted.");
         }
 
-        targetIndicatorTilemap.SetTile(position, targetTile);
+        targetIndicatorTilemap.SetTile(combatant.worldPosition, targetTile);
     }
 
     public void ClearTargets() {

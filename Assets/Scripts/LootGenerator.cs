@@ -11,8 +11,9 @@ public class LootGenerator : ScriptableObject
     [SerializeField] private List<string> weaponFlavorTexts;
     [SerializeField] private List<Sprite> weaponSprites;
     [SerializeField] private Vector2Int rangeOfBaseDamage = new Vector2Int(4, 6);
-    [SerializeField] private List<Action> actionsToChooseFrom;
-    [SerializeField] private Vector2Int rangeOfActionsPerWeapon = new Vector2Int(2, 3);
+    [SerializeField] private List<Action> basicActionsToChooseFrom;
+    [SerializeField] private List<Action> specialActionsToChooseFrom;
+    [SerializeField] private Vector2Int rangeOfSpecialsPerWeapon = new Vector2Int(1, 2);
 
 
     [Header("Armor Generation Settings")]
@@ -39,13 +40,17 @@ public class LootGenerator : ScriptableObject
         int baseDamage = Random.Range(rangeOfBaseDamage.x, rangeOfBaseDamage.y + 1);
 
         // Choose number of actions to add
-        int num = Random.Range(rangeOfActionsPerWeapon.x, rangeOfActionsPerWeapon.y + 1);
+        int numSpecials = Random.Range(rangeOfSpecialsPerWeapon.x, rangeOfSpecialsPerWeapon.y + 1);
 
         List<Action> actions = new List<Action>();
+
+        // Add one basic action
+        actions.Add(Instantiate(basicActionsToChooseFrom[Random.Range(0, basicActionsToChooseFrom.Count)]));
+
         // Choose that many actions
-        for (int i = 0; i < num; i++) {
-            // Choose a random action
-            var action = actionsToChooseFrom[Random.Range(0, actionsToChooseFrom.Count)];
+        for (int i = 0; i < numSpecials; i++) {
+            // Choose a random special action and make a copy
+            var action = Instantiate(specialActionsToChooseFrom[Random.Range(0, specialActionsToChooseFrom.Count)]);
             actions.Add(action);
         }
         
@@ -59,15 +64,21 @@ public class LootGenerator : ScriptableObject
         // Create empty weapon
         Armor newArmor = ScriptableObject.CreateInstance<Armor>();
 
+        // Generate random name
+        newArmor.name = armorNames[Random.Range(0, armorNames.Count)];
+
+        // Generate random description
+        newArmor.description = armorFlavorTexts[Random.Range(0, armorFlavorTexts.Count)];
+
         // Generate random sprite
         newArmor.sprite = armorSprites[Random.Range(0, armorSprites.Count)];
 
         // Choose number of actions to add
-        int num = Random.Range(rangeOfPassivesPerWeapon.Item1, rangeOfPassivesPerWeapon.Item2 + 1);
+        int numPassives = Random.Range(rangeOfPassivesPerWeapon.Item1, rangeOfPassivesPerWeapon.Item2 + 1);
 
         List<Passive> passives = new List<Passive>();
         // Choose that many actions
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < numPassives; i++) {
             // Choose a random action
             var passive = passivesToChooseFrom[Random.Range(0, passivesToChooseFrom.Count)];
             passives.Add(passive);

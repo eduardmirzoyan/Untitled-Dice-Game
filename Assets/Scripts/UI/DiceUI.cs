@@ -6,10 +6,6 @@ using UnityEngine.EventSystems;
 
 public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
 {
-    // MODULARIZE CLASS!
-
-    public static float rollDuration = 0.1f;
-
     [Header("Visuals")]
     [SerializeField] private Image background;
     [SerializeField] private Image selectionOutline;
@@ -31,14 +27,12 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     private Coroutine rollRoutine;
     private bool isBeingDragged;
     private int rotationDirection = 1;
-    private Canvas playerScreen;
+    private Transform playerScreen;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
     }
-    // REMOVE THIS CLASS FOR IMPROVEMENTS!!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public void Initialize(Dice dice, Color color, RectTransform origin, bool interactable = false)
     {
@@ -46,23 +40,27 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         this.origin = origin;
         this.isInteractable = interactable;
         background.color = color;
-        dice.SetActive(true);
+        playerScreen = transform.root;
 
         // Subscribe to events
         CombatEvents.instance.onRoll += OnRoll;
+        CombatEvents.instance.onReroll += OnRoll;
         CombatEvents.instance.onGrow += OnGrow;
         CombatEvents.instance.onShrink += OnShrink;
-        CombatEvents.instance.onSetActive += OnSetActive;
+        CombatEvents.instance.onReplenish += OnReplenish;
+        CombatEvents.instance.onExhaust += OnExhaust;
 
         // Display the current state of the die
         UpdateVisuals();
     }
 
-    public void Uninit() {
+    public void Uninitialize() {
         CombatEvents.instance.onRoll -= OnRoll;
+        CombatEvents.instance.onReroll -= OnRoll;
         CombatEvents.instance.onGrow -= OnGrow;
         CombatEvents.instance.onShrink -= OnShrink;
-        CombatEvents.instance.onSetActive -= OnSetActive;
+        CombatEvents.instance.onReplenish -= OnReplenish;
+        CombatEvents.instance.onExhaust -= OnExhaust;
     }
 
     private void OnRoll(Dice dice) {
@@ -96,21 +94,17 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         }
     }
 
-    private void OnSetActive(Dice dice, bool state)
-    {
-        // If this die was rolled
-        if (this.dice == dice)
-        {
-            // Change state of the die
-            dice.SetActive(state);
-            canvasGroup.alpha = state ? 1f : 0.5f;
+    public void OnReplenish(Dice dice) {
+        // If this die was the target
+        if (this.dice == dice) {
+            canvasGroup.alpha = 1f;
         }
     }
 
-    private void Update() {
-        // For debugging
-        if (Input.GetKeyDown(KeyCode.F)) {
-            Roll();
+    public void OnExhaust(Dice dice) {
+        // If this die was the target
+        if (this.dice == dice) {
+            canvasGroup.alpha = 0.5f;
         }
     }
 
@@ -118,22 +112,16 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         isInteractable = state;
     }
 
-    public void SetActive(bool state) {
-        dice.SetActive(state);
-        UpdateVisuals();
-    }
-
     public void Roll() {
         if (rollRoutine != null) {
             StopCoroutine(rollRoutine);
         }
-        rollRoutine = StartCoroutine(RollVisuals(rollDuration));
+        rollRoutine = StartCoroutine(RollVisuals(CombatManager.instance.rollTime));
     }
 
     private IEnumerator RollVisuals(float duration)
     {
         float elapsedTime = 0;
-        // Randomly roll through numbers and then finally land on the final die value
 
         // Smoothly move to target
         while (elapsedTime < duration)
@@ -184,9 +172,12 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             currentParent = rectTransform.parent;
 
             // Remove parent
-            rectTransform.SetParent(playerScreen.transform);
+            rectTransform.SetParent(playerScreen);
 
+            // Enable flag
             isBeingDragged = true;
+
+            // Randomize rotation direction
             rotationDirection = Random.Range(0, 2) == 0 ? 1 : -1;
         }
     }
@@ -225,8 +216,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         if (eventData.button == PointerEventData.InputButton.Right) {
             // If it is currently in a dice slot, attempt to remove itself
             if (transform.parent.TryGetComponent(out ActionHolderUI actionHolderUI)) {
-                // Deselect the action
-                // CombatManager.instance.SelectAction(null, null);
+                // Trigger Event
                 CombatEvents.instance.TriggerOnDieInsert(null, null);
             }
         }
@@ -272,6 +262,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 pipHolders[4].enabled = false;
                 pipHolders[5].enabled = false;
                 pipHolders[6].enabled = false;
+                pipHolders[7].enabled = false;
+                pipHolders[8].enabled = false;
                 break;
 
             case 2:
@@ -282,6 +274,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 pipHolders[4].enabled = false;
                 pipHolders[5].enabled = false;
                 pipHolders[6].enabled = false;
+                pipHolders[7].enabled = false;
+                pipHolders[8].enabled = false;
                 break;
 
             case 3:
@@ -292,6 +286,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 pipHolders[4].enabled = false;
                 pipHolders[5].enabled = false;
                 pipHolders[6].enabled = false;
+                pipHolders[7].enabled = false;
+                pipHolders[8].enabled = false;
                 break;
 
             case 4:
@@ -302,6 +298,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 pipHolders[4].enabled = true;
                 pipHolders[5].enabled = false;
                 pipHolders[6].enabled = false;
+                pipHolders[7].enabled = false;
+                pipHolders[8].enabled = false;
                 break;
 
             case 5:
@@ -312,6 +310,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 pipHolders[4].enabled = true;
                 pipHolders[5].enabled = false;
                 pipHolders[6].enabled = false;
+                pipHolders[7].enabled = false;
+                pipHolders[8].enabled = false;
                 break;
 
             case 6:
@@ -322,6 +322,44 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 pipHolders[4].enabled = true;
                 pipHolders[5].enabled = true;
                 pipHolders[6].enabled = true;
+                pipHolders[7].enabled = false;
+                pipHolders[8].enabled = false;
+                break;
+
+            case 7:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = true;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = true;
+                pipHolders[4].enabled = true;
+                pipHolders[5].enabled = true;
+                pipHolders[6].enabled = true;
+                pipHolders[7].enabled = false;
+                pipHolders[8].enabled = false;
+                break;
+
+            case 8:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = false;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = true;
+                pipHolders[4].enabled = true;
+                pipHolders[5].enabled = true;
+                pipHolders[6].enabled = true;
+                pipHolders[7].enabled = true;
+                pipHolders[8].enabled = true;
+                break;
+
+            case 9:
+                pipHolders[0].enabled = true;
+                pipHolders[1].enabled = true;
+                pipHolders[2].enabled = true;
+                pipHolders[3].enabled = true;
+                pipHolders[4].enabled = true;
+                pipHolders[5].enabled = true;
+                pipHolders[6].enabled = true;
+                pipHolders[7].enabled = true;
+                pipHolders[8].enabled = true;
                 break;
 
             default:

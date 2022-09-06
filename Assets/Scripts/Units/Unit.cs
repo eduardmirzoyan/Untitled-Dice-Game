@@ -5,7 +5,7 @@ using System.Linq;
 
 public abstract class Unit : ScriptableObject
 {
-    public string unitName;
+    public new string name;
     public Sprite icon;
     public int currentHealth;
     public int maxHealth;
@@ -14,7 +14,6 @@ public abstract class Unit : ScriptableObject
     public List<Armor> armors;
     public int speed;
     public GameObject modelPrefab;
-    public GameObject maskPrefab;
     public List<Passive> innatePassives;
     public SlimeAI ai;
 
@@ -92,6 +91,7 @@ public abstract class Unit : ScriptableObject
                 // Replace the equipped weapon with this one
                 // But idk how to make sure the previous weapon is not lost...
             }
+            Debug.Log("equipped");
             // Equip the weapon
             weapons[slot] = weapon;
         }
@@ -113,9 +113,49 @@ public abstract class Unit : ScriptableObject
     }
     
     public void EquipArmor(Armor armor, int slot) {
-        for (int i = 0; i < armors.Count; i++) {
-            if (armors[i] == armor) {
-                // You already have this armor equipped
+        if (slot < 0 || slot >= armors.Count)
+        {
+            throw new System.Exception("ARMOR ATTEMPTED TO BE EQUIPPED TO AN INVALID INDEX: " + slot);
+        }
+
+        // armor in slot is being removed
+        if (armor == null)
+        {
+            armors[slot] = null;
+        }
+
+        // Check if armor already exists
+        int index = armors.IndexOf(armor);
+
+        // If armor is NOT already equipped
+        if (index == -1)
+        {
+            // Check if there is already a armor at the slot it wants to be at
+            if (armors[slot] != null)
+            {
+                // Replace the equipped armor with this one
+                // But idk how to make sure the previous armor is not lost...
+            }
+            Debug.Log("equipped");
+            // Equip the armor
+            armors[slot] = armor;
+        }
+        // If the armor IS equipped
+        else
+        {
+            // If the slot is the same, then player wants to UN-equip
+            if (slot == index)
+            {
+                // Unequip
+                armors[slot] = null;
+            }
+            // Else you are trying to move the armor to a different slot 
+            else
+            {
+                // Swap the values of the two slots then
+                var temp = armors[slot];
+                armors[slot] = armors[index];
+                armors[index] = temp;
             }
         }
     }

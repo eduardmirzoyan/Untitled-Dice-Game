@@ -15,7 +15,7 @@ public class PassUI : MonoBehaviour
 
     private void Start() {
         CombatEvents.instance.onPlayerTurnStart += Show;
-        CombatEvents.instance.onPlayerTurnEnd += Hide;
+        CombatEvents.instance.onActionConfirm += Hide;
     }
 
     private void Show(int value) {
@@ -24,7 +24,7 @@ public class PassUI : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
     }
 
-    public void Hide(int value) {
+    public void Hide(Action action) {
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;

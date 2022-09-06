@@ -7,7 +7,6 @@ using TMPro;
 public class StateIndicatorUI : MonoBehaviour
 {
     [SerializeField] private static float fadeDuration = 0.5f;
-    [SerializeField] private static float pauseDuration = 0.5f;
     [SerializeField] private RectTransform main;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TextMeshProUGUI textBox;
@@ -22,12 +21,6 @@ public class StateIndicatorUI : MonoBehaviour
     private void Start() {
         CombatEvents.instance.onShowBanner += ShowBanner;
         CombatEvents.instance.onHideBanner += HideBanner;
-
-        // CombatEvents.instance.onCombatStart += StartCombat;
-        // CombatEvents.instance.onRoundStart += StartRound;
-        // CombatEvents.instance.onTurnStart += StartTurn;
-        // CombatEvents.instance.onRoundEnd += EndRound;
-        // CombatEvents.instance.onCombatEnd += EndCombat;
     }
 
     private void StartCombat(ActionInfo info) {

@@ -59,6 +59,22 @@ public class DicePool : ScriptableObject
         return false;
     }
 
+    public bool IsUnique() {
+        return dice.All(die => dice.Count(die2 => die2.GetValue() == die.GetValue()) == 1);
+    }
+
+    public bool HasPair() {
+        return dice.Any(die => dice.Count(die2 => die2.GetValue() == die.GetValue()) > 1);
+    }
+
+    public Dice GetFirstOdd() {
+        return dice.First(die => die.IsOdd());
+    }
+
+    public Dice GetFirstEven() {
+        return dice.First(die => die.IsEven());
+    }
+
     public int OddCount() {
         return dice.Sum(die => die.IsOdd() ? 1 : 0);
     }

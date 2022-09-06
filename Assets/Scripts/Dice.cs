@@ -32,8 +32,8 @@ public class Dice : ScriptableObject, IComparable<Dice>
         isActive = true;
     }
 
-    public void SetActive(bool state) {
-        isActive = state;
+    public void Exhaust() {
+        isActive = false;
     }
 
     public bool GetActive() {
@@ -89,8 +89,7 @@ public class Dice : ScriptableObject, IComparable<Dice>
         return !IsEven();
     }
 
-    public int CompareTo(Dice other)
-    {
+    public int CompareTo(Dice other) {
         return GetValue().CompareTo(other.GetValue());
     }
 }

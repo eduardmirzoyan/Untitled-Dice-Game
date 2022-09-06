@@ -66,7 +66,7 @@ public class QueueUI : MonoBehaviour
             // Enqueue combatant
             Enqueue(combatant.unit, Color.clear);
 
-            result += combatant.unit.unitName + " -> ";
+            result += combatant.unit.name + " -> ";
         }
         // Debug print queue order
         print(result + "END");
@@ -79,7 +79,7 @@ public class QueueUI : MonoBehaviour
         queueSlotGameobjects.Add(go);
         // Intialize based on unit
         if (go.TryGetComponent(out QueueSlot queueSlot)) {
-            queueSlot.Initialize(unit.maskPrefab, color);
+            queueSlot.Initialize(unit.icon, color);
         }
         else {
             print("Prefab does not have QueueSlot componenet");

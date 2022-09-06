@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d93cc06083c65d47bfb430877c49814, type: 3}
   m_Name: Passive 2
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  possessor: {fileID: 0}
+  name: Shrink
+  description: 'On Round Start: SHRINK your largest die'
+  icon: {fileID: 21300000, guid: c96cd29d99f0a4443be126d6901a3ada, type: 3}
+  combatant: {fileID: 0}
+  sourceArmor: {fileID: 0}
