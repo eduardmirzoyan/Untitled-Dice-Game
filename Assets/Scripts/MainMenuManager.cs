@@ -23,10 +23,6 @@ public class MainMenuManager : MonoBehaviour
         TransitionManager.instance.LoadNextScene();
     }
 
-    public void ShowHelp() {
-        helpUI.Show();
-    }
-
     public void QuitGame() {
         Debug.Log("Player quit game.");
         Application.Quit();

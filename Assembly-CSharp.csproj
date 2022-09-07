@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\SelectionManager.cs" />
      <Compile Include="Assets\Scripts\UI\QueueSlot.cs" />
      <Compile Include="Assets\Scripts\UI\Selection Scene\UnitUI.cs" />
+     <Compile Include="Assets\Scripts\Sound.cs" />
      <Compile Include="Assets\Scripts\Actions\AoEAttack.cs" />
      <Compile Include="Assets\Scripts\CombatManager.cs" />
      <Compile Include="Assets\Scripts\UI\Tooltips\TextTooltipUI.cs" />
@@ -67,6 +68,7 @@
      <Compile Include="Assets\Scripts\DicePool.cs" />
      <Compile Include="Assets\Scripts\Dice.cs" />
      <Compile Include="Assets\Scripts\Passives\Passive3.cs" />
+     <Compile Include="Assets\Scripts\AudioManager.cs" />
      <Compile Include="Assets\Scripts\Actions\PairAttack1.cs" />
      <Compile Include="Assets\Scripts\UI\SlidingWindow.cs" />
      <Compile Include="Assets\Scripts\UI\PassUI.cs" />
@@ -112,8 +114,7 @@
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
      <Compile Include="Assets\Scripts\UI\ConfirmButtonUI.cs" />
-     <Compile Include="Assets\Scripts\AudioManager.cs" />
-     <Compile Include="Assets\Scripts\Sound.cs" />
+     <Compile Include="Assets\Scripts\SettingsManager.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

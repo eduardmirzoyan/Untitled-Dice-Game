@@ -4,30 +4,30 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class HelpUI : MonoBehaviour, IPointerClickHandler
+public class HelpUI : MonoBehaviour
 {
-    [SerializeField] private CanvasGroup canvasGroup;
+    // [SerializeField] private CanvasGroup canvasGroup;
 
-    private void Awake() {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
+    // private void Awake() {
+    //     canvasGroup = GetComponent<CanvasGroup>();
+    // }
 
-    public void Show() {
-        canvasGroup.alpha = 1f;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
-    }
+    // public void Show() {
+    //     canvasGroup.alpha = 1f;
+    //     canvasGroup.interactable = true;
+    //     canvasGroup.blocksRaycasts = true;
+    // }
 
-    public void Hide() {
-        canvasGroup.alpha = 0f;
-        canvasGroup.interactable = false;
-        canvasGroup.blocksRaycasts = false;
-    }
+    // public void Hide() {
+    //     canvasGroup.alpha = 0f;
+    //     canvasGroup.interactable = false;
+    //     canvasGroup.blocksRaycasts = false;
+    // }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right) {
-            Hide();
-        }
-    }
+    // public void OnPointerClick(PointerEventData eventData)
+    // {
+    //     if (eventData.button == PointerEventData.InputButton.Right) {
+    //         Hide();
+    //     }
+    // }
 }

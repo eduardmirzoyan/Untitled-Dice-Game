@@ -42,27 +42,25 @@ public class SelectionManager : MonoBehaviour
     }
 
     private void Start() {
-        // Lower window
-        slidingWindow.Lower();
-
         // Start routine
         StartCoroutine(WaitThenDisplay());
-
-        // Start routine
-        StartCoroutine(SpawnItems());
     }
 
     private IEnumerator WaitThenDisplay() {
-        yield return new WaitForSeconds(0.5f);
+        // Wait for dramatic effect
+        yield return new WaitForSeconds(waitTilSpawn);
+
+        // Spawn items
+        SpawnItems();
+
+        // Lower window
+        slidingWindow.Lower();
 
         // Trigger event to spawn all the units to choose from
         SelectionEvents.instance.TriggerOnDisplayUnitOptions(unitsToChooseFrom);
     }
 
-    private IEnumerator SpawnItems() {
-        // Wait for a sec
-        yield return new WaitForSeconds(waitTilSpawn);
-
+    private void SpawnItems() {
         // Initialize storage
         playerStorage.Initialize(16);
 
@@ -85,6 +83,7 @@ public class SelectionManager : MonoBehaviour
             // Trigger event
             SelectionEvents.instance.TriggerOnAddItemToStorage(armor, i);
         }
+
     }
 
     private void Update() {

@@ -12,6 +12,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     [SerializeField] private TextMeshProUGUI unitName;
     [SerializeField] private int index;
     [SerializeField] private Image dropIcon;
+    [SerializeField] private Image dropArrowIcon;
     [SerializeField] private DiceUI diceUI;
     [SerializeField] private TextMeshProUGUI healthStat;
     [SerializeField] private TextMeshProUGUI speedStat;
@@ -21,6 +22,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     
     [Header("Temporary")]
     [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private SlidingWindow slidingWindow;
 
     [Header("Settings")]
     [SerializeField] private Color emptyColor;
@@ -36,6 +38,9 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
         
         SelectionEvents.instance.onFillParty += FillWithUnit;
+
+        // Bring into view
+        slidingWindow.Raise();
     }
 
     public void FillWithUnit(Unit unit, int index) {
@@ -69,15 +74,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // Return to origin on right click
-        // if (interact && unitUI != null && eventData.button == PointerEventData.InputButton.Right) {
-        //     unitUI.ResetLocation();
-        //     unitUI = null;
-
-        //     UpdateVisuals();
-
-        //     SelectionManager.instance.AddUnitToParty(null, index);
-        // }
+        // TODO?
     }
 
 
@@ -146,7 +143,9 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
             // Show "drop here" icon
             dropIcon.color = emptyColor;
+            dropArrowIcon.color = emptyColor;
             dropIcon.enabled = true;
+            dropArrowIcon.enabled = true;
 
             // Update health
             healthStat.text = "0/0";
@@ -168,6 +167,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
         // Hide "drop here" icon
         dropIcon.enabled = false;
+        dropArrowIcon.enabled = false;
 
         // Update health
         healthStat.text = unit.GetHealthStatus();
@@ -200,6 +200,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI)) {
             unitName.color = highlightColor;
             dropIcon.color = highlightColor;
+            dropArrowIcon.color = highlightColor;
         }
     }
 
@@ -211,6 +212,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         else {
             unitName.color = emptyColor;
             dropIcon.color = emptyColor;
+            dropArrowIcon.color = emptyColor;
         }
     }
 }

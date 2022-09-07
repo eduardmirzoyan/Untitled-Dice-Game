@@ -19,6 +19,7 @@ public class SlidingWindow : MonoBehaviour, IPointerClickHandler
 
     [Header("State")]
     [SerializeField] private bool isRasied = false;
+    [SerializeField] private bool isReversed;
     private Coroutine transitionRoutine;
 
     public void OnPointerClick(PointerEventData eventData)
@@ -34,7 +35,8 @@ public class SlidingWindow : MonoBehaviour, IPointerClickHandler
         if (isInteractable && eventData.button == PointerEventData.InputButton.Right
             && RectTransformUtility.RectangleContainsScreenPoint(lowerRect, Input.mousePosition, Camera.main)) {
             // Attempt to lower
-            Lower();
+            if (isReversed) Raise();
+            else Lower();
         }
     }
 
@@ -79,32 +81,43 @@ public class SlidingWindow : MonoBehaviour, IPointerClickHandler
 
     private IEnumerator RaiseUI() {
         isRasied = true;
+        float start = window.anchoredPosition.y;
+        float end = raisedHeight;
 
-        float timer = transitionTime;
-        while (timer > 0) {
+
+        float timer = 0;
+        while (timer < transitionTime) {
             // Raise UI over time
-            var newY = Mathf.Lerp(window.anchoredPosition.y, raisedHeight, 1 - timer / transitionTime);
+            var newY = Mathf.Lerp(start, end, timer / transitionTime);
             window.anchoredPosition = new Vector2(window.anchoredPosition.x, newY);
 
-            // Decrement time
-            timer -= Time.deltaTime;
+            // Increment time
+            timer += Time.deltaTime;
             yield return null;
         }
+
+        // Set final point
+        window.anchoredPosition = new Vector2(window.anchoredPosition.x, end);
     }
 
     private IEnumerator LowerUI() {
         isRasied = false;
+        float start = window.anchoredPosition.y;
+        float end = loweredHeight;
 
-        float timer = transitionTime;
-        while (timer > 0) {
-            // Raise UI over time
-            var newY = Mathf.Lerp(window.anchoredPosition.y, loweredHeight, 1 - timer / transitionTime);
+        float timer = 0;
+        while (timer < transitionTime) {
+            // Lower UI over time
+            var newY = Mathf.Lerp(start, end, timer / transitionTime);
             window.anchoredPosition = new Vector2(window.anchoredPosition.x, newY);
 
-            // Decrement time
-            timer -= Time.deltaTime;
+            // Increment time
+            timer += Time.deltaTime;
             yield return null;
         }
+
+        // Set final point
+        window.anchoredPosition = new Vector2(window.anchoredPosition.x, end);
     }
 
 }
