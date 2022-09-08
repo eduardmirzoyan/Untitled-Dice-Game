@@ -28,7 +28,7 @@ public class ModelUI : MonoBehaviour
         CombatEvents.instance.onDie += Dead;
     }
 
-    public void Hurt(Combatant combatant) {
+    public void Hurt(Combatant combatant, int value) {
         if (this.combatant == combatant) {
             // Change animation
             animator.Play(hurtState);

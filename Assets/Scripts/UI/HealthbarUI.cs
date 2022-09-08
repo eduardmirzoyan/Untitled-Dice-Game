@@ -8,6 +8,7 @@ public class HealthbarUI : MonoBehaviour
 {
     [SerializeField] private Slider slider;
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private Combatant combatant;
 
     // Stores entity its tracking
     private void Awake()
@@ -16,15 +17,27 @@ public class HealthbarUI : MonoBehaviour
         text = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public void Initialize(int maxHealth, int currentHealth) {
-        slider.maxValue = maxHealth;
-        slider.value = currentHealth;
-        text.text = slider.value + "/" + slider.maxValue;
+    private void Start() {
+        // Sub to relavent events
+        CombatEvents.instance.onTakeDamage += UpdateHealth;
+        CombatEvents.instance.onHeal += UpdateHealth;
     }
 
-    public void UpdateHealth(int currentHealth) {
-        slider.value = currentHealth;
-        text.text = slider.value + "/" + slider.maxValue;
+    public void Initialize(Combatant combatant) {
+        this.combatant = combatant;
+
+        slider.maxValue = combatant.unit.maxHealth;
+        slider.value = combatant.unit.currentHealth;
+        text.text = combatant.unit.GetHealthStatus();
+    }
+
+    public void UpdateHealth(Combatant combatant, int amount) {
+        if (this.combatant == combatant) {
+            // Update Heal values
+            slider.maxValue = combatant.unit.maxHealth;
+            slider.value = combatant.unit.currentHealth;
+            text.text = combatant.unit.GetHealthStatus();
+        }
     }
 
 }

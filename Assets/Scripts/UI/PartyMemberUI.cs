@@ -34,13 +34,27 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     private bool interact;
 
     private void Start() {
-        SelectionEvents.instance.onAddUnitToParty += AddUnit;
-        SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
         
-        SelectionEvents.instance.onFillParty += FillWithUnit;
+
+        // Check if we are in selection
+        if (SelectionEvents.instance != null) {
+            SelectionEvents.instance.onAddUnitToParty += AddUnit;
+            SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
+        }
+
+        GameEvents.instance.onSetParty += SetUnit;
 
         // Bring into view
         slidingWindow.Raise();
+    }
+
+    private void OnDestroy() {
+        // Unsub
+        if (SelectionEvents.instance != null) {
+            SelectionEvents.instance.onAddUnitToParty -= AddUnit;
+            SelectionEvents.instance.onItemInsertIntoSlot -= HandleItemInsertedIntoItemSlot;
+        }
+        GameEvents.instance.onSetParty -= SetUnit;
     }
 
     public void FillWithUnit(Unit unit, int index) {
@@ -77,7 +91,6 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         // TODO?
     }
 
-
     private void HandleItemInsertedIntoItemSlot(ItemUI itemUI, ItemSlotUI itemSlotUI) {
         // Check if item is weapon
         int wpnIndex = weaponSlots.IndexOf(itemSlotUI);
@@ -113,6 +126,13 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         }
 
         // Else we don't care
+    }
+
+    private void SetUnit(Party party) {
+        var ui = Instantiate(GameManager.instance.unitUIprefab, unitModelTransform).GetComponent<UnitUI>();
+        ui.Initialize(party[index], index, unitModelTransform, false);
+        EquipUnitUI(ui);
+        interact = false;
     }
 
 
@@ -164,6 +184,10 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         // Update display name
         unitName.text = unit.name;
         unitName.color = fullColor;
+
+        if (dropIcon == null) {
+            print("null for " + gameObject.name);
+        }
 
         // Hide "drop here" icon
         dropIcon.enabled = false;

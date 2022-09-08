@@ -16,6 +16,7 @@ public class CombatManager : MonoBehaviour
     public float rollTime = 0.3f;
     public float waitTime = 1f;
     public float attackTime = 1f;
+    public float spawnTime = 1f;
 
     [SerializeField] private CombatState state;
     [SerializeField] private Party allyParty;
@@ -78,10 +79,10 @@ public class CombatManager : MonoBehaviour
         // Debug Feedback
         print("Combat Start");
 
-        for (int i = 0; i < 4; i++)
-        {
-            SelectionEvents.instance.TriggerOnFillParty(allyParty[i], i);
-        }
+        yield return new WaitForSeconds(0.5f);
+
+        // Trigger event
+        GameEvents.instance.TriggerOnSetParty(allyParty);
 
         // Change state
         state = CombatState.RoundStart;
@@ -178,7 +179,7 @@ public class CombatManager : MonoBehaviour
         yield return CombatEvents.instance.TriggerTurnStart(new ActionInfo(0.5f), currentCombatant);
 
         // Select (Outline) the tile that the unit is one, visual feedback
-        CombatManagerUI.instance.SetTurn(currentCombatant.worldPosition);
+        CombatManagerUI.instance.SetTurn(currentCombatant.hexPosition);
 
         // If Unit is NPC then let it decide its own action
         if (currentCombatant.unit.ai != null) {
@@ -274,20 +275,19 @@ public class CombatManager : MonoBehaviour
     /// Helper functions ~~~~~~~~~~~~~~~~~~~~~~~~
 
     /// Give the party members important info regarding current combat
-    private void GenerateCombatants()
-    {
+    private void GenerateCombatants() {
         // Location of the unit on the battle field
-        Vector3Int worldPosition;
+        Vector3Int hexPosition;
         combatants = new List<Combatant>();
 
         // Turn allies into combatants, giving them index 0-3
         for (int i = 0; i < allyPositions.Length; i++) {
             if (allyParty[i] != null) {
                 // Assign model's location in this combat
-                worldPosition = allyPositions[i];
+                hexPosition = allyPositions[i];
 
                 var combatant = ScriptableObject.CreateInstance<Combatant>();
-                combatant.Initialize(allyParty[i], allyParty.dicePool, i, worldPosition);
+                combatant.Initialize(allyParty[i], allyParty.dicePool, i, hexPosition);
                 combatants.Add(combatant);
 
                 // Initialize passives
@@ -305,11 +305,11 @@ public class CombatManager : MonoBehaviour
         for (int i = 0; i < enemyPositions.Length; i++) {
             if (enemyParty[i] != null) {
                 // Assign model's location in this combat
-                worldPosition = enemyPositions[i];
+                hexPosition = enemyPositions[i];
 
                 var combatant = ScriptableObject.CreateInstance<Combatant>();
                 // Make sure to offset index by 4 since they are on the enemy team
-                combatant.Initialize(enemyParty[i], enemyParty.dicePool, i + 4, worldPosition);
+                combatant.Initialize(enemyParty[i], enemyParty.dicePool, i + 4, hexPosition);
                 combatants.Add(combatant);
 
                 // Initialize passives
@@ -330,8 +330,14 @@ public class CombatManager : MonoBehaviour
         // Generate combatants for this particular combat
         GenerateCombatants();
 
-        // Spawn all combatants models onto map
-        CombatManagerUI.instance.SpawnModels(combatants);
+        for (int i = 0; i < 4; i++) {
+            // Spawn two units at a time
+            CombatEvents.instance.TriggerOnSpawnCombatant(combatants[i], spawnTime);
+            CombatEvents.instance.TriggerOnSpawnCombatant(combatants[i + 4], spawnTime);
+
+            // Wait for animation
+            yield return new WaitForSeconds(spawnTime / 2);
+        }
 
         yield return null;
     }
@@ -494,7 +500,7 @@ public class CombatManager : MonoBehaviour
 
     public Combatant GetCombatantAtPosition(Vector3Int position) {
         foreach (var combatant in combatants) {
-            if (combatant.worldPosition == position) {
+            if (combatant.hexPosition == position) {
                 // Check if target is dead
                 if (combatant.unit.IsDead()) {
                     CombatEvents.instance.TriggerOnFeedback("You cannot target DEAD units.");
@@ -592,7 +598,7 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(0);
 
         // Then return model
-        currentCombatant.modelTransform.position = CombatManagerUI.instance.GetCellCenter(currentCombatant.worldPosition);
+        currentCombatant.modelTransform.position = CombatManagerUI.instance.GetCellCenter(currentCombatant.hexPosition);
 
         // Trigger event
         CombatEvents.instance.TriggerOnExhaust(selectedDie);

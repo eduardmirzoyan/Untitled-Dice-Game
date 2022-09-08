@@ -82,6 +82,12 @@ public class CombatManagerUI : MonoBehaviour
         CombatEvents.instance.onActionConfirm += DisableAllyDice;
 
         CombatEvents.instance.onRoundEndUI += DespawnDice;
+
+        // Visuals for damage and heal
+        CombatEvents.instance.onTakeDamage += SpawnDamageNumber;
+        CombatEvents.instance.onHeal += SpawnHealNumber;
+
+        CombatEvents.instance.onSpawnCombatant += SpawnCombatant;
     }
 
     # region Selection Logic
@@ -123,11 +129,6 @@ public class CombatManagerUI : MonoBehaviour
         // Right click to clear any selection
         if (Input.GetMouseButtonDown(1) && SelectionExists()) {
             ResetSelection();
-        }
-
-        // DEUBUGGING
-        if (Input.GetKeyDown(KeyCode.H)) {
-            SpawnFloatingNumber("10", Vector3.zero);
         }
     }
 
@@ -190,38 +191,57 @@ public class CombatManagerUI : MonoBehaviour
         dieUIs.Add(dieUI);
     }
 
-    public void SpawnModels(List<Combatant> combatants) {
-        // Stores the center of the hex to spawn model
+    private void SpawnCombatant(Combatant combatant, float animationTime) {
         Vector3 centeredPosition = Vector3.zero;
         Transform parent = null;
 
-        // Loop through all combatants
-        foreach (var combatant in combatants)
-        {
-            // Get center of world position
-            centeredPosition = GetCellCenter(combatant.worldPosition);
+        // Get center of world position
+        centeredPosition = GetCellCenter(combatant.hexPosition);
 
-            // Set parent based on allegiance
-            parent = combatant.isAlly() ? allyModels : enemyModels;
+        // Set parent based on allegiance
+        parent = combatant.isAlly() ? allyModels : enemyModels;
 
-            // Spawn unit's model prefab and store it's canvas
-            var modelObject = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent);
-            var canvas = modelObject.GetComponentInChildren<Canvas>();
+        // Spawn unit's model prefab and store it's canvas
+        var modelObject = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent);
+        var canvas = modelObject.GetComponentInChildren<Canvas>();
 
-            // Spawn healthbar
-            var healthbar = Instantiate(healthbarPrefab, canvas.transform).GetComponent<HealthbarUI>();
+        // Spawn healthbar and initialize
+        var healthbar = Instantiate(healthbarPrefab, canvas.transform).GetComponent<HealthbarUI>();
+        healthbar.Initialize(combatant);
 
-            // Assign healthbar
-            combatant.AssignHealthbar(healthbar);
+        // Initialize model
+        modelObject.GetComponent<ModelUI>().Initialize(combatant);
 
-            // Initialize model
-            modelObject.GetComponent<ModelUI>().Initialize(combatant);
+        // Assign model
+        combatant.AssignModel(modelObject.transform);
 
-            // Assign model
-            combatant.AssignModel(modelObject.transform);
+        // Spawn animation
+        StartCoroutine(Move(combatant, animationTime));
+    }
 
-            // TODO Spawn animation?
+    private IEnumerator Move(Combatant combatant, float animationTime) {
+        float offset = combatant.isAlly() ? -5 : 5;
+        float start = combatant.worldPosition.x + offset;
+        float end = combatant.worldPosition.x;
+
+        // Move to offset
+        combatant.modelTransform.position = new Vector2(start, combatant.modelTransform.position.y);
+
+        float timer = 0;
+        while (timer < animationTime) {
+            // Move unit
+            var newX = Mathf.Lerp(start, end, timer / animationTime);
+            combatant.modelTransform.position = new Vector2(newX, combatant.modelTransform.position.y);
+
+            // Increment time
+            timer += Time.deltaTime;
+            yield return null;
         }
+
+        // Set final point
+        combatant.modelTransform.position = new Vector2(end, combatant.modelTransform.position.y);
+
+        yield return null;
     }
 
     private void EnableAllyDice(int value) {
@@ -240,7 +260,6 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    /// Clears all dice and outline UI
     private void DespawnDice(int value) {
         // Destroy all the dice and their outlines
         for (int i = 0; i < dieUIs.Count; i++) {
@@ -296,11 +315,11 @@ public class CombatManagerUI : MonoBehaviour
 
     public void HighlightTarget(Combatant combatant) {
         // Turn hex color to red
-        if (targetIndicatorTilemap.HasTile(combatant.worldPosition)) {
+        if (targetIndicatorTilemap.HasTile(combatant.hexPosition)) {
             print("This location is already targeted.");
         }
 
-        targetIndicatorTilemap.SetTile(combatant.worldPosition, targetTile);
+        targetIndicatorTilemap.SetTile(combatant.hexPosition, targetTile);
     }
 
     public void ClearTargets() {
@@ -310,9 +329,14 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    public void SpawnFloatingNumber(string damageText, Vector3 position) {
-        var floatingNum = Instantiate(floatingNumberPrefab, position, Quaternion.identity, playerScreen.transform).GetComponent<FloatingNumberUI>();
-        floatingNum.Initialize(damageText);
+
+    private void SpawnDamageNumber(Combatant combatant, int amount) {
+        var floatingNum = Instantiate(floatingNumberPrefab, combatant.worldPosition, Quaternion.identity, playerScreen.transform).GetComponent<FloatingNumberUI>();
+        floatingNum.Initialize(amount.ToString(), Color.white);
     }
 
+    private void SpawnHealNumber(Combatant combatant, int amount) {
+        var floatingNum = Instantiate(floatingNumberPrefab, combatant.worldPosition, Quaternion.identity, playerScreen.transform).GetComponent<FloatingNumberUI>();
+        floatingNum.Initialize(amount.ToString(), Color.green);
+    }
 }

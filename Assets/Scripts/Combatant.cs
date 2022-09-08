@@ -6,17 +6,18 @@ public class Combatant : ScriptableObject
 {
     public Unit unit;
     public int index;
-    public Vector3Int worldPosition;
+    public Vector3Int hexPosition;
+    public Vector3 worldPosition;
     public DicePool dicePool;
     
     public Transform modelTransform; // Change this to event based
-    public HealthbarUI healthbar; // Change this to event based
 
-    public void Initialize(Unit unit, DicePool dicePool, int index, Vector3Int worldPosition) {
+    public void Initialize(Unit unit, DicePool dicePool, int index, Vector3Int hexPosition) {
         this.unit = unit;
         this.dicePool = dicePool;
-        this.worldPosition = worldPosition;
+        this.hexPosition = hexPosition;
         this.index = index;
+        this.worldPosition = CombatManagerUI.instance.GetCellCenter(hexPosition);
     }
 
     public bool isAlly() {
@@ -27,11 +28,6 @@ public class Combatant : ScriptableObject
         return index % 4;
     }
 
-    public void AssignHealthbar(HealthbarUI healthbar) {
-        this.healthbar = healthbar;
-
-        healthbar.Initialize(unit.maxHealth, unit.currentHealth);
-    }
 
     public void AssignModel(Transform transform) {
         this.modelTransform = transform;
@@ -41,22 +37,15 @@ public class Combatant : ScriptableObject
         // Calls unit's take damage
         unit.TakeDamage(amount);
 
-        // Feedback
+        // Debugging
         Debug.Log(unit.name + " took " + amount + " damage.");
 
-        // Spawn floating number for visual feedback
-        var position = CombatManagerUI.instance.GetCellCenter(worldPosition);
-        CombatManagerUI.instance.SpawnFloatingNumber(amount.ToString(), position);
+        // Trigger event
+        CombatEvents.instance.TriggerOnTakeDamage(this, amount);
 
-        // Updates health bar UI
-        healthbar.UpdateHealth(unit.currentHealth);
-
-        // Trigger approperiate event
+        // Trigger death if approperiate
         if (unit.IsDead()) {
             CombatEvents.instance.TriggerOnDie(this);
-        }   
-        else {
-            CombatEvents.instance.TriggerOnTakeDamage(this);
         }
     }
 
@@ -64,13 +53,10 @@ public class Combatant : ScriptableObject
         // Calls unit's heal
         unit.Heal(amount);
 
+        // Debugging
         Debug.Log(unit.name + " healed " + amount + " hp.");
 
-        // Spawn floating number for visual feedback
-        var position = CombatManagerUI.instance.GetCellCenter(worldPosition);
-        CombatManagerUI.instance.SpawnFloatingNumber(amount.ToString(), position);
-
-        // Updates health bar UI
-        healthbar.UpdateHealth(unit.currentHealth);
+        // Trigger event
+        CombatEvents.instance.TriggerOnHeal(this, amount);
     }
 }

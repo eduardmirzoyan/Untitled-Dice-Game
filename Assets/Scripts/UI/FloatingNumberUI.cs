@@ -14,9 +14,10 @@ public class FloatingNumberUI : MonoBehaviour
     [SerializeField] private float minVelocity;
     [SerializeField] private float maxVelocity;
 
-    public void Initialize(string damageText) {
+    public void Initialize(string damageText, Color color) {
         // Change text
         text.text = damageText;
+        text.color = color;
 
         // Get random velocity
         float velocity = Random.Range(minVelocity, maxVelocity);

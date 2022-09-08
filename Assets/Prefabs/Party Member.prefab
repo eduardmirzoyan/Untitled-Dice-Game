@@ -3031,7 +3031,7 @@ MonoBehaviour:
   toggleRaiseRect: {fileID: 7778510077583980032}
   lowerRect: {fileID: 7778510079508084354}
   isInteractable: 1
-  transitionTime: 0.5
+  transitionTime: 0.25
   raisedHeight: 370
   loweredHeight: -393
   isRasied: 0

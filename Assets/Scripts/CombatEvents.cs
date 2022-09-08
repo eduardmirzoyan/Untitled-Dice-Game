@@ -20,11 +20,9 @@ public class CombatEvents : MonoBehaviour
 {
     public static CombatEvents instance;
 
-    private void Awake()
-    {
+    private void Awake() {
         // Singleton Logic
-        if(CombatEvents.instance != null)
-        {
+        if(CombatEvents.instance != null) {
             Destroy(gameObject);
             return;
         }
@@ -52,8 +50,6 @@ public class CombatEvents : MonoBehaviour
     public event Action<Dice> onShrink;
     public event Action<Dice> onReplenish;
     public event Action<Dice> onExhaust;
-    public event Action<Dice, bool> onSetActive;
-
 
     // Action events
     public event Action<int> onPlayerTurnStart;
@@ -64,14 +60,15 @@ public class CombatEvents : MonoBehaviour
     public event Action<int> onPlayerTurnEnd;
 
     // General events
-    public event Action<Combatant> onTakeDamage;
+    public event Action<Combatant, int> onHeal;
+    public event Action<Combatant, int> onTakeDamage;
     public event Action<Combatant> onDie;
 
     // UI events
-    public event Action<Queue<Combatant>> onFormQueue; // ?
-    public event Action<Combatant> deQueue; // ?
-    public event Action<int> onClearQueue; // ?
-    
+    public event Action<Combatant, float> onSpawnCombatant;
+    public event Action<Queue<Combatant>> onFormQueue;
+    public event Action<Combatant> deQueue;
+    public event Action<int> onClearQueue;
     public event Action<string> onFeedback;
 
     public void TriggerOnRoundStartUI(int value) {
@@ -146,6 +143,12 @@ public class CombatEvents : MonoBehaviour
 
     #region Queue based events
 
+    public void TriggerOnSpawnCombatant(Combatant combatant, float spawnTime) {
+        if (onSpawnCombatant != null) {
+            onSpawnCombatant(combatant, spawnTime);
+        }
+    }
+
     public void TriggerFormQueue(Queue<Combatant> queue) {
         if (onFormQueue != null) {
             onFormQueue(queue);
@@ -204,12 +207,6 @@ public class CombatEvents : MonoBehaviour
     public void TriggerOnExhaust(Dice dice) {
         if (onExhaust != null) {
             onExhaust(dice);
-        }
-    }
-
-    public void TriggerSetActive(Dice dice, bool state) {
-        if (onSetActive != null) {
-            onSetActive(dice, state);
         }
     }
 
@@ -315,9 +312,15 @@ public class CombatEvents : MonoBehaviour
 
     #region Unit-based events
 
-    public void TriggerOnTakeDamage(Combatant combatant) {
+    public void TriggerOnHeal(Combatant combatant, int amount) {
+        if (onHeal != null) {
+            onHeal(combatant, amount);
+        }
+    }
+
+    public void TriggerOnTakeDamage(Combatant combatant, int amount) {
         if (onTakeDamage != null) {
-            onTakeDamage(combatant);
+            onTakeDamage(combatant, amount);
         }
     }
 

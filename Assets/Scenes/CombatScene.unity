@@ -7011,6 +7011,7 @@ MonoBehaviour:
   rollTime: 0.5
   waitTime: 0.3
   attackTime: 0.5
+  spawnTime: 1
   state: 0
   allyParty: {fileID: 11400000, guid: e308135c7a3a3434ab65125370856fa1, type: 2}
   enemyParty: {fileID: 11400000, guid: fc24900ed4b4d1443b436596e3141f70, type: 2}
