@@ -63,6 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shading: {fileID: 2274657985569361609}
   iconImage: {fileID: 3419157785473121337}
+  isTurn: 0
 --- !u!1 &2274657985569361615
 GameObject:
   m_ObjectHideFlags: 0

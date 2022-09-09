@@ -57,7 +57,9 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     {
         // Display item info
         Vector3[] corners = new Vector3[4];
+        // Get all corners of item boundry
         GetComponent<RectTransform>().GetWorldCorners(corners);
+        // Send bottom right corner as position
         ItemTooltipUI.instance.Show(item, corners[3]);
     }
 

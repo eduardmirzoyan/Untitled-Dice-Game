@@ -23,7 +23,7 @@ public class CombatManagerUI : MonoBehaviour
     [Header("Actions UI")]
     [SerializeField] private LayoutGroup actionLayoutGroup;
     [SerializeField] private GameObject actionHolderPrefab;
-    [SerializeField] private List<ActionHolderUI> actionHolders;
+    [SerializeField] private List<SkillDisplaySlotUI> actionHolders;
 
     [Header("Dice UI")]
     [SerializeField] private HorizontalLayoutGroup allyDiceGroup;
@@ -75,7 +75,6 @@ public class CombatManagerUI : MonoBehaviour
     private void Start() {
         CombatEvents.instance.onRoundStartUI += SpawnDiceOutlines;
         
-        CombatEvents.instance.onPlayerTurnStart += EnableAllyDice;
         CombatEvents.instance.onPlayerTurnStart += ShowActions;
         CombatEvents.instance.onTargetSelect += HighlightTarget;
         CombatEvents.instance.onActionConfirm += ClearActions;
@@ -185,7 +184,7 @@ public class CombatManagerUI : MonoBehaviour
         // Create the UI
         var dieUI = Instantiate(dicePrefab, dieOutlineUI.transform).GetComponent<DiceUI>();
         dieUI.transform.position = dieOutlineUI.transform.position;
-        dieUI.Initialize(combatant.unit.dice, dieColor, dieOutlineUI.GetComponent<RectTransform>());
+        dieUI.Initialize(combatant, dieColor, dieOutlineUI.GetComponent<RectTransform>());
 
         // Store
         dieUIs.Add(dieUI);
@@ -280,11 +279,11 @@ public class CombatManagerUI : MonoBehaviour
 
     private void ShowActions(int value) {
         // Make new list
-        actionHolders = new List<ActionHolderUI>();
+        actionHolders = new List<SkillDisplaySlotUI>();
         // Get all weapons equipped to the unit
         foreach (var action in CombatManager.instance.currentCombatant.unit.GetActions()) {
             // Create UI gameobject
-            var actionHolder = Instantiate(actionHolderPrefab, actionLayoutGroup.transform).GetComponent<ActionHolderUI>();
+            var actionHolder = Instantiate(actionHolderPrefab, actionLayoutGroup.transform).GetComponent<SkillDisplaySlotUI>();
             // Initalize it
             actionHolder.Initialize(action);
             // Add to list

@@ -13,4 +13,8 @@ public class QueueSlot : MonoBehaviour
         iconImage.sprite = icon;
         shading.color = color;
     }
+
+    public void Highlight() {
+        shading.color = Color.yellow;
+    }
 }

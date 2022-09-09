@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Text.RegularExpressions;
 
 public class SkillTooltipUI : MonoBehaviour
 {
     public static SkillTooltipUI instance;
 
     [Header("Components")]
+    [SerializeField] private SkillDisplayDescriptionUI skillDisplayDescriptionUI;
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private TextMeshProUGUI skillName;
-    [SerializeField] private TextMeshProUGUI skillDescription;
-    [SerializeField] private Image skillIcon;
-    [SerializeField] private Image sourceIcon;
 
     [Header("Icons")]
-    [SerializeField] private Image selfTargetIcon;
-    [SerializeField] private Image allyTargetIcon;
-    [SerializeField] private Image enemyTargetIcon;
-    [SerializeField] private Image passiveIcon;
     [SerializeField] private Image lockIcon;
 
     [Header("Adjustments")]
     [SerializeField] private Vector3 offset;
     [SerializeField] private bool isVisible;
     [SerializeField] private bool isLocked;
+
 
     private void Awake() {
         // Singleton logic
@@ -60,27 +55,8 @@ public class SkillTooltipUI : MonoBehaviour
         // Move transform
         transform.position = position + offset;
 
-        // Update text
-        skillName.text = action.name;
-        skillDescription.text = action.GetDynamicDescription();
-
-        // Update source
-        if (action is AttackAction) {
-            AttackAction attackAction = (AttackAction)action;
-            if (attackAction.sourceWeapon != null) {
-                sourceIcon.sprite = attackAction.sourceWeapon.sprite;
-                sourceIcon.enabled = true;
-            }
-        }
-        else {
-            sourceIcon.enabled = false;
-        }
-
-        // Toggle icons based on what action can do
-        selfTargetIcon.gameObject.SetActive(action.canTargetAllies);
-        allyTargetIcon.gameObject.SetActive(action.canTargetAllies);
-        enemyTargetIcon.gameObject.SetActive(action.canTargetEnemies);
-        passiveIcon.gameObject.SetActive(false);
+        // Initialize
+        skillDisplayDescriptionUI.Initialize(action);
 
         // Display window
         canvasGroup.alpha = 1f;
@@ -96,27 +72,8 @@ public class SkillTooltipUI : MonoBehaviour
         // Move transform
         transform.position = position + offset;
 
-        // Update text
-        skillName.text = passive.name;
-        skillDescription.text = passive.GetDynamicDescription();
-
-        // Update source
-        if (passive.sourceArmor != null) {
-            sourceIcon.sprite = passive.sourceArmor.sprite;
-            sourceIcon.enabled = true;
-        }
-        else {
-            sourceIcon.enabled = false;
-        }
-
-        // Toggle icons based on what action can do
-        selfTargetIcon.gameObject.SetActive(false);
-        allyTargetIcon.gameObject.SetActive(false);
-        enemyTargetIcon.gameObject.SetActive(false);
-        passiveIcon.gameObject.SetActive(true);
-
-        // Update the icon of the action
-        skillIcon.sprite = passive.icon;
+        // Initialize
+        skillDisplayDescriptionUI.Initialize(passive);
 
         // Display window
         canvasGroup.alpha = 1f;

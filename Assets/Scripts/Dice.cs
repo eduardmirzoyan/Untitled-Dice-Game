@@ -8,14 +8,16 @@ public class Dice : ScriptableObject, IComparable<Dice>
 {
     public int maxValue = 6;
     [SerializeField] private int value;
-    public bool isActive;
+    public bool isExhausted;
 
     private void Awake() {
         if (maxValue < 1) {
             throw new System.Exception("Error: Dice is negative or 0");
         }
 
-        isActive = true;
+        // Set to not exhausted
+        isExhausted = false;
+        
         // Set default value to 1
         value = 1;
     }
@@ -29,11 +31,11 @@ public class Dice : ScriptableObject, IComparable<Dice>
     }
 
     public void Replenish() {
-        isActive = true;
+        isExhausted = false;
     }
 
     public void Exhaust() {
-        isActive = false;
+        isExhausted = true;
     }
 
     public void Grow() {

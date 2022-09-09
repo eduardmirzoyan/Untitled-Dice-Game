@@ -14,6 +14,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     [SerializeField] private Dice dice;
     [SerializeField] private Animator animator;
     [SerializeField] private Image[] pipHolders;
+    [SerializeField] private Combatant combatant;
 
     [SerializeField] private RectTransform origin;
     private RectTransform rectTransform;
@@ -34,13 +35,19 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void Initialize(Dice dice, Color color, RectTransform origin, bool interactable = false)
+    public void Initialize(Combatant combatant, Color color, RectTransform origin, bool interactable = false)
     {
-        this.dice = dice;
+        this.dice = combatant.unit.dice;
+        this.combatant = combatant;
         this.origin = origin;
         this.isInteractable = interactable;
         background.color = color;
         playerScreen = transform.root;
+
+        // UI events
+        CombatEvents.instance.onPlayerTurnStart += OnPlayerTurnStart;
+        CombatEvents.instance.onDieStartDrag += OnStartDrag;
+        CombatEvents.instance.onDieEndDrag += OnEndDrag;
 
         // Subscribe to events
         CombatEvents.instance.onRoll += OnRoll;
@@ -55,12 +62,66 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     }
 
     public void Uninitialize() {
+        // Unsub to all events
+        CombatEvents.instance.onPlayerTurnStart -= OnPlayerTurnStart;
+        CombatEvents.instance.onDieStartDrag -= OnStartDrag;
+        CombatEvents.instance.onDieEndDrag -= OnEndDrag;
+
         CombatEvents.instance.onRoll -= OnRoll;
         CombatEvents.instance.onReroll -= OnRoll;
         CombatEvents.instance.onGrow -= OnGrow;
         CombatEvents.instance.onShrink -= OnShrink;
         CombatEvents.instance.onReplenish -= OnReplenish;
         CombatEvents.instance.onExhaust -= OnExhaust;
+    }
+
+    private void OnPlayerTurnStart(int value) {
+        // Check if this is an ally die
+        if (combatant.isAlly()) {
+            // Make it interactive
+            isInteractable = true;
+
+            CheckHighlight();
+        }
+    }
+
+    private void CheckHighlight() {
+        // Check if it's usable
+        if (combatant.isAlly() && !dice.isExhausted) {
+            // Show outline animation
+            animator.Play("Active");
+        }
+        else {
+            // Else play regular animation
+            animator.Play("Idle");
+        }
+    }
+
+    private void OnStartDrag(Dice dice) {
+        if (combatant.isAlly()) {
+            // Die should become idle
+            animator.Play("Idle");
+        }   
+    }
+
+    private void OnEndDrag(Dice dice) {
+        // If this is an ally die
+        if (!this.dice.isExhausted && combatant.isAlly()) {
+            // If a die was selected
+            if (CombatManager.instance.selectedDie != null) {
+                // If this was the selected die
+                if (CombatManager.instance.selectedDie == this.dice) {
+                    animator.Play("Select");
+                }
+                else {
+                    animator.Play("Idle");
+                }
+            }
+            else {
+                animator.Play("Active");
+            }
+        }
+        
     }
 
     private void OnRoll(Dice dice) {
@@ -78,7 +139,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
             // Do green animation
             selectionOutline.color = Color.green;
-            animator.Play("Selected"); // MAKE THIS GREEN
+            animator.Play("Select"); // MAKE THIS GREEN
         }
     }
 
@@ -90,7 +151,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
             // Do green animation
             selectionOutline.color = Color.red;
-            animator.Play("Selected"); // MAKE THIS GREEN
+            animator.Play("Select"); // MAKE THIS GREEN
         }
     }
 
@@ -140,7 +201,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         DrawValue(dice.GetValue());
 
         // Visual feedback
-        animator.Play("Selected");
+        animator.Play("Select");
     }
 
     private void UpdateVisuals() {
@@ -148,7 +209,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         DrawValue(dice.GetValue());
 
         // Update transparancy depending if die is active
-        canvasGroup.alpha = dice.isActive ? 1f : 0.5f;
+        canvasGroup.alpha = dice.isExhausted ? 0.5f : 1f;
     }
 
     public Dice GetDie() {
@@ -163,7 +224,9 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     // Dragging helper functions
     public void OnBeginDrag(PointerEventData eventData) {
-        if (isInteractable) {
+        // If interactable and die is active
+        if (!dice.isExhausted && isInteractable) {
+
             // Update visuals
             canvasGroup.alpha = 0.6f;
             canvasGroup.blocksRaycasts = false;
@@ -179,6 +242,9 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
             // Randomize rotation direction
             rotationDirection = Random.Range(0, 2) == 0 ? 1 : -1;
+
+            // Trigger event
+            CombatEvents.instance.TriggerOnDieStartDrag(dice);
         }
     }
 
@@ -187,7 +253,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        if (isInteractable) {
+        if (!dice.isExhausted && isInteractable) {
             // Stop dragging
             isBeingDragged = false;
 
@@ -207,7 +273,11 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             // Reset position
             transform.localPosition = Vector3.zero;
 
+            // Update UI
             UpdateVisuals();
+            
+            // Trigger event
+            CombatEvents.instance.TriggerOnDieEndDrag(dice);
         }
     }
 
@@ -215,9 +285,11 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         // Return to origin on right click
         if (eventData.button == PointerEventData.InputButton.Right) {
             // If it is currently in a dice slot, attempt to remove itself
-            if (transform.parent.TryGetComponent(out ActionHolderUI actionHolderUI)) {
+            if (transform.parent.TryGetComponent(out SkillDisplaySlotUI actionHolderUI)) {
                 // Trigger Event
                 CombatEvents.instance.TriggerOnDieInsert(null, null);
+                // Trigger Event
+                CombatEvents.instance.TriggerOnDieEndDrag(dice);
             }
         }
     }

@@ -53,6 +53,8 @@ public class CombatEvents : MonoBehaviour
 
     // Action events
     public event Action<int> onPlayerTurnStart;
+    public event Action<Dice> onDieStartDrag;
+    public event Action<Dice> onDieEndDrag;
     public event Action<Action, Dice> onDieInsert;
     public event Action<Combatant> onTargetSelect;
     public event Action<Action> onPreActionConfirm;
@@ -114,9 +116,21 @@ public class CombatEvents : MonoBehaviour
     }
 
     #region Action based events
+    public void TriggerOnDieStartDrag(Dice dice) {
+        if (onDieStartDrag != null) {
+            onDieStartDrag(dice);
+        }
+    }
+
     public void TriggerOnDieInsert(Action action, Dice dice) {
         if (onDieInsert != null) {
             onDieInsert(action, dice);
+        }
+    }
+
+    public void TriggerOnDieEndDrag(Dice dice) {
+        if (onDieEndDrag != null) {
+            onDieEndDrag(dice);
         }
     }
 

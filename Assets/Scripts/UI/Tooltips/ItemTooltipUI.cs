@@ -9,12 +9,13 @@ public class ItemTooltipUI : MonoBehaviour
     public static ItemTooltipUI instance;
 
     [Header("Displaying Components")]
+    [SerializeField] private RectTransform windowTransform;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TextMeshProUGUI itemName;
     [SerializeField] private TextMeshProUGUI flavorText;
     [SerializeField] private TextMeshProUGUI itemDescription;
     [SerializeField] private Image lockImage;
-    [SerializeField] private GameObject actionHolderPrefab;
+    [SerializeField] private GameObject itemSkillPrefab;
     [SerializeField] private LayoutGroup actionsLayoutGroup;
 
     [Header("Adjustments")]
@@ -22,7 +23,7 @@ public class ItemTooltipUI : MonoBehaviour
     [SerializeField] private bool isVisible;
     [SerializeField] private bool isLocked;
 
-    private List<ActionHolderUI> actionHolderUIs;
+    private List<ItemSkillUI> itemSkillUIs;
 
     private void Awake() {
         // Singleton logic
@@ -35,7 +36,7 @@ public class ItemTooltipUI : MonoBehaviour
         canvasGroup = GetComponentInChildren<CanvasGroup>();
 
         lockImage.enabled = false;
-        actionHolderUIs = new List<ActionHolderUI>();
+        itemSkillUIs = new List<ItemSkillUI>();
     }
 
     private void Update() {
@@ -67,9 +68,6 @@ public class ItemTooltipUI : MonoBehaviour
         // Don't reshow if locked
         if (isLocked) return;
 
-        // Move transform
-        transform.position = position + offset;
-
         // Display window
         canvasGroup.alpha = 1f;
 
@@ -86,9 +84,9 @@ public class ItemTooltipUI : MonoBehaviour
             // Display all the actions
             foreach (var action in weapon.actions) {
                 // Spawn visuals of actions
-                var actionHolderUI = Instantiate(actionHolderPrefab, actionsLayoutGroup.transform).GetComponent<ActionHolderUI>();
-                actionHolderUI.Initialize(action, false);
-                actionHolderUIs.Add(actionHolderUI);
+                var itemSkillUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
+                itemSkillUI.Initialize(action);
+                itemSkillUIs.Add(itemSkillUI);
             }
         }
         else if (item is Armor) {
@@ -98,14 +96,23 @@ public class ItemTooltipUI : MonoBehaviour
             // Display all the actions
             foreach (var passive in armor.passives) {
                 // Spawn visuals of actions
-                var actionHolderUI = Instantiate(actionHolderPrefab, actionsLayoutGroup.transform).GetComponent<ActionHolderUI>();
+                var actionHolderUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
                 actionHolderUI.Initialize(passive);
-                actionHolderUIs.Add(actionHolderUI);
+                itemSkillUIs.Add(actionHolderUI);
             }
         }
 
         // Upate Canvas
         LayoutRebuilder.ForceRebuildLayoutImmediate(actionsLayoutGroup.GetComponent<RectTransform>());
+
+        // Upate Canvas
+        LayoutRebuilder.ForceRebuildLayoutImmediate(windowTransform);
+
+        // Move transform
+        transform.position = position + offset;
+
+        // Translate tooltip so that window's bottom left corner is at bottom right
+        windowTransform.anchoredPosition = new Vector2(windowTransform.rect.width / 2, windowTransform.rect.height / 2);
 
         isVisible = true;
     }
@@ -118,10 +125,10 @@ public class ItemTooltipUI : MonoBehaviour
         SkillTooltipUI.instance.Hide();
 
         // Destroy all the ui
-        foreach (var ui in actionHolderUIs) {
+        foreach (var ui in itemSkillUIs) {
             Destroy(ui.gameObject);
         }
-        actionHolderUIs.Clear();
+        itemSkillUIs.Clear();
 
         // Then disable window
         canvasGroup.alpha = 0f;

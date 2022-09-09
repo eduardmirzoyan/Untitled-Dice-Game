@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         dictionary["GROW"] = "INCREASE the value of the die by 1, with overflow";
         dictionary["SHRINK"] = "DECREASE the value of the die by 1, with overflow";
         dictionary["PAIR"] = "Your DICE POOL contains 2+ dice with the SAME value.";
-        dictionary["UNIQUE"] = "Every die in your DICE POOL has a UNIQUE value.";
+        dictionary["UNIQUE"] = "Every die in your DICE POOL has a DIFFERENT value.";
         dictionary["BLEED"] = "To be implemented.";
 
         // Create a player party (Which should be overwritten)

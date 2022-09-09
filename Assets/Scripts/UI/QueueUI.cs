@@ -21,6 +21,7 @@ public class QueueUI : MonoBehaviour
 
     private void Start() {
         // Subscribe to events
+        CombatEvents.instance.onTurnStart += StartTurn;
         CombatEvents.instance.onCombatStart += OnCombatStart;
         CombatEvents.instance.onFormQueue += FormQueue;
         CombatEvents.instance.deQueue += Dequeue;
@@ -47,6 +48,13 @@ public class QueueUI : MonoBehaviour
             Destroy(queueSlotGameobjects[0]);
             queueSlotGameobjects.RemoveAt(0);
         }
+    }
+
+    private void StartTurn(ActionInfo actionInfo, Combatant combatant) {
+        if (queueSlotGameobjects.Count > 0) {
+            queueSlotGameobjects[0].GetComponent<QueueSlot>().Highlight();
+        }
+        actionInfo.waitTime = 0f;
     }
 
     private void ClearQueue(int value) {

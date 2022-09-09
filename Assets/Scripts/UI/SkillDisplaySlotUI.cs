@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("Components")]
     [SerializeField] private Image icon;
@@ -49,13 +49,13 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
             var dice = diceUI.GetDie();
 
             // Make sure die is active
-            if (!dice.isActive) {
+            if (dice.isExhausted) {
                 CombatEvents.instance.TriggerOnFeedback("Must use NON-EXHAUSTED die.");
                 return;
             }
 
             // Check for any constraints on the die
-            if (dice.isActive && action.checkDieConstraints(dice)) {
+            if (!dice.isExhausted && action.checkDieConstraints(dice)) {
                 // Stores UI
                 containedDiceUI = diceUI;
 
@@ -86,8 +86,11 @@ public class ActionHolderUI : MonoBehaviour, IDropHandler, IPointerEnterHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // If this is not functional, then dip
+        if (!isFunctional) return;
+
         // If a die is hovered over, then reduce alpha
-        if (isFunctional && eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI)) {
+        if (eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI)) {
             icon.color = new Color(255, 255, 255, highlightAlpha);
         }
 
