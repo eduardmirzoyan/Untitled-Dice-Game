@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\UI\Selection Scene\UnitUI.cs" />
      <Compile Include="Assets\Scripts\Sound.cs" />
      <Compile Include="Assets\Scripts\Actions\AoEAttack.cs" />
+     <Compile Include="Assets\Scripts\UI\Tooltips\ItemSkillUI.cs" />
      <Compile Include="Assets\Scripts\CombatManager.cs" />
      <Compile Include="Assets\Scripts\UI\Tooltips\TextTooltipUI.cs" />
      <Compile Include="Assets\Scripts\UI\Tooltips\TooltipTrigger.cs" />
@@ -61,6 +62,7 @@
      <Compile Include="Assets\Scripts\Actions\EvenAttack1.cs" />
      <Compile Include="Assets\Scripts\Passives\Passive7.cs" />
      <Compile Include="Assets\Scripts\UI\PartyMemberUI.cs" />
+     <Compile Include="Assets\Scripts\UI\SkillDisplayDescriptionUI.cs" />
      <Compile Include="Assets\Scripts\TransitionManager.cs" />
      <Compile Include="Assets\Scripts\Actions\Action.cs" />
      <Compile Include="Assets\Scripts\UI\QueueUI.cs" />
@@ -92,6 +94,7 @@
      <Compile Include="Assets\Scripts\Actions\OddAttack1.cs" />
      <Compile Include="Assets\Scripts\UI\FloatingNumberUI.cs" />
      <Compile Include="Assets\Scripts\UI\Main Menu\HelpUI.cs" />
+     <Compile Include="Assets\Scripts\UI\SkillDisplaySlotUI.cs" />
      <Compile Include="Assets\Scripts\Combatant.cs" />
      <Compile Include="Assets\Scripts\UI\Tooltips\SkillTooltipUI.cs" />
      <Compile Include="Assets\Scripts\UI\ModelUI.cs" />
@@ -115,9 +118,7 @@
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
      <Compile Include="Assets\Scripts\UI\ConfirmButtonUI.cs" />
-     <Compile Include="Assets\Scripts\UI\SkillDisplayDescriptionUI.cs" />
-     <Compile Include="Assets\Scripts\UI\SkillDisplaySlotUI.cs" />
-     <Compile Include="Assets\Scripts\UI\Tooltips\ItemSkillUI.cs" />
+     <Compile Include="Assets\Scripts\CameraManager.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
