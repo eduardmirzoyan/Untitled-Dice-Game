@@ -47,6 +47,8 @@ public class CombatManagerUI : MonoBehaviour
     [Header("Damage number UI")]
     [SerializeField] private GameObject floatingNumberPrefab;
 
+    [SerializeField] private GameObject combatStationPrefab;
+
     [SerializeField] private Color allyColor;
     [SerializeField] private Color enemyColor;
 
@@ -76,7 +78,7 @@ public class CombatManagerUI : MonoBehaviour
         CombatEvents.instance.onRoundStartUI += SpawnDiceOutlines;
         
         CombatEvents.instance.onPlayerTurnStart += ShowActions;
-        CombatEvents.instance.onTargetSelect += HighlightTarget;
+        // CombatEvents.instance.onTargetSelect += HighlightTarget;
         CombatEvents.instance.onActionConfirm += ClearActions;
         CombatEvents.instance.onActionConfirm += DisableAllyDice;
 
@@ -113,16 +115,16 @@ public class CombatManagerUI : MonoBehaviour
             }
 
             // Check if selected map has tile
-            if (groundTilemap.HasTile(worldPos)) {
-                // Reset previous selection if exists
-                if (SelectionExists()) {
-                    ResetSelection();
-                }
+            // if (groundTilemap.HasTile(worldPos)) {
+            //     // Reset previous selection if exists
+            //     if (SelectionExists()) {
+            //         ResetSelection();
+            //     }
 
-                // Cache selected position
-                selectionPosition = worldPos;
-                selectionTilemap.SetTile(worldPos, selectionTile);
-            }
+            //     // Cache selected position
+            //     selectionPosition = worldPos;
+            //     selectionTilemap.SetTile(worldPos, selectionTile);
+            // }
         }
 
         // Right click to clear any selection
@@ -213,6 +215,10 @@ public class CombatManagerUI : MonoBehaviour
 
         // Assign model
         combatant.AssignModel(modelObject.transform);
+
+        // Spawn station and initialize
+        var combatStation = Instantiate(combatStationPrefab, centeredPosition, Quaternion.identity).GetComponent<CombatStationUI>();
+        combatStation.Initialize(combatant);
 
         // Spawn animation
         StartCoroutine(Move(combatant, animationTime));

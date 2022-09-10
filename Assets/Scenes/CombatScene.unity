@@ -175,6 +175,7 @@ MonoBehaviour:
   allyModels: {fileID: 1040685145}
   enemyModels: {fileID: 1015980002}
   floatingNumberPrefab: {fileID: 8052576575257178517, guid: 816499e5f76a7b846844ef40f7fb6a3f, type: 3}
+  combatStationPrefab: {fileID: 6855098011690045420, guid: c64d349b1d379dc45bf0435ad2ca2e94, type: 3}
   allyColor: {r: 0.30588236, g: 0.46666667, b: 0.6392157, a: 1}
   enemyColor: {r: 0.9254902, g: 0.5921569, b: 0.2784314, a: 1}
 --- !u!4 &3169989

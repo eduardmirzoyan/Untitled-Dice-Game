@@ -210,7 +210,7 @@ public class CombatManager : MonoBehaviour
         }
         else {
             // Start listening for events
-            CombatEvents.instance.onDieInsert += SelectAction;
+            CombatEvents.instance.onActionSelect += SelectAction;
 
             // Trigger event for visuals
             CombatEvents.instance.TriggerOnPlayerTurnStart(0);
@@ -556,7 +556,7 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator ConfirmAction() {
         // Stop listening for actions
-        CombatEvents.instance.onDieInsert -= SelectAction;
+        CombatEvents.instance.onActionSelect -= SelectAction;
 
         // Trigger event
         CombatEvents.instance.TriggerOnPreActionConfirm(selectedAction);

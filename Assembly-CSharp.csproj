@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\Passives\Passive5.cs" />
      <Compile Include="Assets\Scripts\UI\Selection Scene\StartButtonUI.cs" />
      <Compile Include="Assets\Scripts\Actions\EvenAttack1.cs" />
+     <Compile Include="Assets\Scripts\CameraManager.cs" />
      <Compile Include="Assets\Scripts\Passives\Passive7.cs" />
      <Compile Include="Assets\Scripts\UI\PartyMemberUI.cs" />
      <Compile Include="Assets\Scripts\UI\SkillDisplayDescriptionUI.cs" />
@@ -118,7 +119,7 @@
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
      <Compile Include="Assets\Scripts\UI\ConfirmButtonUI.cs" />
-     <Compile Include="Assets\Scripts\CameraManager.cs" />
+     <Compile Include="Assets\Scripts\UI\CombatStationUI.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

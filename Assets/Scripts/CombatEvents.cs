@@ -55,7 +55,7 @@ public class CombatEvents : MonoBehaviour
     public event Action<int> onPlayerTurnStart;
     public event Action<Dice> onDieStartDrag;
     public event Action<Dice> onDieEndDrag;
-    public event Action<Action, Dice> onDieInsert;
+    public event Action<Action, Dice> onActionSelect;
     public event Action<Combatant> onTargetSelect;
     public event Action<Action> onPreActionConfirm;
     public event Action<Action> onActionConfirm;
@@ -122,9 +122,9 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public void TriggerOnDieInsert(Action action, Dice dice) {
-        if (onDieInsert != null) {
-            onDieInsert(action, dice);
+    public void TriggerOnActionSelect(Action action, Dice dice) {
+        if (onActionSelect != null) {
+            onActionSelect(action, dice);
         }
     }
 

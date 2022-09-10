@@ -8,6 +8,7 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
 {
     [Header("Components")]
     [SerializeField] private Image icon;
+    [SerializeField] private Animator animator;
     [SerializeField] private DiceUI containedDiceUI;
 
     [Header("States")]
@@ -16,6 +17,10 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
     [SerializeField] private float highlightAlpha = 0.5f;
     [SerializeField] private bool isFunctional;
 
+    private void Awake() {
+        animator = GetComponent<Animator>();
+    }
+
 
     public void Initialize(Action action, bool isFunctional = true) {
         this.action = action;
@@ -23,14 +28,18 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
         icon.sprite = action.icon;
 
         if (isFunctional) {
-            CombatEvents.instance.onDieInsert += OnDieInsert;
+            CombatEvents.instance.onDieStartDrag += OnDieDragStart;
+            CombatEvents.instance.onDieEndDrag += OnDieDragEnd;
+            CombatEvents.instance.onActionSelect += OnDieInsert;
             CombatEvents.instance.onPreActionConfirm += ReleaseDieIfPossible;
         }
     }
 
     public void Deinitialize() {
         if (isFunctional) {
-            CombatEvents.instance.onDieInsert -= OnDieInsert;
+            CombatEvents.instance.onDieStartDrag -= OnDieDragStart;
+            CombatEvents.instance.onDieEndDrag -= OnDieDragEnd;
+            CombatEvents.instance.onActionSelect -= OnDieInsert;
             CombatEvents.instance.onPreActionConfirm -= ReleaseDieIfPossible;
         }
     }
@@ -66,7 +75,7 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
                 icon.color = new Color(255, 255, 255, 1);
 
                 // Select this
-                CombatEvents.instance.TriggerOnDieInsert(action, dice);
+                CombatEvents.instance.TriggerOnActionSelect(action, dice);
             }
             else {
                 print("Dice does not pass contraints of selected action");
@@ -136,5 +145,18 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
             }
             else { throw new System.Exception("CONFIRMED ACTION HAD NO DIE??!"); }
         }
+    }
+
+    private void OnDieDragStart(Dice dice) {
+        // Check if the dragged die passes this action's constraints
+        if (action != null && action.checkDieConstraints(dice)) {
+            // Show highlight animation
+            animator.Play("Highlight");
+        }
+    }
+
+    private void OnDieDragEnd(Dice dice) {
+        // Stop any animations
+        animator.Play("Idle");
     }
 }

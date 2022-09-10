@@ -89,7 +89,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         // Check if it's usable
         if (combatant.isAlly() && !dice.isExhausted) {
             // Show outline animation
-            animator.Play("Active");
+            animator.Play("Highlight");
         }
         else {
             // Else play regular animation
@@ -118,7 +118,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 }
             }
             else {
-                animator.Play("Active");
+                animator.Play("Highlight");
             }
         }
         
@@ -287,7 +287,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             // If it is currently in a dice slot, attempt to remove itself
             if (transform.parent.TryGetComponent(out SkillDisplaySlotUI actionHolderUI)) {
                 // Trigger Event
-                CombatEvents.instance.TriggerOnDieInsert(null, null);
+                CombatEvents.instance.TriggerOnActionSelect(null, null);
                 // Trigger Event
                 CombatEvents.instance.TriggerOnDieEndDrag(dice);
             }
