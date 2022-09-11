@@ -10,13 +10,13 @@ public class Passive5 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onTurnStart += CheckPool;
+        CombatEvents.instance.onSkillTurnStart += CheckPool;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onTurnStart -= CheckPool;
+        CombatEvents.instance.onSkillTurnStart -= CheckPool;
     }
 
     private void CheckPool(ActionInfo info, Combatant combatant)

@@ -10,13 +10,13 @@ public class Passive2 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onRoundStart += ShrinkLargestDie;
+        CombatEvents.instance.onSkillRoundStart += ShrinkLargestDie;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onRoundStart += ShrinkLargestDie;
+        CombatEvents.instance.onSkillRoundStart += ShrinkLargestDie;
     }
 
     private void ShrinkLargestDie(ActionInfo info)

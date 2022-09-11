@@ -154,14 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldGrid: {fileID: 1274067387}
   groundTilemap: {fileID: 1621863498}
-  selectionTilemap: {fileID: 1545811041}
-  turnIndicatorTilemap: {fileID: 1699940101}
-  targetIndicatorTilemap: {fileID: 639134876}
-  selectionTile: {fileID: 11400000, guid: f39de31589f85fe4ba125d2c1ad2ccff, type: 2}
-  turnTile: {fileID: 11400000, guid: 1dc904c162eec644f9b4d6bb267df39f, type: 2}
-  targetTile: {fileID: 11400000, guid: d1ef45b61398ee04fb2957dddfaa3139, type: 2}
-  selectionPosition: {x: 0, y: 0, z: 0}
-  turnPosition: {x: 0, y: 0, z: 0}
   actionLayoutGroup: {fileID: 1546465309}
   actionHolderPrefab: {fileID: 5915709135306995342, guid: 8ba0cbced85d1b647890c85b2b9545a0, type: 3}
   actionHolders: []
@@ -174,7 +166,7 @@ MonoBehaviour:
   healthbarPrefab: {fileID: 4351659929625625644, guid: 72c9b7c6bc8486f488869019b24efb6e, type: 3}
   allyModels: {fileID: 1040685145}
   enemyModels: {fileID: 1015980002}
-  floatingNumberPrefab: {fileID: 8052576575257178517, guid: 816499e5f76a7b846844ef40f7fb6a3f, type: 3}
+  floatingNumberPrefab: {fileID: 1594117422838939648, guid: 654e13c913d805343a516cfac8fd9eba, type: 3}
   combatStationPrefab: {fileID: 6855098011690045420, guid: c64d349b1d379dc45bf0435ad2ca2e94, type: 3}
   allyColor: {r: 0.30588236, g: 0.46666667, b: 0.6392157, a: 1}
   enemyColor: {r: 0.9254902, g: 0.5921569, b: 0.2784314, a: 1}
@@ -1219,19 +1211,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b6f43667ca3e9c40a2d170523232d5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 10
-  panBorderThickness: 100
-  panLimit: {x: 1, y: 1}
-  zoomSpeed: 20
-  maxY: -10
-  minY: -12
-  panCoef: 0.05
-  debugMode: 1
+  defaultTarget: {fileID: 264697121}
+  targets: []
+  offset: {x: 0, y: 0, z: -10}
+  smoothTime: 0.5
+  minZoom: 5
+  maxZoom: 2
+  zoomLimiter: 10
+  isEnabled: 0
 --- !u!224 &570971835 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7778510077901528290, guid: 66dc8508586cf2e40883307a6334e675, type: 3}
@@ -3090,7 +3082,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1145498673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7065,7 +7057,9 @@ MonoBehaviour:
   rollTime: 0.5
   waitTime: 0.3
   attackTime: 0.5
+  hoverTime: 1
   spawnTime: 1
+  fastMode: 0
   state: 0
   allyParty: {fileID: 11400000, guid: e308135c7a3a3434ab65125370856fa1, type: 2}
   enemyParty: {fileID: 11400000, guid: fc24900ed4b4d1443b436596e3141f70, type: 2}

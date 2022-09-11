@@ -13,10 +13,11 @@ public class HolderHolder : MonoBehaviour
     }
 
     public void DisplayUnits(List<Unit> units) {
-        print("displaying");
+        print("Displaying copies!");
         foreach (var unit in units) {
             var holder = Instantiate(unitHolderPrefab, layoutGroup.transform).GetComponent<UnitHolderUI>();
-            holder.Initialize(unit);
+            // Make copies of units instead of themselves
+            holder.Initialize(unit.Copy());
         }
     }
 }

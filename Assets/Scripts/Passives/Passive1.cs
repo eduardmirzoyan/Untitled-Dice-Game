@@ -10,13 +10,13 @@ public class Passive1 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onRoundStart += GrowSmallestDie;
+        CombatEvents.instance.onSkillRoundStart += GrowSmallestDie;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onRoundStart += GrowSmallestDie;
+        CombatEvents.instance.onSkillRoundStart += GrowSmallestDie;
     }
 
     private void GrowSmallestDie(ActionInfo info)

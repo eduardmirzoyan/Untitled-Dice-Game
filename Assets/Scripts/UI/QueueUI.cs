@@ -21,15 +21,15 @@ public class QueueUI : MonoBehaviour
 
     private void Start() {
         // Subscribe to events
-        CombatEvents.instance.onTurnStart += StartTurn;
         CombatEvents.instance.onCombatStart += OnCombatStart;
         CombatEvents.instance.onFormQueue += FormQueue;
         CombatEvents.instance.deQueue += Dequeue;
+        CombatEvents.instance.onTurnStart += StartTurn;
         CombatEvents.instance.onClearQueue += ClearQueue;
         CombatEvents.instance.onCombatEnd += OnCombatEnd;
     }
 
-    private void OnCombatStart(ActionInfo info) {
+    private void OnCombatStart(int value) {
         // Lower window
         slidingWindow.Lower();
     }
@@ -50,25 +50,24 @@ public class QueueUI : MonoBehaviour
         }
     }
 
-    private void StartTurn(ActionInfo actionInfo, Combatant combatant) {
+    private void StartTurn(int value) {
         if (queueSlotGameobjects.Count > 0) {
             queueSlotGameobjects[0].GetComponent<QueueSlot>().Highlight();
         }
-        actionInfo.waitTime = 0f;
     }
 
     private void ClearQueue(int value) {
         // ?
     }
 
-    private void OnCombatEnd(ActionInfo info) {
+    private void OnCombatEnd(int value) {
         // Raise window
         slidingWindow.Raise();
     }
 
 
-    // Helper functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public void SetUpTurnQueue(Queue<Combatant> queue) {
+    // Private Helper functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    private void SetUpTurnQueue(Queue<Combatant> queue) {
         string result = "";
         foreach (var combatant in queue.ToList()) {
             // Enqueue combatant
@@ -80,7 +79,7 @@ public class QueueUI : MonoBehaviour
         print(result + "END");
     }
 
-    public void Enqueue(Unit unit, Color color) {
+    private void Enqueue(Unit unit, Color color) {
         // Create slot
         var go = Instantiate(queueSlotPrefab, queueLayoutGroup.transform);
         // Cache
@@ -96,7 +95,7 @@ public class QueueUI : MonoBehaviour
     }
      
     /// Maybe doesn't need to be used?
-    public void Clear() {
+    private void Clear() {
         foreach (var gameObject in queueSlotGameobjects) {
             Destroy(gameObject);
         }

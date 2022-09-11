@@ -10,13 +10,13 @@ public class Passive9 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onTurnStart += RerollDie;
+        CombatEvents.instance.onSkillTurnStart += RerollDie;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onTurnStart -= RerollDie;
+        CombatEvents.instance.onSkillTurnStart -= RerollDie;
     }
 
     private void RerollDie(ActionInfo info, Combatant combatant)

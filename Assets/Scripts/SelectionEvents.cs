@@ -27,6 +27,7 @@ public class SelectionEvents : MonoBehaviour
     public event Action<ItemUI, ItemSlotUI> onItemInsertIntoSlot;
 
     public event Action<Item, int> onAddItemToStorage;
+    public event Action<int> onGameStart;
 
     public void TriggerOnAddItemToStorage(Item item, int index) {
         if (onAddItemToStorage != null) {
@@ -67,6 +68,12 @@ public class SelectionEvents : MonoBehaviour
     public void TriggerOnItemInsertIntoSlot(ItemUI itemUI, ItemSlotUI itemSlotUI) {
         if (onItemInsertIntoSlot != null) {
             onItemInsertIntoSlot(itemUI, itemSlotUI);
+        }
+    }
+
+    public void TriggerOnGameStart(int value) {
+        if (onGameStart != null) {
+            onGameStart(value);
         }
     }
 }

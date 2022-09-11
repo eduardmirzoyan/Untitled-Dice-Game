@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public GameObject unitUIprefab;
 
+    public bool fastMode;
+
     private void Awake() {
         // Singleton logic
         if (instance != null) {

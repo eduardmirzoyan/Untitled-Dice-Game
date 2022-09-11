@@ -10,13 +10,13 @@ public class Passive3 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onRoundStart += CheckPool;
+        CombatEvents.instance.onSkillRoundStart += CheckPool;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onRoundStart -= CheckPool;
+        CombatEvents.instance.onSkillRoundStart -= CheckPool;
     }
 
     private void CheckPool(ActionInfo info)

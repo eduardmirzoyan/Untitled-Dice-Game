@@ -48,6 +48,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         CombatEvents.instance.onPlayerTurnStart += OnPlayerTurnStart;
         CombatEvents.instance.onDieStartDrag += OnStartDrag;
         CombatEvents.instance.onDieEndDrag += OnEndDrag;
+        CombatEvents.instance.onPlayerTurnEnd += OnPlayerTurnEnd;
 
         // Subscribe to events
         CombatEvents.instance.onRoll += OnRoll;
@@ -66,6 +67,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         CombatEvents.instance.onPlayerTurnStart -= OnPlayerTurnStart;
         CombatEvents.instance.onDieStartDrag -= OnStartDrag;
         CombatEvents.instance.onDieEndDrag -= OnEndDrag;
+        CombatEvents.instance.onPlayerTurnEnd -= OnPlayerTurnEnd;
 
         CombatEvents.instance.onRoll -= OnRoll;
         CombatEvents.instance.onReroll -= OnRoll;
@@ -82,6 +84,17 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             isInteractable = true;
 
             CheckHighlight();
+        }
+    }
+
+    private void OnPlayerTurnEnd(int valid) {
+        // Check if this is an ally die
+        if (combatant.isAlly()) {
+            // Make it NOT interactive
+            isInteractable = false;
+
+            // Remove any highlight
+            animator.Play("Idle");
         }
     }
 
@@ -183,6 +196,9 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     private IEnumerator RollVisuals(float duration)
     {
         float elapsedTime = 0;
+
+        // Make animation fast if in mode
+        if (GameManager.instance.fastMode) duration = 0.1f;
 
         // Smoothly move to target
         while (elapsedTime < duration)

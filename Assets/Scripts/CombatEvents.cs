@@ -32,16 +32,21 @@ public class CombatEvents : MonoBehaviour
     // Banner events
     public event Action<string> onShowBanner;
     public event Action<string> onHideBanner;
-    public event Action<int> onRoundStartUI;
-    public event Action<int> onRoundEndUI;
-    
 
-    // Game states
-    public event Action<ActionInfo> onCombatStart;
-    public event Action<ActionInfo> onRoundStart;
-    public event Action<ActionInfo, Combatant> onTurnStart; // Update
-    public event Action<ActionInfo> onRoundEnd;
-    public event Action<ActionInfo> onCombatEnd;
+    // Game state events
+    public event Action<int> onCombatStart;
+    public event Action<int> onRoundStart;
+    public event Action<int> onTurnStart;
+    public event Action<int> onTurnEnd;
+    public event Action<int> onRoundEnd;
+    public event Action<int> onCombatEnd;
+
+    // Skill events
+    public event Action<ActionInfo> onSkillCombatStart;
+    public event Action<ActionInfo> onSkillRoundStart;
+    public event Action<ActionInfo, Combatant> onSkillTurnStart;
+    public event Action<ActionInfo> onSkillRoundEnd;
+    public event Action<ActionInfo> onSkillCombatEnd;
 
     // Die events
     public event Action<Dice> onRoll;
@@ -73,18 +78,48 @@ public class CombatEvents : MonoBehaviour
     public event Action<int> onClearQueue;
     public event Action<string> onFeedback;
 
-    public void TriggerOnRoundStartUI(int value) {
-        if (onRoundStartUI != null) {
-            onRoundStartUI(value);
+
+    #region Game State Events
+
+    public void TriggerOnCombatStart(int value) {
+        if (onCombatStart != null) {
+            onCombatStart(value);
         }
     }
 
-    public void TriggerOnRoundEndUI(int value) {
-        if (onRoundEndUI != null) {
-            onRoundEndUI(value);
+    public void TriggerOnRoundStart(int value) {
+        if (onRoundStart != null) {
+            onRoundStart(value);
         }
     }
 
+    public void TriggerOnTurnStart(int value) {
+        if (onTurnStart != null) {
+            onTurnStart(value);
+        }
+    }
+
+    public void TriggerOnTurnEnd(int value) {
+        if (onTurnEnd != null) {
+            onTurnEnd(value);
+        }
+    }
+
+    public void TriggerOnRoundEnd(int value) {
+        if (onRoundEnd != null) {
+            onRoundEnd(value);
+        }
+    }
+
+    public void TriggerOnCombatEnd(int value) {
+        if (onCombatEnd != null) {
+            onCombatEnd(value);
+        }
+    }
+
+    #endregion
+
+    #region UI Events
     public void TriggerOnShowBanner(string message) {
         if (onShowBanner != null) {
             onShowBanner(message);
@@ -96,6 +131,15 @@ public class CombatEvents : MonoBehaviour
             onHideBanner(message);
         }
     }
+
+    public void TriggerOnFeedback(string message) {
+        if (onFeedback != null) {
+            onFeedback(message);
+        }
+    }
+
+    #endregion
+
 
     public void TriggerOnPlayerTurnStart(int value) {
         if (onPlayerTurnStart != null) {
@@ -109,11 +153,8 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public void TriggerOnFeedback(string message) {
-        if (onFeedback != null) {
-            onFeedback(message);
-        }
-    }
+
+    
 
     #region Action based events
     public void TriggerOnDieStartDrag(Dice dice) {
@@ -124,6 +165,9 @@ public class CombatEvents : MonoBehaviour
 
     public void TriggerOnActionSelect(Action action, Dice dice) {
         if (onActionSelect != null) {
+            if (action != null) print("Debug: Action " + action.name + " was selected.");
+            else print("Debug: Action was deselected.");
+
             onActionSelect(action, dice);
         }
     }
@@ -148,6 +192,8 @@ public class CombatEvents : MonoBehaviour
 
     public void TriggerOnTargetSelect(Combatant combatant) {
         if (onTargetSelect != null) {
+            if (combatant != null) print("Debug: Target " + combatant.unit.name + " was selected.");
+            else print("Debug: Target was deselected.");
             onTargetSelect(combatant);
         }
     }
@@ -226,18 +272,18 @@ public class CombatEvents : MonoBehaviour
 
     #endregion
 
-    #region Combat state based events
+    #region Skill Trigger Events
     // Turn state events
-    public IEnumerator TriggerCombatStart(ActionInfo info)
+    public IEnumerator TriggerSkillCombatStart(ActionInfo info)
     {
         // Wait for some time first
         yield return new WaitForSeconds(info.waitTime);
 
         // If there are any subscribers
-        if (onCombatStart != null)
+        if (onSkillCombatStart != null)
         {
             // Invoke all the subscribers
-            foreach (var invocation in onCombatStart.GetInvocationList())
+            foreach (var invocation in onSkillCombatStart.GetInvocationList())
             {
                 // Call invokation and update info values
                 invocation.DynamicInvoke(info);
@@ -247,16 +293,16 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public IEnumerator TriggerRoundStart(ActionInfo info)
+    public IEnumerator TriggerSkillRoundStart(ActionInfo info)
     {
         // Wait for some time first
         yield return new WaitForSeconds(info.waitTime);
 
         // If there are any subscribers
-        if (onRoundStart != null)
+        if (onSkillRoundStart != null)
         {
             // Invoke all the subscribers
-            foreach (var invocation in onRoundStart.GetInvocationList()) {
+            foreach (var invocation in onSkillRoundStart.GetInvocationList()) {
                 // Call invokation and update info values
                 invocation.DynamicInvoke(info);
                 // Wait an amount of time
@@ -265,16 +311,16 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public IEnumerator TriggerTurnStart(ActionInfo info, Combatant combatant) 
+    public IEnumerator TriggerSkillTurnStart(ActionInfo info, Combatant combatant) 
     {
         // Wait for some time first
         yield return new WaitForSeconds(info.waitTime);
 
         // If there are any subscribers
-        if (onTurnStart != null)
+        if (onSkillTurnStart != null)
         {
             // Invoke all the subscribers
-            foreach (var invocation in onTurnStart.GetInvocationList())
+            foreach (var invocation in onSkillTurnStart.GetInvocationList())
             {
                 // Call invokation and update info values
                 invocation.DynamicInvoke(info, combatant);
@@ -284,16 +330,16 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public IEnumerator TriggerRoundEnd(ActionInfo info)
+    public IEnumerator TriggerSkillRoundEnd(ActionInfo info)
     {
         // Wait for some time first
         yield return new WaitForSeconds(info.waitTime);
 
         // If there are any subscribers
-        if (onRoundEnd != null)
+        if (onSkillRoundEnd != null)
         {
             // Invoke all the subscribers
-            foreach (var invocation in onRoundEnd.GetInvocationList())
+            foreach (var invocation in onSkillRoundEnd.GetInvocationList())
             {
                 // Call invokation and update info values
                 invocation.DynamicInvoke(info);
@@ -303,16 +349,16 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public IEnumerator TriggerCombatEnd(ActionInfo info)
+    public IEnumerator TriggerSkillCombatEnd(ActionInfo info)
     {
         // Wait for some time first
         yield return new WaitForSeconds(info.waitTime);
 
         // If there are any subscribers
-        if (onCombatEnd != null)
+        if (onSkillCombatEnd != null)
         {
             // Invoke all the subscribers
-            foreach (var invocation in onCombatEnd.GetInvocationList())
+            foreach (var invocation in onSkillCombatEnd.GetInvocationList())
             {
                 // Call invokation and update info values
                 invocation.DynamicInvoke(info);
@@ -324,7 +370,7 @@ public class CombatEvents : MonoBehaviour
 
     #endregion
 
-    #region Unit-based events
+    #region Unit-related events
 
     public void TriggerOnHeal(Combatant combatant, int amount) {
         if (onHeal != null) {

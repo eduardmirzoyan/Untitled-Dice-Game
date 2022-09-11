@@ -16,4 +16,19 @@ public class Armor : Item
             this.passives.Add(passive);
         }
     }
+
+    public Armor Copy() {
+        // Make a copy
+        Armor copy = Instantiate(this);
+
+        // Make a copy of all it's actions
+        for (int i = 0; i < passives.Count; i++) {
+            // Make a copy of all the weapons
+            copy.passives[i] = Instantiate(passives[i]);
+            // Set source of passive to the copy
+            copy.passives[i].sourceArmor = copy;
+        }
+
+        return copy;
+    }
 }

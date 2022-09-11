@@ -34,16 +34,27 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     private bool interact;
 
     private void Start() {
-        
-
         // Check if we are in selection
         if (SelectionEvents.instance != null) {
+            SelectionEvents.instance.onDisplayUnitOptions += OnDisplay;
             SelectionEvents.instance.onAddUnitToParty += AddUnit;
             SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
         }
+        // Check if we are in combat
+        else if (CombatEvents.instance != null) {
+            CombatEvents.instance.onCombatStart += OnCombatStart;
+        }
 
-        GameEvents.instance.onSetParty += SetUnit;
+        // Sub to Game event
+        GameEvents.instance.onSetParty += SetUnit;   
+    }
 
+    private void OnCombatStart(int value) {
+        // Bring into view
+        slidingWindow.Raise();
+    }
+
+    private void OnDisplay(List<Unit> units) {
         // Bring into view
         slidingWindow.Raise();
     }
@@ -57,15 +68,6 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         GameEvents.instance.onSetParty -= SetUnit;
     }
 
-    public void FillWithUnit(Unit unit, int index) {
-        if (this.index != index) return;
-
-        var ui = Instantiate(GameManager.instance.unitUIprefab, unitModelTransform).GetComponent<UnitUI>();
-        ui.Initialize(unit, index, unitModelTransform, false);
-        EquipUnitUI(ui);
-        interact = false;
-    }
-
     public void EquipUnitUI(UnitUI newUnitUI) {
         unitUI = newUnitUI;
         unitUI.SetParent(unitModelTransform);
@@ -74,8 +76,7 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         UpdateVisuals();
     }
 
-    public void OnDrop(PointerEventData eventData)
-    {
+    public void OnDrop(PointerEventData eventData) {
         // Make sure there already isn't an item and it is an itemUI
         if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI))
         {
@@ -137,7 +138,6 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
 
     private void AddUnit(Unit unit, int index) {
-
         if (this.index == index) {
             if (unit == null) {
                 unitUI = null;
@@ -148,11 +148,9 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
             unitUI = null;
             UpdateVisuals();
         }
-        
     }
 
     public void UpdateVisuals() {
-        
         // Make sure a unit exists
         if (unitUI == null) {
             // Set to default values

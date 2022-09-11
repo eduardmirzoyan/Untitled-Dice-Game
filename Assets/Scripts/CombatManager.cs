@@ -16,6 +16,7 @@ public class CombatManager : MonoBehaviour
     public float rollTime = 0.3f;
     public float waitTime = 1f;
     public float attackTime = 1f;
+    public float hoverTime = 1f;
     public float spawnTime = 1f;
 
     [SerializeField] private CombatState state;
@@ -98,7 +99,10 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         // Trigger event
-        yield return CombatEvents.instance.TriggerCombatStart(new ActionInfo(0.5f));
+        CombatEvents.instance.TriggerOnCombatStart(0);
+
+        // Trigger event
+        yield return CombatEvents.instance.TriggerSkillCombatStart(new ActionInfo(0.5f));
 
         // Visuals
         CombatEvents.instance.TriggerOnHideBanner("Combat Start");
@@ -113,25 +117,24 @@ public class CombatManager : MonoBehaviour
         // Debug Feedback
         print("Round Start");
 
+        // Change state
+        state = CombatState.RoundStart;
+
         // Visuals
         CombatEvents.instance.TriggerOnShowBanner("Round Start");
         yield return new WaitForSeconds(0.5f);
 
-        // Change state
-        state = CombatState.RoundStart;
-
         // Increment round counter
         roundNumber++;
 
-        // Trigger Start for UI
-        CombatEvents.instance.TriggerOnRoundStartUI(0);
+        // Trigger Event
+        CombatEvents.instance.TriggerOnRoundStart(0);
 
         // Roll Dice in sequence
         yield return GenerateDiceRolls();
 
-        // Activate any "on round-start" passives
-        // Trigger event
-        yield return CombatEvents.instance.TriggerRoundStart(new ActionInfo(0.5f));
+        // Trigger skill event
+        yield return CombatEvents.instance.TriggerSkillRoundStart(new ActionInfo(0.5f));
 
         // Generate turn order as a queue
         GenerateTurnOrder();
@@ -160,26 +163,27 @@ public class CombatManager : MonoBehaviour
         // Use the first entity in the queue
         currentCombatant = turnQueue.Peek();
 
+        // Debug Feedback
+        print("Turn Start: " + currentCombatant.unit.name);
+
         // If unit is dead, then pass action
         if (currentCombatant.unit.IsDead()) {
+            // Pass their action
             yield return ConfirmAction();
         }
 
         // Check if it's a player turn
         isPlayerTurn = currentCombatant.isAlly();
 
-        // Debug Feedback
-        print("Turn Start: " + currentCombatant.unit.name);
-
         // Visuals
         CombatEvents.instance.TriggerOnShowBanner("Turn Start: " + currentCombatant.unit.name);
         yield return new WaitForSeconds(0.5f);
 
-        // Passives
-        yield return CombatEvents.instance.TriggerTurnStart(new ActionInfo(0.5f), currentCombatant);
+        // Trigger event
+        CombatEvents.instance.TriggerOnTurnStart(0);
 
-        // Select (Outline) the tile that the unit is one, visual feedback
-        CombatManagerUI.instance.SetTurn(currentCombatant.hexPosition);
+        // Trigger skill event
+        yield return CombatEvents.instance.TriggerSkillTurnStart(new ActionInfo(0.5f), currentCombatant);
 
         // If Unit is NPC then let it decide its own action
         if (currentCombatant.unit.ai != null) {
@@ -221,21 +225,21 @@ public class CombatManager : MonoBehaviour
     }
 
     private IEnumerator EndRound() {
+        // Change state to roundstart
+        state = CombatState.RoundEnd;
+
         // Debug Feedback
         print("Round End");
 
         // Visuals
         CombatEvents.instance.TriggerOnShowBanner("Round End");
         yield return new WaitForSeconds(0.5f);
-
-        // Change state to roundstart
-        state = CombatState.RoundEnd;
         
-        // Clear visuals
-        CombatEvents.instance.TriggerOnRoundEndUI(0);
+        // Trigger event
+        CombatEvents.instance.TriggerOnRoundEnd(0);
 
         // Trigger round end events
-        yield return CombatEvents.instance.TriggerRoundEnd(new ActionInfo(0.5f));
+        yield return CombatEvents.instance.TriggerSkillRoundEnd(new ActionInfo(0.5f));
 
         // Visuals
         CombatEvents.instance.TriggerOnHideBanner("Round End");
@@ -246,6 +250,9 @@ public class CombatManager : MonoBehaviour
     }
 
     private IEnumerator EndCombat() {
+        // Change state
+        state = CombatState.CombatEnd;
+
         // Debug Feedback
         print("Combat End");
 
@@ -253,11 +260,11 @@ public class CombatManager : MonoBehaviour
         CombatEvents.instance.TriggerOnShowBanner("Combat End: " + endMessage);
         yield return new WaitForSeconds(0.5f);
 
-        // Change state
-        state = CombatState.CombatEnd;
+        // Trigger event
+        CombatEvents.instance.TriggerOnCombatEnd(0);
 
         // Trigger end of combat events
-        yield return CombatEvents.instance.TriggerCombatEnd(new ActionInfo(0.5f));
+        yield return CombatEvents.instance.TriggerSkillCombatEnd(new ActionInfo(0.5f));
 
         // Terminate passives
         foreach (var combatant in combatants) {
@@ -346,7 +353,7 @@ public class CombatManager : MonoBehaviour
         foreach (var combatant in combatants) {
             var die = combatant.unit.dice;
             if (combatant != null && die != null) {
-                
+
                 // Set the die state based on if combatant is alive
                 if (combatant.unit.IsDead()) die.Exhaust();
                 else die.Replenish();
@@ -361,7 +368,11 @@ public class CombatManager : MonoBehaviour
                 CombatEvents.instance.TriggerOnRoll(die);
 
                 // Wait until animation is over
-                yield return new WaitForSeconds(rollTime + waitTime);
+
+                // Make animation fast if in mode
+                if (GameManager.instance.fastMode) yield return new WaitForSeconds(0.1f);
+                else yield return new WaitForSeconds(rollTime + waitTime);
+                
             }
         }
     }
@@ -389,6 +400,9 @@ public class CombatManager : MonoBehaviour
             // Visuals
             CombatEvents.instance.TriggerOnHideBanner("Turn End");
             yield return new WaitForSeconds(0.5f);
+
+            // Trigger event
+            CombatEvents.instance.TriggerOnTurnEnd(0);
             
             // Trigger event
             if (isPlayerTurn)
@@ -435,16 +449,15 @@ public class CombatManager : MonoBehaviour
         selectedDie = die;
 
         // If given action is null, then Player wants to de-select action
-        if (selectedAction != null) {
-            // Select a default target if possible
-            SelectDefaultTarget();
-        }
-        else {
-            // Clear any targets
-            selectedTarget = null;
+        if (selectedAction == null) {
+            // Check if any targets need to be de-selected
+            if (selectedTarget != null) {
+                // Clear target
+                selectedTarget = null;
 
-            // Update visuals
-            CombatManagerUI.instance.ClearTargets();
+                // Trigger event
+                CombatEvents.instance.TriggerOnTargetSelect(null);
+            }
         }
     }
 
@@ -490,8 +503,6 @@ public class CombatManager : MonoBehaviour
                         return;
                     }
                 }
-
-                
             }
         }
 
@@ -519,10 +530,11 @@ public class CombatManager : MonoBehaviour
 
         // Clear any previous targets if possible
         if (selectedTarget != null) {
-            // Clear visuals
-            CombatManagerUI.instance.ClearTargets();
             // Reset list of targets
             selectedTarget = null;
+
+            // Trigger event
+            CombatEvents.instance.TriggerOnTargetSelect(null);
         }
 
         // Set new selected target
@@ -533,6 +545,9 @@ public class CombatManager : MonoBehaviour
     }
 
     public void Pass() {
+        // Deubug
+        print(currentCombatant.unit.name + " passed their turn.");
+
         // Clear action
         selectedAction = null;
 
@@ -569,9 +584,6 @@ public class CombatManager : MonoBehaviour
             // Deubug
             print("Turn has been confirmed without selecting an action and die and target.");
 
-            // Clear visuals
-            CombatManagerUI.instance.ClearTargets();
-
             // Clear potentional action
             selectedAction = null;
 
@@ -584,12 +596,16 @@ public class CombatManager : MonoBehaviour
             yield return EndTurn();
         }
 
-        // Perform animation
+        // Move to target animation
         if (selectedAction is AttackAction)
-            yield return Attack();
+            yield return TravelToTarget();
 
         // Perform selected action on selected target using selected die
         selectedAction.Perform(selectedTarget.index, combatants, selectedDie);
+
+        // Hover for dramatic effect
+        if (selectedAction is AttackAction)
+            yield return HoverOverTarget();
 
         // Set selected die innactive
         selectedDie.Exhaust();
@@ -602,9 +618,6 @@ public class CombatManager : MonoBehaviour
 
         // Trigger event
         CombatEvents.instance.TriggerOnExhaust(selectedDie);
-
-        // Clear visuals
-        CombatManagerUI.instance.ClearTargets();
 
         // Clear action
         selectedAction = null;
@@ -619,16 +632,34 @@ public class CombatManager : MonoBehaviour
         yield return EndTurn();
     }
 
-    private IEnumerator Attack() {
+    private IEnumerator TravelToTarget() {
         var startPos = currentCombatant.modelTransform.position;
         var endPos = selectedTarget.modelTransform.position;
+        var direction = (endPos - startPos).normalized / 2;
         float timer = 0;
         
         while (timer < attackTime) {
             // Lerp model towards other model
-            currentCombatant.modelTransform.position = Vector3.Lerp(startPos, endPos, timer / attackTime);
+            currentCombatant.modelTransform.position = Vector3.Lerp(startPos, endPos - direction, timer / attackTime);
 
-            // Decrement time
+            // Increment time
+            timer += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private IEnumerator HoverOverTarget() {
+        var startPos = currentCombatant.modelTransform.position;
+        var endPos = selectedTarget.modelTransform.position;
+        var direction = (endPos - startPos).normalized / 2;
+        float timer = 0;
+
+        while (timer < hoverTime)
+        {
+            // Lerp model towards other model
+            currentCombatant.modelTransform.position = Vector3.Lerp(startPos, endPos + direction, timer / hoverTime);
+
+            // Increment time
             timer += Time.deltaTime;
             yield return null;
         }

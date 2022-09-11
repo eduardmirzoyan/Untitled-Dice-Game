@@ -5,14 +5,23 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager instance;
-    [SerializeField] private float panSpeed = 20f;
-    [SerializeField] private float panBorderThickness = 10f;
-    [SerializeField] private Vector2 panLimit;
-    [SerializeField] private float zoomSpeed = 20f;
-    [SerializeField] private float maxY = 20f;
-    [SerializeField] private float minY = 20f;
-    [SerializeField] private float panCoef = 0.25f;
-    [SerializeField] private bool debugMode;
+    
+    [Header("Targets")]
+    [SerializeField] private Transform defaultTarget;
+    [SerializeField] private List<Transform> targets;
+
+    [Header("Settings")]
+    [SerializeField] private Vector3 offset;
+    [SerializeField] private float smoothTime = 0.5f;
+
+    [SerializeField] private float minZoom = 40f;
+    [SerializeField] private float maxZoom = 10f;
+    [SerializeField] private float zoomLimiter = 50f;
+
+    [SerializeField] private bool isEnabled;
+
+    private Camera cam;
+    private Vector3 velocity;
 
     private void Awake()
     {
@@ -24,83 +33,94 @@ public class CameraManager : MonoBehaviour
         }
         instance = this;
 
-        // If debugging, draw a box of border thickness
-        if (debugMode) {
-            Vector3 bottomLeft = new Vector3(panBorderThickness, panBorderThickness, 0);
-            Vector3 topRight = new Vector3(Screen.width - panBorderThickness, Screen.height - panBorderThickness, 0);
-            Debug.DrawRay(bottomLeft, Vector3.up * 2000, Color.red, 60f);
-            Debug.DrawRay(bottomLeft, Vector3.right * 2000, Color.red, 60f);
-            Debug.DrawRay(topRight, Vector3.down * 2000, Color.red, 60f);
-            Debug.DrawRay(topRight, Vector3.left * 2000, Color.red, 60f);
+        cam = GetComponent<Camera>();
+
+        // Set to default
+        targets.Add(defaultTarget);
+    }
+
+    private void Start() {
+        // If this is not enabled then don't sub
+        if (!isEnabled) return;
+
+        // Sub to events
+        CombatEvents.instance.onActionConfirm += OnActionConfirm;
+        CombatEvents.instance.onTurnEnd += OnTurnEnd;
+    }
+
+    private void OnActionConfirm(Action action) {
+        // Select the targeter and targetee as the focus
+        if (CombatManager.instance.selectedTarget != null) {
+            // Clear any targets first
+            targets.Clear();
+            // Add current combatant
+            targets.Add(CombatManager.instance.currentCombatant.modelTransform);
+            // Add target
+            targets.Add(CombatManager.instance.selectedTarget.modelTransform);
         }
+    }
+
+    private void OnTurnEnd(int value) {
+        // Clear any targets
+        targets.Clear();
+        // Set to default
+        targets.Add(defaultTarget);
     }
     
-    private void Update() {
-        // IN PROGRESS
-        Vector3 cameraPosition = transform.position;
+    private void LateUpdate() {
+        // Make sure you have more than 1 target
+        if (targets.Count == 0) return;
 
-        //if (debugMode) return;
+        // Move the camera to the center of targets
+        MoveCamera();
 
-        // Debug, reset
-        if(Input.GetKeyDown(KeyCode.P)) {
-            cameraPosition = Vector3.zero;
-        }
-
-        // Pan up
-        if (Input.mousePosition.y >= Screen.height - panBorderThickness) 
-        {
-            //cameraPosition.y += panSpeed * Time.deltaTime;
-            cameraPosition.y = Mathf.Lerp(cameraPosition.y, panLimit.y, panCoef);
-        }
-
-        // Pan down
-        if (Input.mousePosition.y <= panBorderThickness)
-        {
-            //cameraPosition.y -= panSpeed * Time.deltaTime;
-            cameraPosition.y = Mathf.Lerp(cameraPosition.y, -panLimit.y, panCoef);
-        }
-
-        // Pan right
-        if (Input.mousePosition.x >= Screen.width - panBorderThickness)
-        {
-            //cameraPosition.x += panSpeed * Time.deltaTime;
-            cameraPosition.x = Mathf.Lerp(cameraPosition.x, panLimit.x, panCoef);
-        }
-
-        // Pan left
-        if (Input.mousePosition.x <= panBorderThickness)
-        {
-            //cameraPosition.x -= panSpeed * Time.deltaTime;
-            cameraPosition.x = Mathf.Lerp(cameraPosition.x, -panLimit.x, panCoef);
-        }
-        
-        // Limit Panning
-        cameraPosition.x = Mathf.Clamp(cameraPosition.x, -panLimit.x, panLimit.x);
-        cameraPosition.y = Mathf.Clamp(cameraPosition.y, -panLimit.y, panLimit.y);
-
-        // Check zooming with scrolling
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        cameraPosition.z -= scroll * zoomSpeed * 100 * Time.deltaTime;
-
-        // Limit zooming
-        cameraPosition.z = Mathf.Clamp(cameraPosition.z, minY, maxY);
-
-        print("w: " + Screen.width);
-        print("h: " + Screen.height);
-
-        transform.position = cameraPosition;
+        // Zoom camera to better capture the targets
+        ZoomCamera();
     }
 
-    private void OnDrawGizmos()
-    {
-        if (debugMode) {
-            // Draw a red cube to indicate area where u can pan
-            Gizmos.color = Color.red;
-            Vector3 pos = transform.position;
-            pos.z = 0;
-            Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(panBorderThickness, panBorderThickness, 0));
-            Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - panBorderThickness, Screen.height - panBorderThickness, 0));
-            Gizmos.DrawWireCube(pos, new Vector3(topRight.x - bottomLeft.x, topRight.y - bottomLeft.y, 0));
+    private void ZoomCamera() {
+        // Calculate new zoom level
+        float newZoom = Mathf.Lerp(maxZoom, minZoom, GetGreatestDistance() / zoomLimiter);
+        
+        // If we only have 1 target, then set the zoom to min
+        if (targets.Count == 1) {
+            newZoom = minZoom;
         }
+        
+        // Change FoV based on new zoom
+        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, newZoom, Time.deltaTime);
+    }
+
+    private float GetGreatestDistance() {
+        var bounds = new Bounds(targets[0].position, Vector3.zero);
+        foreach (var target in targets) {
+            bounds.Encapsulate(target.position);
+        }
+        
+        return bounds.size.x;
+    }
+
+    private void MoveCamera() {
+        // Get center point between all the targets
+        Vector3 centerPoint = GetCenterPoint();
+
+        // Set new position to centerpoint +offset
+        Vector3 newPosition = centerPoint + offset;
+
+        // Smoothly move camera
+        transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref velocity, smoothTime);
+    }
+
+    private Vector3 GetCenterPoint() {
+        if (targets.Count == 1) {
+            return targets[0].position;
+        }
+
+        var bounds = new Bounds(targets[0].position, Vector3.zero);
+        foreach (var target in targets) {
+            bounds.Encapsulate(target.position);
+        }
+
+        return bounds.center;
     }
 }

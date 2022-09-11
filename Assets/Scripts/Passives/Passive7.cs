@@ -10,13 +10,13 @@ public class Passive7 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onTurnStart += Grow2Odd;
+        CombatEvents.instance.onSkillTurnStart += Grow2Odd;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onTurnStart -= Grow2Odd;
+        CombatEvents.instance.onSkillTurnStart -= Grow2Odd;
     }
 
     private void Grow2Odd(ActionInfo info, Combatant combatant)

@@ -10,13 +10,13 @@ public class Passive8 : Passive
     {
         base.Initialize(combatant);
         // Sub to event
-        CombatEvents.instance.onTurnStart += Shrink2Even;
+        CombatEvents.instance.onSkillTurnStart += Shrink2Even;
     }
 
     public override void Terminate()
     {
         // Unsub
-        CombatEvents.instance.onTurnStart -= Shrink2Even;
+        CombatEvents.instance.onSkillTurnStart -= Shrink2Even;
     }
 
     private void Shrink2Even(ActionInfo info, Combatant combatant)

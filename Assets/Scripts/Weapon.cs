@@ -23,4 +23,21 @@ public class Weapon : Item
             this.actions.Add(action);
         }
     }
+
+    public Weapon Copy() {
+        // Make a copy
+        Weapon copy = Instantiate(this);
+
+        // Make a copy of all it's actions
+        for (int i = 0; i < actions.Count; i++) {
+            // Make a copy of all the weapons
+            copy.actions[i] = Instantiate(actions[i]);
+            // Set source to this weapon if it is an attack
+            if (actions[i] is AttackAction) {
+                ((AttackAction) copy.actions[i]).sourceWeapon = copy;
+            }
+        }
+
+        return copy;
+    }
 }

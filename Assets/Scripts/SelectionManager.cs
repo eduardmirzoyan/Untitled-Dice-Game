@@ -9,7 +9,6 @@ public class SelectionManager : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private List<Unit> unitsToChooseFrom;
-    [SerializeField] private List<Item> itemsToChooseFrom;
 
     [SerializeField] private LootGenerator lootGenerator;
     [SerializeField] private CombatEnounterGenerator combatEnounterGenerator;
@@ -82,14 +81,6 @@ public class SelectionManager : MonoBehaviour
             playerStorage.AddToIndex(armor, i);
             // Trigger event
             SelectionEvents.instance.TriggerOnAddItemToStorage(armor, i);
-        }
-
-    }
-
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.K)) {
-            var weapon = ScriptableObject.CreateInstance<Weapon>();
-            playerParty[0].EquipWeapon(weapon, 0);
         }
     }
 

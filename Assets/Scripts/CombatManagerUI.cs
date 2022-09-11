@@ -11,14 +11,6 @@ public class CombatManagerUI : MonoBehaviour
 
     [SerializeField] private Grid worldGrid;
     [SerializeField] private Tilemap groundTilemap;
-    [SerializeField] private Tilemap selectionTilemap;
-    [SerializeField] private Tilemap turnIndicatorTilemap;
-    [SerializeField] private Tilemap targetIndicatorTilemap;
-    [SerializeField] private Tile selectionTile;
-    [SerializeField] private Tile turnTile;
-    [SerializeField] private Tile targetTile;
-    [SerializeField] private Vector3Int selectionPosition;
-    [SerializeField] private Vector3Int turnPosition;
 
     [Header("Actions UI")]
     [SerializeField] private LayoutGroup actionLayoutGroup;
@@ -62,29 +54,21 @@ public class CombatManagerUI : MonoBehaviour
         }
         instance = this;
 
-        // Default value for turn
-        turnPosition = Vector3Int.back;
-
         // Initialize
         dieUIs = new List<DiceUI>();
-
-        // Reset world selection
-        ResetSelection();
 
         playerScreen = GameObject.Find("Player Screen").GetComponent<Canvas>();
     }
 
     private void Start() {
-        CombatEvents.instance.onRoundStartUI += SpawnDiceOutlines;
+        CombatEvents.instance.onRoundStart += SpawnDiceOutlines;
         
         CombatEvents.instance.onPlayerTurnStart += ShowActions;
-        // CombatEvents.instance.onTargetSelect += HighlightTarget;
         CombatEvents.instance.onActionConfirm += ClearActions;
-        CombatEvents.instance.onActionConfirm += DisableAllyDice;
 
-        CombatEvents.instance.onRoundEndUI += DespawnDice;
+        CombatEvents.instance.onRoundEnd += DespawnDice;
 
-        // Visuals for damage and heal
+
         CombatEvents.instance.onTakeDamage += SpawnDamageNumber;
         CombatEvents.instance.onHeal += SpawnHealNumber;
 
@@ -113,50 +97,28 @@ public class CombatManagerUI : MonoBehaviour
                 }
                 
             }
+        }
 
-            // Check if selected map has tile
-            // if (groundTilemap.HasTile(worldPos)) {
-            //     // Reset previous selection if exists
-            //     if (SelectionExists()) {
-            //         ResetSelection();
+        // Deselect on right click
+        else if (Input.GetMouseButtonDown(1)) {
+            // if (CombatManager.instance.hasActionBeenChoosen()) {
+            //     Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //     pos.z = 0; // Because camera is -10 from the world
+            //     Vector3Int worldPos = groundTilemap.WorldToCell(pos);
+
+            //     // Check if there was something to target at that location
+            //     var targetCombatant = CombatManager.instance.GetCombatantAtPosition(worldPos);
+            //     if (targetCombatant != null && CombatManager.instance.selectedTarget == targetCombatant) {
+            //         // Attempt to de-select target
+            //         CombatManager.instance.SelectTarget(null);
             //     }
-
-            //     // Cache selected position
-            //     selectionPosition = worldPos;
-            //     selectionTilemap.SetTile(worldPos, selectionTile);
+                
             // }
         }
-
-        // Right click to clear any selection
-        if (Input.GetMouseButtonDown(1) && SelectionExists()) {
-            ResetSelection();
-        }
     }
 
-    private bool SelectionExists() {
-        return selectionPosition.z != -1;
-    }
-
-    private void ResetSelection() {
-        if (SelectionExists()) {
-            // Delete tile at selected location
-            selectionTilemap.SetTile(selectionPosition, null);
-        }
-        // Reset position
-        selectionPosition = new Vector3Int(0, 0, -1);
-    }
 
     #endregion
-
-    public void SetTurn(Vector3Int vector3Int) {
-        // If something else was chosen as the turn, then deselect it
-        if (turnPosition != Vector3Int.back) {
-            turnIndicatorTilemap.SetTile(turnPosition, null);
-        }
-        turnPosition = vector3Int;
-        // Set tile
-        turnIndicatorTilemap.SetTile(vector3Int, turnTile);
-    }
 
     private void SpawnDiceOutlines(int value) {
         // Make new list
@@ -232,6 +194,9 @@ public class CombatManagerUI : MonoBehaviour
         // Move to offset
         combatant.modelTransform.position = new Vector2(start, combatant.modelTransform.position.y);
 
+        // Make animation fast if in mode
+        if (GameManager.instance.fastMode) animationTime = 0.1f;
+
         float timer = 0;
         while (timer < animationTime) {
             // Move unit
@@ -247,22 +212,6 @@ public class CombatManagerUI : MonoBehaviour
         combatant.modelTransform.position = new Vector2(end, combatant.modelTransform.position.y);
 
         yield return null;
-    }
-
-    private void EnableAllyDice(int value) {
-        // Set the first 4 die active
-        for (int i = 0; i < 4; i++) {
-            // Enable moving the die
-            dieUIs[i].SetInteractive(true);
-        }
-    }
-
-    private void DisableAllyDice(Action action) {
-        // Set the first 4 die active
-        for (int i = 0; i < 4; i++) {
-            // Enable moving the die
-            dieUIs[i].SetInteractive(false);
-        }
     }
 
     private void DespawnDice(int value) {
@@ -318,30 +267,13 @@ public class CombatManagerUI : MonoBehaviour
         return worldGrid.GetCellCenterWorld(position);
     }
 
-    public void HighlightTarget(Combatant combatant) {
-        // Turn hex color to red
-        if (targetIndicatorTilemap.HasTile(combatant.hexPosition)) {
-            print("This location is already targeted.");
-        }
-
-        targetIndicatorTilemap.SetTile(combatant.hexPosition, targetTile);
-    }
-
-    public void ClearTargets() {
-        // Turn hex color to red
-        foreach (var position in targetIndicatorTilemap.cellBounds.allPositionsWithin) {
-            targetIndicatorTilemap.SetTile(position, null);
-        }
-    }
-
-
     private void SpawnDamageNumber(Combatant combatant, int amount) {
-        var floatingNum = Instantiate(floatingNumberPrefab, combatant.worldPosition, Quaternion.identity, playerScreen.transform).GetComponent<FloatingNumberUI>();
+        var floatingNum = Instantiate(floatingNumberPrefab, combatant.worldPosition, Quaternion.identity).GetComponent<FloatingNumber>();
         floatingNum.Initialize(amount.ToString(), Color.white);
     }
 
     private void SpawnHealNumber(Combatant combatant, int amount) {
-        var floatingNum = Instantiate(floatingNumberPrefab, combatant.worldPosition, Quaternion.identity, playerScreen.transform).GetComponent<FloatingNumberUI>();
+        var floatingNum = Instantiate(floatingNumberPrefab, combatant.worldPosition, Quaternion.identity).GetComponent<FloatingNumber>();
         floatingNum.Initialize(amount.ToString(), Color.green);
     }
 }

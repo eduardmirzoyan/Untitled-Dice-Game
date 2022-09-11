@@ -9,9 +9,24 @@ public class StorageUI : MonoBehaviour
     [SerializeField] private SlidingWindow slidingWindow;
 
     private void Start() {
-        SelectionEvents.instance.onAddItemToStorage += SpawnItem;
+        // Check if we are in selection
+        if (SelectionEvents.instance != null) {
+            SelectionEvents.instance.onDisplayUnitOptions += OnDisplay;
+            SelectionEvents.instance.onAddItemToStorage += SpawnItem;
+        }
+        // Check if we are in combat
+        else if (CombatEvents.instance != null) {
+            CombatEvents.instance.onCombatStart += OnCombatStart;
+        }
+    }
 
-        // Raise on spawn
+    private void OnCombatStart(int value) {
+        // Bring into view
+        slidingWindow.Raise();
+    }
+
+    private void OnDisplay(List<Unit> units) {
+        // Bring into view
         slidingWindow.Raise();
     }
 

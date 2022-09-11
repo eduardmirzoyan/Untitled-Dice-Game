@@ -47,6 +47,8 @@
      <Compile Include="Assets\Scripts\SettingsManager.cs" />
      <Compile Include="Assets\Scripts\SelectionManager.cs" />
      <Compile Include="Assets\Scripts\UI\QueueSlot.cs" />
+     <Compile Include="Assets\Scripts\UI\FloatingNumber.cs" />
+     <Compile Include="Assets\Scripts\UI\CombatStationUI.cs" />
      <Compile Include="Assets\Scripts\UI\Selection Scene\UnitUI.cs" />
      <Compile Include="Assets\Scripts\Sound.cs" />
      <Compile Include="Assets\Scripts\Actions\AoEAttack.cs" />
@@ -118,8 +120,6 @@
      <Compile Include="Assets\Scripts\Actions\HighrollAttack1.cs" />
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
-     <Compile Include="Assets\Scripts\UI\ConfirmButtonUI.cs" />
-     <Compile Include="Assets\Scripts\UI\CombatStationUI.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

@@ -17,6 +17,32 @@ public abstract class Unit : ScriptableObject
     public List<Passive> innatePassives;
     public SlimeAI ai;
 
+    public Unit Copy() {
+        // Make a copy of self
+        Unit copy = Instantiate(this);
+
+        // Set copies die to a copy of this unit's die
+        copy.dice = Instantiate(dice);
+
+        // Copy all weapons
+        for (int i = 0; i < weapons.Count; i++) {
+            if (weapons[i] != null) {
+                // Get a copy of each weapon
+                copy.weapons[i] = weapons[i].Copy();
+            }
+        }
+
+        // Copy all armor
+        for (int i = 0; i < armors.Count; i++) {
+            if (armors[i] != null) {
+                // Get a copy of each armor
+                copy.armors[i] = armors[i].Copy();
+            }
+        }
+
+        return copy;
+    }
+
     public List<Action> GetActions() {
         List<Action> result = new List<Action>();
 
