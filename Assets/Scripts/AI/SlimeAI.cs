@@ -18,7 +18,7 @@ public class SlimeAI : ScriptableObject
                     if (die.isExhausted) continue;
 
                     // Make sure die passes contraints
-                    if (attack.checkDieConstraints(die)) {
+                    if (attack.CheckDieConstraints(die)) {
                         // Check to see if attack is better than previous
                         if (attack.FinalDamageValue() > heuristic) {
                             heuristic = attack.FinalDamageValue();

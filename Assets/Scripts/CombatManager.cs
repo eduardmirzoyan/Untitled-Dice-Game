@@ -40,7 +40,7 @@ public class CombatManager : MonoBehaviour
 
     private Coroutine coroutine;
     private string endMessage = "Draw";
-    private bool isPlayerTurn;
+    public bool isPlayerTurn;
 
     private void Awake() {
         // Singleton logic
@@ -172,7 +172,7 @@ public class CombatManager : MonoBehaviour
             yield return ConfirmAction();
         }
 
-        // Check if it's a player turn
+        // SO FAR, it's a player turn if the combatant is an ally
         isPlayerTurn = currentCombatant.isAlly();
 
         // Visuals
@@ -296,6 +296,11 @@ public class CombatManager : MonoBehaviour
                 var combatant = ScriptableObject.CreateInstance<Combatant>();
                 combatant.Initialize(allyParty[i], allyParty.dicePool, i, hexPosition);
                 combatants.Add(combatant);
+
+                // Initialize actions
+                foreach (var action in allyParty[i].GetActions()) {
+                    action.Initialize();
+                }
 
                 // Initialize passives
                 foreach (var passive in allyParty[i].GetPassives()) {
@@ -463,7 +468,7 @@ public class CombatManager : MonoBehaviour
 
     private void SelectDefaultTarget() {
         // Check self
-        if (selectedAction.canTargetSelf && selectedAction.checkTargetConstraints(currentCombatant)) {
+        if (selectedAction.canTargetSelf && selectedAction.CheckTargetConstraints(currentCombatant)) {
             // Select self
             SelectTarget(currentCombatant);
             return;
@@ -476,13 +481,13 @@ public class CombatManager : MonoBehaviour
             if (combatant != null && combatant.index != currentCombatant.index) {
                 
                 if (currentCombatant.isAlly()) {
-                    if (selectedAction.canTargetAllies && combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    if (selectedAction.canTargetAllies && combatant.isAlly() && selectedAction.CheckTargetConstraints(combatant))
                     {
                         // Select target
                         SelectTarget(combatant);
                         return;
                     }
-                    else if (selectedAction.canTargetEnemies && !combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    else if (selectedAction.canTargetEnemies && !combatant.isAlly() && selectedAction.CheckTargetConstraints(combatant))
                     {
                         // Select target
                         SelectTarget(combatant);
@@ -490,13 +495,13 @@ public class CombatManager : MonoBehaviour
                     }
                 }
                 else {
-                    if (selectedAction.canTargetAllies && !combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    if (selectedAction.canTargetAllies && !combatant.isAlly() && selectedAction.CheckTargetConstraints(combatant))
                     {
                         // Select target
                         SelectTarget(combatant);
                         return;
                     }
-                    else if (selectedAction.canTargetEnemies && combatant.isAlly() && selectedAction.checkTargetConstraints(combatant))
+                    else if (selectedAction.canTargetEnemies && combatant.isAlly() && selectedAction.CheckTargetConstraints(combatant))
                     {
                         // Select target
                         SelectTarget(combatant);
@@ -602,6 +607,10 @@ public class CombatManager : MonoBehaviour
 
         // Perform selected action on selected target using selected die
         selectedAction.Perform(selectedTarget.index, combatants, selectedDie);
+
+        // Update uses and cooldown of action
+        selectedAction.SetCooldown();
+        selectedAction.UpdateUses();
 
         // Hover for dramatic effect
         if (selectedAction is AttackAction)

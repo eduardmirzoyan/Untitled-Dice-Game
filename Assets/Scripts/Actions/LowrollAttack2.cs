@@ -8,9 +8,18 @@ public class LowrollAttack2 : AttackAction
 {
     public int numberOfTargets = 3;
 
-    public override bool checkDieConstraints(Dice dice)
+    public override bool CheckDieConstraints(Dice dice)
     {
         return dice.IsLowroll();
+    }
+
+    public override void ShowDieConstraintFeedback(Dice dice)
+    {
+        if (!dice.IsLowroll())
+        {
+            // Trigger event
+            CombatEvents.instance.TriggerOnFeedback("This action requires a LOWROLL.");
+        }
     }
 
     public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice) 

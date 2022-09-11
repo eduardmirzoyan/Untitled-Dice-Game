@@ -237,6 +237,8 @@ public class CombatManagerUI : MonoBehaviour
         actionHolders = new List<SkillDisplaySlotUI>();
         // Get all weapons equipped to the unit
         foreach (var action in CombatManager.instance.currentCombatant.unit.GetActions()) {
+            // Update cooldown
+            action.ReduceCooldown();
             // Create UI gameobject
             var actionHolder = Instantiate(actionHolderPrefab, actionLayoutGroup.transform).GetComponent<SkillDisplaySlotUI>();
             // Initalize it

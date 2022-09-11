@@ -6,13 +6,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Actions/Highroll/Attack 1")]
 public class HighrollAttack1 : AttackAction
 {
-    public override bool checkDieConstraints(Dice dice) 
+    public override bool CheckDieConstraints(Dice dice) 
     {
-        if (!dice.IsHighroll()) {
-            // CombatEvents.instance.TriggerOnFeedback("The selected die is not a HIGHROLL.");
-            return false;
+        return dice.IsHighroll();
+    }
+
+    public override void ShowDieConstraintFeedback(Dice dice)
+    {
+        if (!dice.IsHighroll())
+        {
+            // Trigger event
+            CombatEvents.instance.TriggerOnFeedback("This action requires a HIGHROLL.");
         }
-        return true;
     }
 
     public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice) 
