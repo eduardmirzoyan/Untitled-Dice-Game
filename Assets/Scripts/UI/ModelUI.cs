@@ -26,6 +26,9 @@ public class ModelUI : MonoBehaviour
         // Subscribe to related events
         CombatEvents.instance.onTakeDamage += Hurt;
         CombatEvents.instance.onDie += Dead;
+
+        // Default to idle state
+        animator.Play(idleState);
     }
 
     public void Hurt(Combatant combatant, int value) {

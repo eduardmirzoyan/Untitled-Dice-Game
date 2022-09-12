@@ -54,6 +54,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 819fa6d1511f3ca48b63c598a657ae5b, type: 2}
   - {fileID: 11400000, guid: 320e9696fcc58ce4caa858f35d678009, type: 2}
   - {fileID: 11400000, guid: 1e2508c0ef559ea48922084cf702d3d6, type: 2}
+  - {fileID: 11400000, guid: d269f9ff33b4a8748997cad76887884b, type: 2}
   rangeOfSpecialsPerWeapon: {x: 1, y: 2}
   armorNames:
   - Worn Armor
@@ -94,3 +95,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2891f8773791f6b4bb8da145bad9f53f, type: 2}
   - {fileID: 11400000, guid: 0e305f55113395f469987ba67a8d7329, type: 2}
   - {fileID: 11400000, guid: 7f85e1ce616953d469f0d6b5e4b7adeb, type: 2}
+  - {fileID: 11400000, guid: 7b7fb636f6a412f43bfa7ec3b9ca7c32, type: 2}

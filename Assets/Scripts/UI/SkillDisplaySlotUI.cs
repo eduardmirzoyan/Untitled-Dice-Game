@@ -40,31 +40,31 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
             CombatEvents.instance.onDieEndDrag += OnDieDragEnd;
             CombatEvents.instance.onActionSelect += OnDieInsert;
             CombatEvents.instance.onPreActionConfirm += ReleaseDieIfPossible;
-        }
 
-        // Visuals based on uses
-        if (action.hasUses > 0) {
-            // If you have no uses left
-            if (action.uses == 0) {
-                // Enable canvas group
-                usesCanvasGroup.alpha = 1f;
+            // Visuals based on uses
+            if (action.hasUses > 0) {
+                // If you have no uses left
+                if (action.uses == 0) {
+                    // Enable canvas group
+                    usesCanvasGroup.alpha = 1f;
+                }
+
+                // Disply uses left
+                usesText.text = action.uses.ToString();
             }
+            else {
+                usesText.text = "";
+            }
+            
 
-            // Disply uses left
-            usesText.text = action.uses.ToString();
-        }
-        else {
-            usesText.text = "";
-        }
-        
+            // Visuals based on cooldown
+            if (action.hasCooldown > 0 && action.cooldown > 0) {
+                // Enable canvas group
+                cooldownCanvasGroup.alpha = 1f;
 
-        // Visuals based on cooldown
-        if (action.hasCooldown > 0 && action.cooldown > 0) {
-            // Enable canvas group
-            cooldownCanvasGroup.alpha = 1f;
-
-            // Disply cooldown
-            cooldownText.text = action.cooldown.ToString();
+                // Disply cooldown
+                cooldownText.text = action.cooldown.ToString();
+            }
         }
     }
 

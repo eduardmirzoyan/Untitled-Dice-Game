@@ -8,9 +8,10 @@ public class Combatant : ScriptableObject
     public int index;
     public Vector3Int hexPosition;
     public Vector3 worldPosition;
+    public List<StatusEffect> statusEffects;
     public DicePool dicePool;
     
-    public Transform modelTransform; // Change this to event based
+    public Transform modelTransform;
 
     public void Initialize(Unit unit, DicePool dicePool, int index, Vector3Int hexPosition) {
         this.unit = unit;
@@ -18,6 +19,7 @@ public class Combatant : ScriptableObject
         this.hexPosition = hexPosition;
         this.index = index;
         this.worldPosition = CombatManagerUI.instance.GetCellCenter(hexPosition);
+        statusEffects = new List<StatusEffect>();
     }
 
     public bool isAlly() {
@@ -28,16 +30,47 @@ public class Combatant : ScriptableObject
         return index % 4;
     }
 
-
     public void AssignModel(Transform transform) {
         this.modelTransform = transform;
+    }
+
+    public void AddStatusEffect(StatusEffect statusEffect) {
+        // TODO: Finish this
+
+        // Debug
+        Debug.Log(unit.name + " recieved the status effect: " + statusEffect.name);
+
+        // Adding logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // If combatant already has this status effect...?
+        if (statusEffects.Contains(statusEffect)) {
+            // TODO: FIX THIS!!!
+            statusEffects[0].Stack(statusEffect);
+        }
+        else {
+            // Else add as new status effect
+            statusEffects.Add(statusEffect);
+
+            // Initialize effect with this combatant
+            statusEffect.Initialize(this);
+        }
+
+        // Trigger event
+        CombatEvents.instance.TriggerOnAddEffect(statusEffect, this);
+    }
+
+    public void RemoveStatusEffect(StatusEffect statusEffect) {
+        // TODO
+
+        // Unintialize effect
+        statusEffect.Uninitialize();
     }
 
     public void TakeDamage(int amount) {
         // Calls unit's take damage
         unit.TakeDamage(amount);
 
-        // Debugging
+        // Debugg
         Debug.Log(unit.name + " took " + amount + " damage.");
 
         // Trigger event
@@ -53,7 +86,7 @@ public class Combatant : ScriptableObject
         // Calls unit's heal
         unit.Heal(amount);
 
-        // Debugging
+        // Debug
         Debug.Log(unit.name + " healed " + amount + " hp.");
 
         // Trigger event

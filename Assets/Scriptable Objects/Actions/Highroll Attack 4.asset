@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61dd6004c874ab84b8c0d9a8413bd9be, type: 3}
+  m_Name: Highroll Attack 4
+  m_EditorClassIdentifier: 
+  name: Concuss
+  description: 'HIGHROLL: REROLL target''s die'
+  icon: {fileID: 21300000, guid: 6a704c1228bb1c14589184a23dbd040b, type: 3}
+  canTargetSelf: 0
+  canTargetAllies: 0
+  canTargetEnemies: 1
+  hasCooldown: 0
+  cooldown: 0
+  hasUses: 0
+  uses: 0
+  baseDamageMultiplier: 0
+  sourceWeapon: {fileID: 0}

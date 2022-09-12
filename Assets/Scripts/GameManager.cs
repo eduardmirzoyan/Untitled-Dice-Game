@@ -34,7 +34,8 @@ public class GameManager : MonoBehaviour
         dictionary["SHRINK"] = "DECREASE the value of the die by 1, with overflow";
         dictionary["PAIR"] = "Your DICE POOL contains 2+ dice with the SAME value.";
         dictionary["UNIQUE"] = "Every die in your DICE POOL has a DIFFERENT value.";
-        dictionary["BLEED"] = "To be implemented.";
+        dictionary["HIGHROLLPOOL"] = "The value of ALL your dice are at their MAXIMUM";
+        dictionary["LOWROLLPOOL"] = "The value of ALL your dice are at their MINIMUM";
 
         // Create a player party (Which should be overwritten)
         allyParty = ScriptableObject.CreateInstance<Party>();

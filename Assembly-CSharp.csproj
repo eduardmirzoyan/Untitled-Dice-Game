@@ -40,7 +40,7 @@
      <Compile Include="Assets\Scripts\UI\Selection Scene\UnitHolderUI.cs" />
      <Compile Include="Assets\Scripts\Passives\Passive.cs" />
      <Compile Include="Assets\Scripts\AI\SlimeAI.cs" />
-     <Compile Include="Assets\Scripts\Actions\HighrollAttack3.cs" />
+     <Compile Include="Assets\Scripts\Actions\Highroll\HighrollAttack3.cs" />
      <Compile Include="Assets\Scripts\Actions\UniqueAttack1.cs" />
      <Compile Include="Assets\Scripts\Passives\Passive9.cs" />
      <Compile Include="Assets\Scripts\UI\StateIndicatorUI.cs" />
@@ -88,7 +88,7 @@
      <Compile Include="Assets\Scripts\UI\DiceUI.cs" />
      <Compile Include="Assets\Scripts\Armor.cs" />
      <Compile Include="Assets\Scripts\UI\Tooltips\ItemTooltipUI.cs" />
-     <Compile Include="Assets\Scripts\Actions\HighrollAttack2.cs" />
+     <Compile Include="Assets\Scripts\Actions\Highroll\HighrollAttack2.cs" />
      <Compile Include="Assets\Scripts\LootGenerator.cs" />
      <Compile Include="Assets\Scripts\UI\ItemSlotUI.cs" />
      <Compile Include="Assets\Scripts\UI\Selection Scene\HolderHolder.cs" />
@@ -117,9 +117,18 @@
      <Compile Include="Assets\Scripts\UI\PauseManager.cs" />
      <Compile Include="Assets\Scripts\UI\FeedbackUI.cs" />
      <Compile Include="Assets\Scripts\Units\Knight.cs" />
-     <Compile Include="Assets\Scripts\Actions\HighrollAttack1.cs" />
+     <Compile Include="Assets\Scripts\Actions\Highroll\HighrollAttack1.cs" />
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
+     <Compile Include="Assets\Scripts\Actions\Highroll\HighrollAttack6.cs" />
+     <Compile Include="Assets\Scripts\Actions\Highroll\HighrollAttack5.cs" />
+     <Compile Include="Assets\Scripts\Actions\Highroll\HighrollAttack4.cs" />
+     <Compile Include="Assets\Scripts\Passives\Passive10.cs" />
+     <Compile Include="Assets\Scripts\Status Effects\StatusEffect.cs" />
+     <Compile Include="Assets\Scripts\Status Effects\Mark.cs" />
+     <Compile Include="Assets\Scripts\Status Effects\Bleed.cs" />
+     <Compile Include="Assets\Scripts\UI\StatusEffectUI.cs" />
+     <Compile Include="Assets\Scripts\UI\StatusEffectHolderUI.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

@@ -50,6 +50,7 @@ public class CombatEvents : MonoBehaviour
 
     // Die events
     public event Action<Dice> onRoll;
+    public event Action<Dice> onSet;
     public event Action<Dice> onReroll;
     public event Action<Dice> onGrow;
     public event Action<Dice> onShrink;
@@ -78,6 +79,10 @@ public class CombatEvents : MonoBehaviour
     public event Action<int> onClearQueue;
     public event Action<string> onFeedback;
 
+    // Status effect events
+    public event Action<StatusEffect, Combatant> onAddEffect;
+    public event Action<StatusEffect, Combatant> onRemoveEffect;
+    
 
     #region Game State Events
 
@@ -156,7 +161,7 @@ public class CombatEvents : MonoBehaviour
 
     
 
-    #region Action based events
+    #region Action Events
     public void TriggerOnDieStartDrag(Dice dice) {
         if (onDieStartDrag != null) {
             onDieStartDrag(dice);
@@ -201,7 +206,7 @@ public class CombatEvents : MonoBehaviour
     #endregion
 
 
-    #region Queue based events
+    #region Queue Events
 
     public void TriggerOnSpawnCombatant(Combatant combatant, float spawnTime) {
         if (onSpawnCombatant != null) {
@@ -232,7 +237,7 @@ public class CombatEvents : MonoBehaviour
     #endregion
 
 
-    #region Dice based events
+    #region Dice Events
 
     public void TriggerOnRoll(Dice dice) {
         if (onRoll != null) {
@@ -240,9 +245,15 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public void TriggerReroll(Dice dice) {
+    public void TriggerOnReroll(Dice dice) {
         if (onReroll != null) {
             onReroll(dice);
+        }
+    }
+
+    public void TriggerOnSet(Dice dice) {
+        if (onSet != null) {
+            onSet(dice);
         }
     }
 
@@ -273,6 +284,7 @@ public class CombatEvents : MonoBehaviour
     #endregion
 
     #region Skill Trigger Events
+
     // Turn state events
     public IEnumerator TriggerSkillCombatStart(ActionInfo info)
     {
@@ -370,7 +382,7 @@ public class CombatEvents : MonoBehaviour
 
     #endregion
 
-    #region Unit-related events
+    #region Unit events
 
     public void TriggerOnHeal(Combatant combatant, int amount) {
         if (onHeal != null) {
@@ -387,6 +399,22 @@ public class CombatEvents : MonoBehaviour
     public void TriggerOnDie(Combatant combatant) {
         if (onDie != null) {
             onDie(combatant);
+        }
+    }
+
+    #endregion
+
+    #region Status Effect Events
+
+    public void TriggerOnAddEffect(StatusEffect statusEffect, Combatant combatant) {
+        if (onAddEffect != null) {
+            onAddEffect(statusEffect, combatant);
+        }
+    }
+
+    public void TriggerOnRemoveEffect(StatusEffect statusEffect, Combatant combatant) {
+        if (onRemoveEffect != null) {
+            onRemoveEffect(statusEffect, combatant);
         }
     }
 

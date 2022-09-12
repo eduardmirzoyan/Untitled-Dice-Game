@@ -18,4 +18,4 @@ MonoBehaviour:
   baseDamage: 5
   actions:
   - {fileID: 11400000, guid: 2f13d58c006bb0548b2b28f3a9c2a38a, type: 2}
-  - {fileID: 11400000, guid: 320e9696fcc58ce4caa858f35d678009, type: 2}
+  - {fileID: 11400000, guid: d269f9ff33b4a8748997cad76887884b, type: 2}

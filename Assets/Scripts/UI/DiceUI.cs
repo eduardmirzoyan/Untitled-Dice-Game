@@ -53,6 +53,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         // Subscribe to events
         CombatEvents.instance.onRoll += OnRoll;
         CombatEvents.instance.onReroll += OnRoll;
+        CombatEvents.instance.onSet += OnSet;
         CombatEvents.instance.onGrow += OnGrow;
         CombatEvents.instance.onShrink += OnShrink;
         CombatEvents.instance.onReplenish += OnReplenish;
@@ -71,6 +72,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
         CombatEvents.instance.onRoll -= OnRoll;
         CombatEvents.instance.onReroll -= OnRoll;
+        CombatEvents.instance.onSet -= OnSet;
         CombatEvents.instance.onGrow -= OnGrow;
         CombatEvents.instance.onShrink -= OnShrink;
         CombatEvents.instance.onReplenish -= OnReplenish;
@@ -102,6 +104,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         // Check if it's usable
         if (combatant.isAlly() && !dice.isExhausted) {
             // Show outline animation
+            selectionOutline.color = Color.white;
             animator.Play("Highlight");
         }
         else {
@@ -124,6 +127,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
             if (CombatManager.instance.selectedDie != null) {
                 // If this was the selected die
                 if (CombatManager.instance.selectedDie == this.dice) {
+                    selectionOutline.color = Color.white;
                     animator.Play("Select");
                 }
                 else {
@@ -131,6 +135,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
                 }
             }
             else {
+                selectionOutline.color = Color.white;
                 animator.Play("Highlight");
             }
         }
@@ -141,6 +146,18 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         // If this die was rolled
         if (this.dice == dice) {
             Roll();
+        }
+    }
+
+    private void OnSet(Dice dice) {
+        // If this die was set
+        if (this.dice == dice) {
+            // Update value
+            DrawValue(dice.GetValue());
+
+            // Show visuals
+            selectionOutline.color = Color.yellow;
+            animator.Play("Select");
         }
     }
 
@@ -217,6 +234,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         DrawValue(dice.GetValue());
 
         // Visual feedback
+        selectionOutline.color = Color.white;
         animator.Play("Select");
     }
 

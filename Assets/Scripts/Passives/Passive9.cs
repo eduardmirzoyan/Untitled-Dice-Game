@@ -29,7 +29,7 @@ public class Passive9 : Passive
             combatant.unit.dice.Roll();
 
             // Trigger event
-            CombatEvents.instance.TriggerReroll(combatant.unit.dice);
+            CombatEvents.instance.TriggerOnReroll(combatant.unit.dice);
 
             // Set wait to 0.5
             info.waitTime = CombatManager.instance.rollTime;

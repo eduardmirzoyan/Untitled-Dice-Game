@@ -369,10 +369,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 464c4912b080de04abb158541b3f026a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 7165282630464710092}
-  containedDiceUI: {fileID: 0}
+  skillIcon: {fileID: 7165282630464710092}
+  animator: {fileID: 0}
+  usesCanvasGroup: {fileID: 0}
+  usesText: {fileID: 0}
+  cooldownCanvasGroup: {fileID: 0}
+  cooldownText: {fileID: 0}
   action: {fileID: 0}
   passive: {fileID: 0}
+  containedDiceUI: {fileID: 0}
   highlightAlpha: 0.5
   isFunctional: 0
 --- !u!1 &7165282630464710098
@@ -387,7 +392,7 @@ GameObject:
   - component: {fileID: 7165282630464710095}
   - component: {fileID: 7165282630464710092}
   m_Layer: 5
-  m_Name: Action Icon
+  m_Name: Skill Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
