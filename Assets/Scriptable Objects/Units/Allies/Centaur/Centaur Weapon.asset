@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Centaur's Battle Axe
   description: The starting weapon of the Centaur
   sprite: {fileID: -755106536, guid: 20597968d5281954482d5d148d07fa12, type: 3}
-  baseDamage: 5
-  actions:
-  - {fileID: 11400000, guid: 0af394f37864ba24fbebac3ee3269a0e, type: 2}
+  skills:
   - {fileID: 11400000, guid: e760e954560361246a3c8b36a11e54f3, type: 2}
+  - {fileID: 11400000, guid: 0af394f37864ba24fbebac3ee3269a0e, type: 2}
+  baseDamage: 5

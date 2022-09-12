@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mark
   m_EditorClassIdentifier: 
   name: Mark
-  description: Triggers additional Skill effects when targeted.
+  description: Triggers additional Skill effects when Unit is targeted.
   icon: {fileID: 21300000, guid: e784c6b65911c2d42a62a78f97c8e016, type: 3}
   combatant: {fileID: 0}
   maxStacks: 1

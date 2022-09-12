@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Knight's Broadsword
   description: The starting weapon of the Knight
   sprite: {fileID: -1956281420, guid: 20597968d5281954482d5d148d07fa12, type: 3}
-  baseDamage: 5
-  actions:
+  skills:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
-  - {fileID: 11400000, guid: f989fb2f27b1d7a4c998359a74ddc258, type: 2}
+  - {fileID: 11400000, guid: 819fa6d1511f3ca48b63c598a657ae5b, type: 2}
+  baseDamage: 5

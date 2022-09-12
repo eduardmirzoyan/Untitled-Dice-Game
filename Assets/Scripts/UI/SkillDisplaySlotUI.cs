@@ -22,6 +22,7 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
     [Header("Data")]
     [SerializeField] private Action action;
     [SerializeField] private Passive passive;
+    [SerializeField] private Skill skill;
     [SerializeField] private DiceUI containedDiceUI;
     [SerializeField] private float highlightAlpha = 0.5f;
     [SerializeField] private bool isFunctional;

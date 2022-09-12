@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Treant Weapon
   description: Sticky
   sprite: {fileID: 21300000, guid: c14f7f896144a5b4ab5c1f72f9bf4a08, type: 3}
-  baseDamage: 3
-  actions:
+  skills:
   - {fileID: 11400000, guid: f00b8bdc41758584f9ae2daf1ce1149b, type: 2}
   - {fileID: 11400000, guid: 5ee86cae16c3c0842877d923671e64d7, type: 2}
+  baseDamage: 3

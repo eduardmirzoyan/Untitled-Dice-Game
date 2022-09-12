@@ -65,6 +65,7 @@ public class CombatEvents : MonoBehaviour
     public event Action<Combatant> onTargetSelect;
     public event Action<Action> onPreActionConfirm;
     public event Action<Action> onActionConfirm;
+    public event Action<Action> onActionPerformed;
     public event Action<int> onPlayerTurnEnd;
 
     // General events
@@ -81,6 +82,8 @@ public class CombatEvents : MonoBehaviour
 
     // Status effect events
     public event Action<StatusEffect, Combatant> onAddEffect;
+    public event Action<StatusEffect> onEffectProc;
+    public event Action<StatusEffect> onEffectUpdate;
     public event Action<StatusEffect, Combatant> onRemoveEffect;
     
 
@@ -183,6 +186,14 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
+    public void TriggerOnTargetSelect(Combatant combatant) {
+        if (onTargetSelect != null) {
+            if (combatant != null) print("Debug: Target " + combatant.unit.name + " was selected.");
+            else print("Debug: Target was deselected.");
+            onTargetSelect(combatant);
+        }
+    }
+
     public void TriggerOnPreActionConfirm(Action action) {
         if (onPreActionConfirm != null) {
             onPreActionConfirm(action);
@@ -195,13 +206,12 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public void TriggerOnTargetSelect(Combatant combatant) {
-        if (onTargetSelect != null) {
-            if (combatant != null) print("Debug: Target " + combatant.unit.name + " was selected.");
-            else print("Debug: Target was deselected.");
-            onTargetSelect(combatant);
+    public void TriggerOnActionPerformed(Action action) {
+        if (onActionPerformed != null) {
+            onActionPerformed(action);
         }
     }
+    
 
     #endregion
 
@@ -409,6 +419,18 @@ public class CombatEvents : MonoBehaviour
     public void TriggerOnAddEffect(StatusEffect statusEffect, Combatant combatant) {
         if (onAddEffect != null) {
             onAddEffect(statusEffect, combatant);
+        }
+    }
+
+    public void TriggerOnEffectProc(StatusEffect statusEffect) {
+        if (onEffectProc != null) {
+            onEffectProc(statusEffect);
+        }
+    }
+
+    public void TriggerOnEffectUpdate(StatusEffect statusEffect) {
+        if (onEffectUpdate != null) {
+            onEffectUpdate(statusEffect);
         }
     }
 

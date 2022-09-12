@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Slime WEapon
   description: Slimy
   sprite: {fileID: 21300000, guid: c14f7f896144a5b4ab5c1f72f9bf4a08, type: 3}
-  baseDamage: 4
-  actions:
+  skills:
   - {fileID: 11400000, guid: 7f3e7da1e7cb1c1498b87ec8aa14669d, type: 2}
   - {fileID: 11400000, guid: 7649b081a5fc4d24e889d40ce2850558, type: 2}
+  baseDamage: 4

@@ -15,7 +15,7 @@ public class Bleed : StatusEffect
 
     public override void Stack(StatusEffect statusEffect)
     {
-        // Add the stacks from the new bleed effect
+        // Add the stacks
         stacks += statusEffect.stacks;
     }
 
@@ -35,6 +35,10 @@ public class Bleed : StatusEffect
 
             // Then half stacks, rounding down
             stacks /= 2;
+
+            // Trigger events
+            CombatEvents.instance.TriggerOnEffectProc(this);
+            CombatEvents.instance.TriggerOnEffectUpdate(this);
 
             // Then if stacks equal 0, remove effect
             if (stacks == 0) {

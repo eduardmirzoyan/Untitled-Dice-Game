@@ -27,14 +27,13 @@ public class CombatManagerUI : MonoBehaviour
     [SerializeField] public List<DiceUI> dieUIs;
     [SerializeField] private List<GameObject> dieOutlineUIs;
 
-    [Header("Healthbar UI")]
-    [SerializeField] private GameObject healthbarPrefab;
-
-    [Header("Ally Models Transform")]
+    [Header("Unit Models")]
     [SerializeField] private Transform allyModels;
-
-    [Header("Enemy Models Transform")]
     [SerializeField] private Transform enemyModels;
+
+    [Header("Combat Stations")]
+    [SerializeField] private Transform allyCombatStations;
+    [SerializeField] private Transform enemyCombatStations;
 
     [Header("Damage number UI")]
     [SerializeField] private GameObject floatingNumberPrefab;
@@ -168,18 +167,17 @@ public class CombatManagerUI : MonoBehaviour
         var modelObject = Instantiate(combatant.unit.modelPrefab, centeredPosition, Quaternion.identity, parent);
         var canvas = modelObject.GetComponentInChildren<Canvas>();
 
-        // Spawn healthbar and initialize
-        var healthbar = Instantiate(healthbarPrefab, canvas.transform).GetComponent<HealthbarUI>();
-        healthbar.Initialize(combatant);
-
         // Initialize model
         modelObject.GetComponent<ModelUI>().Initialize(combatant);
 
         // Assign model
         combatant.AssignModel(modelObject.transform);
 
+        // Change parent for station
+        parent = combatant.isAlly() ? allyCombatStations : enemyCombatStations;
+
         // Spawn station and initialize
-        var combatStation = Instantiate(combatStationPrefab, centeredPosition, Quaternion.identity).GetComponent<CombatStationUI>();
+        var combatStation = Instantiate(combatStationPrefab, centeredPosition, Quaternion.identity, parent).GetComponent<CombatStationUI>();
         combatStation.Initialize(combatant);
 
         // Spawn animation

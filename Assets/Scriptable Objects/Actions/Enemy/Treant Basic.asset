@@ -15,12 +15,13 @@ MonoBehaviour:
   name: Twig Slap
   description: 
   icon: {fileID: 0}
+  sourceEquipment: {fileID: 11400000, guid: 716acb8c19e69ae4db1a7fc5c36d5d47, type: 2}
+  sourceCombatant: {fileID: 0}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1
-  cooldown: 0
-  cooldownCounter: 0
+  hasCooldown: 0
+  cooldown: 1
+  hasUses: 0
   uses: 0
-  usesCounter: 0
   baseDamageMultiplier: 1
-  sourceWeapon: {fileID: 11400000, guid: 716acb8c19e69ae4db1a7fc5c36d5d47, type: 2}

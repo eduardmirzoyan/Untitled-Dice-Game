@@ -6,7 +6,7 @@ using System.Linq;
 public abstract class Unit : ScriptableObject
 {
     public new string name;
-    public Sprite icon;
+    public Sprite sprite;
     public int currentHealth;
     public int maxHealth;
     public Dice dice;
@@ -14,7 +14,7 @@ public abstract class Unit : ScriptableObject
     public List<Armor> armors;
     public int speed;
     public GameObject modelPrefab;
-    public List<Passive> innatePassives;
+    public List<Skill> innateSkills;
     public SlimeAI ai;
 
     public Unit Copy() {
@@ -28,7 +28,7 @@ public abstract class Unit : ScriptableObject
         for (int i = 0; i < weapons.Count; i++) {
             if (weapons[i] != null) {
                 // Get a copy of each weapon
-                copy.weapons[i] = weapons[i].Copy();
+                copy.weapons[i] = (Weapon) weapons[i].Copy();
             }
         }
 
@@ -36,11 +36,31 @@ public abstract class Unit : ScriptableObject
         for (int i = 0; i < armors.Count; i++) {
             if (armors[i] != null) {
                 // Get a copy of each armor
-                copy.armors[i] = armors[i].Copy();
+                copy.armors[i] = (Armor) armors[i].Copy();
             }
         }
 
         return copy;
+    }
+
+    public List<Skill> GetSkills() {
+        List<Skill> result = new List<Skill>();
+
+        foreach (var weapon in weapons) {
+            if (weapon != null) {
+                result.AddRange(weapon.skills);
+            }
+        }
+
+        foreach (var armor in armors) {
+            if (armor != null) {
+                result.AddRange(armor.skills);
+            }
+        }
+
+        // Get innate skills
+
+        return result;
     }
 
     public List<Action> GetActions() {
@@ -48,8 +68,14 @@ public abstract class Unit : ScriptableObject
 
         // Get actions from weapons
         foreach (var weapon in weapons) {
-            if (weapon != null)
-                result.AddRange(weapon.actions);
+            if (weapon != null) {
+                foreach (var skill in weapon.skills) {
+                    if (skill is Action) {
+                        result.Add((Action) skill);
+                    }
+                }
+            }
+            
         }
         
         // Get innate actions
@@ -64,13 +90,15 @@ public abstract class Unit : ScriptableObject
     public List<Passive> GetPassives() {
         List<Passive> result = new List<Passive>();
 
-        // Get innate passives
-        result.AddRange(innatePassives);
-
         // Get actions from armor
         foreach (var armor in armors) {
-            if (armor != null)
-                result.AddRange(armor.passives);
+            if (armor != null) {
+                foreach (var skill in armor.skills) {
+                    if (skill is Passive) {
+                        result.Add((Passive) skill);
+                    }
+                }
+            }
         }
 
         // Get passives from equipment

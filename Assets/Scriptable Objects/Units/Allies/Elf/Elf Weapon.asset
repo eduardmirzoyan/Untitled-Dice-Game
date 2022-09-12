@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Elf's Bow
   description: The starting weapon of the Elf
   sprite: {fileID: 86963966, guid: 20597968d5281954482d5d148d07fa12, type: 3}
+  skills:
+  - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
+  - {fileID: 11400000, guid: 320e9696fcc58ce4caa858f35d678009, type: 2}
   baseDamage: 5
-  actions:
-  - {fileID: 11400000, guid: 2f13d58c006bb0548b2b28f3a9c2a38a, type: 2}
-  - {fileID: 11400000, guid: d269f9ff33b4a8748997cad76887884b, type: 2}

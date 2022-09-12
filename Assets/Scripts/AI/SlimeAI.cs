@@ -10,7 +10,10 @@ public class SlimeAI : ScriptableObject
         Action bestAction = null;
         Dice bestDie = null;
         int heuristic = 0;
+       
         foreach (var action in actions) {
+            Debug.Log(action.name);
+
             if (action is AttackAction) {
                 var attack = (AttackAction) action;
                 foreach (var die in dicepool.GetDice()) {
@@ -32,6 +35,11 @@ public class SlimeAI : ScriptableObject
 
         // Now choose random target
         int choice = Random.Range(0, 4);
+        
+        // Debug
+        if (bestAction == null) Debug.Log("AI did not select an action.");
+        if (bestDie == null) Debug.Log("AI did not select a die.");
+        if (combatants[choice] == null) Debug.Log("AI did not select a target.");
 
         // Return the best pair so far
         return (bestAction, bestDie, combatants[choice]);

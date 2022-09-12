@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Adventurer's Shortsword
   description: The starting weapon of the Adventurer
   sprite: {fileID: 1118259674, guid: 20597968d5281954482d5d148d07fa12, type: 3}
-  baseDamage: 5
-  actions:
+  skills:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
-  - {fileID: 11400000, guid: d5ec2ecc7f8aa94448a7f585e80a4591, type: 2}
+  - {fileID: 11400000, guid: e760e954560361246a3c8b36a11e54f3, type: 2}
+  baseDamage: 5

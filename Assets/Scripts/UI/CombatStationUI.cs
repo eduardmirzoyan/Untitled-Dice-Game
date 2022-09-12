@@ -4,12 +4,28 @@ using UnityEngine;
 
 public class CombatStationUI : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private Animator targetAnimator;
     [SerializeField] private Animator turnAnimator;
+    [SerializeField] private HealthbarUI healthbarUI;
+    [SerializeField] private StatusEffectHolderUI statusEffectHolderUI;
+
+    [Header("Data")]
     [SerializeField] private Combatant combatant;
+
+    private void Awake() {
+        healthbarUI = GetComponentInChildren<HealthbarUI>();
+        statusEffectHolderUI = GetComponentInChildren<StatusEffectHolderUI>();
+    }
 
     public void Initialize(Combatant combatant) {
         this.combatant = combatant;
+
+        // Initialize healthbar
+        healthbarUI.Initialize(combatant);
+
+        // Initialize holder
+        statusEffectHolderUI.Initialize(combatant);
 
         // Sub to events
         CombatEvents.instance.onTurnStart += OnTurnStart;

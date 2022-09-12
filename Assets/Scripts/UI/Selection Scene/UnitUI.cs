@@ -42,7 +42,7 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         this.isInteractable = isInteractable;
         origin = parent;
         currentParent = parent;
-        image.sprite = unit.icon;
+        image.sprite = unit.sprite;
         image.SetNativeSize();
     }
 

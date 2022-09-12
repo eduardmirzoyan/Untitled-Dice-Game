@@ -1932,7 +1932,7 @@ MonoBehaviour:
   enemyParty: {fileID: 0}
   storage: {fileID: 0}
   unitUIprefab: {fileID: 5177994696533219902, guid: e45949888fb061e4eb96e062090c52db, type: 3}
-  fastMode: 0
+  fastMode: 1
 --- !u!4 &598127922
 Transform:
   m_ObjectHideFlags: 0
@@ -5119,11 +5119,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1914864725, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1914864725, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1914864725, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -5131,7 +5131,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1914864725, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -106
       objectReference: {fileID: 0}
     - target: {fileID: 5730284964530058030, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5167,11 +5167,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5730284965401650695, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5730284965401650695, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5730284965401650695, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_SizeDelta.y
@@ -5183,7 +5183,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5730284965401650695, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -61
       objectReference: {fileID: 0}
     - target: {fileID: 5730284965534555570, guid: 599b5414a59104d43a5d7e13991e805d, type: 3}
       propertyPath: m_Name

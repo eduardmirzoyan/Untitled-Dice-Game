@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Centaur
   m_EditorClassIdentifier: 
   name: Centaur
-  icon: {fileID: 21300000, guid: 26cd63a481fd496459994f1ea84e708e, type: 3}
+  sprite: {fileID: 21300000, guid: 26cd63a481fd496459994f1ea84e708e, type: 3}
   currentHealth: 45
   maxHealth: 45
   dice: {fileID: 11400000, guid: e878df740483de14e90aecbc93e8381f, type: 2}

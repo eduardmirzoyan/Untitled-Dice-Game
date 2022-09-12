@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Slime
   m_EditorClassIdentifier: 
   name: Slime
-  icon: {fileID: 1579739818, guid: 90c0630c81187e14f80d4956326c961a, type: 3}
+  sprite: {fileID: -158389842, guid: 90c0630c81187e14f80d4956326c961a, type: 3}
   currentHealth: 20
   maxHealth: 20
   dice: {fileID: 11400000, guid: 08715e0a0e5cb92479a72c19334c7496, type: 2}

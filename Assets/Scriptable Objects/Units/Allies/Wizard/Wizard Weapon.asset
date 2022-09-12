@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Wizard's Staff
   description: The starting weapon of the Wizard
   sprite: {fileID: -916839757, guid: 20597968d5281954482d5d148d07fa12, type: 3}
-  baseDamage: 5
-  actions:
+  skills:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
   - {fileID: 11400000, guid: 1e2508c0ef559ea48922084cf702d3d6, type: 2}
+  baseDamage: 5

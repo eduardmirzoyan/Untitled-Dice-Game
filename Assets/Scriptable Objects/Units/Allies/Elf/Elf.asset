@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Elf
   m_EditorClassIdentifier: 
   name: Elf
-  icon: {fileID: 21300000, guid: 1e64dbd796f015143a24e2b7e41918ed, type: 3}
+  sprite: {fileID: 21300000, guid: 1e64dbd796f015143a24e2b7e41918ed, type: 3}
   currentHealth: 30
   maxHealth: 30
   dice: {fileID: 11400000, guid: c1ffd98d8d36f0f41a4881ed8851ce61, type: 2}

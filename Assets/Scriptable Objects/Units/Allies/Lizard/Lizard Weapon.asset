@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Lizard's Pike
   description: The starting weapon of the Lizard
   sprite: {fileID: -1525420329, guid: 20597968d5281954482d5d148d07fa12, type: 3}
-  baseDamage: 5
-  actions:
-  - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
+  skills:
   - {fileID: 11400000, guid: df8b85f4b19f47046a4ec51bb7117ac9, type: 2}
+  - {fileID: 11400000, guid: 819fa6d1511f3ca48b63c598a657ae5b, type: 2}
+  baseDamage: 5

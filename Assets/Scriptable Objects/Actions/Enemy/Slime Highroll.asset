@@ -15,12 +15,13 @@ MonoBehaviour:
   name: Acid Toss
   description: 
   icon: {fileID: 0}
+  sourceEquipment: {fileID: 11400000, guid: 4f547578ff1dbf647b4932e94e779897, type: 2}
+  sourceCombatant: {fileID: 0}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1
+  hasCooldown: 0
   cooldown: 0
-  cooldownCounter: 0
+  hasUses: 0
   uses: 0
-  usesCounter: 0
   baseDamageMultiplier: 2
-  sourceWeapon: {fileID: 11400000, guid: 4f547578ff1dbf647b4932e94e779897, type: 2}

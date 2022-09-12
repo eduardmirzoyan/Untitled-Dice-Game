@@ -17,4 +17,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: fd48b7c4195b61b4fa80c2e7217276f0, type: 3}
   combatant: {fileID: 0}
   maxStacks: 0
-  stacks: 0
+  stacks: 5

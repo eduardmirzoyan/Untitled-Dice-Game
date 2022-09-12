@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Adventurer
   m_EditorClassIdentifier: 
   name: Adventurer
-  icon: {fileID: -1193288918, guid: f9411099644ba7f48936e6764be7695e, type: 3}
+  sprite: {fileID: -1193288918, guid: f9411099644ba7f48936e6764be7695e, type: 3}
   currentHealth: 30
   maxHealth: 30
   dice: {fileID: 11400000, guid: eaae14247699d614d8a5275a34f30d23, type: 2}

@@ -38,6 +38,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField] public Action selectedAction;
     [SerializeField] public Combatant selectedTarget;
 
+    [Header("Temp Shit")]
+    [SerializeField] private StatusEffect statusEffect;
+
     private Coroutine coroutine;
     private string endMessage = "Draw";
     public bool isPlayerTurn;
@@ -70,6 +73,18 @@ public class CombatManager : MonoBehaviour
         // Temp confirm action
         if (Input.GetKeyDown(KeyCode.Space) && state == CombatState.TurnStart) {
             Confirm();
+        }
+
+        // Debug
+        if (Input.GetKeyDown(KeyCode.H) && state == CombatState.TurnStart) {
+            // Emulate adding effect
+            currentCombatant.AddStatusEffect(Instantiate(statusEffect));
+        }
+
+        if (Input.GetKeyDown(KeyCode.J) && state == CombatState.TurnStart)
+        {
+            // Emulate removing effect
+            //currentCombatant.RemoveStatusEffect(statusEffect);
         }
     }
 
@@ -195,8 +210,11 @@ public class CombatManager : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
+            print(bestChoice);
+
             // Select action
             SelectAction(bestChoice.Item1, bestChoice.Item2);
+            
             print(currentCombatant.unit.name + " choose action: " + bestChoice.Item1.name 
                                                     + " with die value: " + bestChoice.Item2.GetValue());
 
@@ -269,7 +287,7 @@ public class CombatManager : MonoBehaviour
         // Terminate passives
         foreach (var combatant in combatants) {
             foreach (var passive in combatant.unit.GetPassives()) {
-                passive.Terminate();
+                passive.Uninitialize();
             }
         }
 
@@ -293,18 +311,14 @@ public class CombatManager : MonoBehaviour
                 // Assign model's location in this combat
                 hexPosition = allyPositions[i];
 
+                // Create combatant SO
                 var combatant = ScriptableObject.CreateInstance<Combatant>();
                 combatant.Initialize(allyParty[i], allyParty.dicePool, i, hexPosition);
                 combatants.Add(combatant);
 
-                // Initialize actions
-                foreach (var action in allyParty[i].GetActions()) {
-                    action.Initialize();
-                }
-
-                // Initialize passives
-                foreach (var passive in allyParty[i].GetPassives()) {
-                    passive.Initialize(combatant);
+                // Initialize skills
+                foreach (var skill in allyParty[i].GetSkills()) {
+                    skill.Initialize(combatant);
                 }
             }
             else {
@@ -319,14 +333,15 @@ public class CombatManager : MonoBehaviour
                 // Assign model's location in this combat
                 hexPosition = enemyPositions[i];
 
+                // Create combatant SO
                 var combatant = ScriptableObject.CreateInstance<Combatant>();
                 // Make sure to offset index by 4 since they are on the enemy team
                 combatant.Initialize(enemyParty[i], enemyParty.dicePool, i + 4, hexPosition);
                 combatants.Add(combatant);
 
-                // Initialize passives
-                foreach (var passive in enemyParty[i].GetPassives()) {
-                    passive.Initialize(combatant);
+                // Initialize skills
+                foreach (var skill in enemyParty[i].GetSkills()) {
+                    skill.Initialize(combatant);
                 }
             }
             else {
@@ -607,6 +622,9 @@ public class CombatManager : MonoBehaviour
 
         // Perform selected action on selected target using selected die
         selectedAction.Perform(selectedTarget.index, combatants, selectedDie);
+
+        // Trigger event
+        CombatEvents.instance.TriggerOnActionPerformed(selectedAction);
 
         // Update uses and cooldown of action
         selectedAction.SetCooldown();

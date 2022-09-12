@@ -86,7 +86,7 @@ public class QueueUI : MonoBehaviour
         queueSlotGameobjects.Add(go);
         // Intialize based on unit
         if (go.TryGetComponent(out QueueSlot queueSlot)) {
-            queueSlot.Initialize(unit.icon, color);
+            queueSlot.Initialize(unit.sprite, color);
         }
         else {
             print("Prefab does not have QueueSlot componenet");

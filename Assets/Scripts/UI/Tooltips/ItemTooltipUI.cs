@@ -76,31 +76,49 @@ public class ItemTooltipUI : MonoBehaviour
         flavorText.text = item.description;
         itemDescription.text = "";
 
-        // If item is a weapon then display it's actions
-        if (item is Weapon) {
-            var weapon = (Weapon) item;
-            itemDescription.text = "Base Damage: " + weapon.baseDamage;
+        // If the item is an equipment item
+        if (item is Equipment) {
+            // Cast
+            var equipment = (Equipment) item;
 
-            // Display all the actions
-            foreach (var action in weapon.actions) {
+            // Show text
+            if (equipment is Weapon) itemDescription.text = "Base Damage: " + ((Weapon) equipment).baseDamage;
+            else itemDescription.text = "";
+
+            // Display all its skills
+            foreach (var skill in equipment.skills) {
                 // Spawn visuals of actions
                 var itemSkillUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
-                itemSkillUI.Initialize(action);
+                itemSkillUI.Initialize(skill);
                 itemSkillUIs.Add(itemSkillUI);
             }
         }
-        else if (item is Armor) {
-            var armor = (Armor) item;
-            itemDescription.text = "";
 
-            // Display all the actions
-            foreach (var passive in armor.passives) {
-                // Spawn visuals of actions
-                var actionHolderUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
-                actionHolderUI.Initialize(passive);
-                itemSkillUIs.Add(actionHolderUI);
-            }
-        }
+        // // If item is a weapon then display it's actions
+        // if (item is Weapon) {
+        //     var weapon = (Weapon) item;
+        //     itemDescription.text = "Base Damage: " + weapon.baseDamage;
+
+        //     // Display all the actions
+        //     foreach (var action in weapon.actions) {
+        //         // Spawn visuals of actions
+        //         var itemSkillUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
+        //         itemSkillUI.Initialize(action);
+        //         itemSkillUIs.Add(itemSkillUI);
+        //     }
+        // }
+        // else if (item is Armor) {
+        //     var armor = (Armor) item;
+        //     itemDescription.text = "";
+
+        //     // Display all the actions
+        //     foreach (var passive in armor.passives) {
+        //         // Spawn visuals of actions
+        //         var actionHolderUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
+        //         actionHolderUI.Initialize(passive);
+        //         itemSkillUIs.Add(actionHolderUI);
+        //     }
+        // }
 
         // Upate Canvas
         LayoutRebuilder.ForceRebuildLayoutImmediate(actionsLayoutGroup.GetComponent<RectTransform>());

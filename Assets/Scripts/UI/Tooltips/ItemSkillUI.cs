@@ -10,18 +10,32 @@ public class ItemSkillUI : MonoBehaviour
 
     [SerializeField] private Action action;
     [SerializeField] private Passive passive;
+    [SerializeField] private Skill skill;
 
+    public void Initialize(Skill skill)
+    {
+        this.skill = skill;
 
-    public void Initialize(Action action) {
-        this.action = action;
-        skillDisplaySlotUI.Initialize(action, false);
-        skillDisplayDescriptionUI.Initialize(action);
+        if (skill is Action) {
+            skillDisplaySlotUI.Initialize((Action) skill, false);
+        }
+        else if (skill is Passive) {
+            skillDisplaySlotUI.Initialize((Passive) skill);
+        }
+
+        skillDisplayDescriptionUI.Initialize(skill);
+    }
+
+    // public void Initialize(Action action) {
+    //     this.action = action;
+    //     skillDisplaySlotUI.Initialize(action, false);
+    //     skillDisplayDescriptionUI.Initialize(action);
         
-    }
+    // }
 
-    public void Initialize(Passive passive) {
-        this.passive = passive;
-        skillDisplaySlotUI.Initialize(passive);
-        skillDisplayDescriptionUI.Initialize(passive);
-    }
+    // public void Initialize(Passive passive) {
+    //     this.passive = passive;
+    //     skillDisplaySlotUI.Initialize(passive);
+    //     skillDisplayDescriptionUI.Initialize(passive);
+    // }
 }

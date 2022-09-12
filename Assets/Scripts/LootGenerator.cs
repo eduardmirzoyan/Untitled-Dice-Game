@@ -42,7 +42,7 @@ public class LootGenerator : ScriptableObject
         // Choose number of actions to add
         int numSpecials = Random.Range(rangeOfSpecialsPerWeapon.x, rangeOfSpecialsPerWeapon.y + 1);
 
-        List<Action> actions = new List<Action>();
+        List<Skill> actions = new List<Skill>();
 
         // Add one basic action
         actions.Add(Instantiate(basicActionsToChooseFrom[Random.Range(0, basicActionsToChooseFrom.Count)]));
@@ -55,7 +55,10 @@ public class LootGenerator : ScriptableObject
         }
         
         // Now add the actions to the weapon
-        newWeapon.Initialize(baseDamage, actions);
+        newWeapon.Initialize(actions);
+
+        // Set base damage
+        newWeapon.baseDamage = baseDamage;
 
         return newWeapon;
     }
@@ -76,7 +79,8 @@ public class LootGenerator : ScriptableObject
         // Choose number of actions to add
         int numPassives = Random.Range(rangeOfPassivesPerWeapon.Item1, rangeOfPassivesPerWeapon.Item2 + 1);
 
-        List<Passive> passives = new List<Passive>();
+        List<Skill> passives = new List<Skill>();
+        
         // Choose that many actions
         for (int i = 0; i < numPassives; i++) {
             // Choose a random action

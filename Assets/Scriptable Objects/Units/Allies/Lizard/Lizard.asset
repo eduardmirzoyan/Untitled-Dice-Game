@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lizard
   m_EditorClassIdentifier: 
   name: Lizard
-  icon: {fileID: 21300000, guid: b1e012d7789a6174dba0e8b8cd43fa32, type: 3}
+  sprite: {fileID: 21300000, guid: b1e012d7789a6174dba0e8b8cd43fa32, type: 3}
   currentHealth: 30
   maxHealth: 30
   dice: {fileID: 11400000, guid: cef44c24ce773d14292d962a3b527f52, type: 2}

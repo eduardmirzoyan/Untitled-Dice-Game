@@ -10,6 +10,7 @@ public class Combatant : ScriptableObject
     public Vector3 worldPosition;
     public List<StatusEffect> statusEffects;
     public DicePool dicePool;
+    public float baseDamageMultiplier = 1f;
     
     public Transform modelTransform;
 
@@ -35,35 +36,61 @@ public class Combatant : ScriptableObject
     }
 
     public void AddStatusEffect(StatusEffect statusEffect) {
-        // TODO: Finish this
+        
+        // Check if combatant already has this status effect
+        foreach (var effect in statusEffects) {
+            // Is the effect the same type as the one being added
+            if (effect.GetType() == statusEffect.GetType()) {
+                // Debug
+                Debug.Log(unit.name + " already status effect: " + statusEffect.name + " so it just stacked.");
+
+                // Then just stack the effect instead of adding new one
+                effect.Stack(statusEffect);
+
+                // Trigger event
+                CombatEvents.instance.TriggerOnEffectUpdate(effect);
+                return;
+            }
+        }
 
         // Debug
         Debug.Log(unit.name + " recieved the status effect: " + statusEffect.name);
 
-        // Adding logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Else add as new status effect
+        statusEffects.Add(statusEffect);
 
-        // If combatant already has this status effect...?
-        if (statusEffects.Contains(statusEffect)) {
-            // TODO: FIX THIS!!!
-            statusEffects[0].Stack(statusEffect);
-        }
-        else {
-            // Else add as new status effect
-            statusEffects.Add(statusEffect);
-
-            // Initialize effect with this combatant
-            statusEffect.Initialize(this);
-        }
+        // Initialize effect with this combatant
+        statusEffect.Initialize(this);
 
         // Trigger event
         CombatEvents.instance.TriggerOnAddEffect(statusEffect, this);
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect) {
-        // TODO
+        
+        // Search through effects
+        foreach (var effect in statusEffects) {
+            // If effect was found
+            if (effect == statusEffect) {
+                // Debug
+                Debug.Log(unit.name + " lost the status effect: " + statusEffect.name);
 
-        // Unintialize effect
-        statusEffect.Uninitialize();
+                // Uninitialize
+                effect.Uninitialize();
+
+                // Then remove
+                statusEffects.Remove(effect);
+
+                // Trigger event
+                CombatEvents.instance.TriggerOnRemoveEffect(statusEffect, this);
+
+                // Dip
+                return;
+            }
+        }
+
+        // Debug
+        Debug.Log(statusEffect.name + " was not found?!");
     }
 
     public void TakeDamage(int amount) {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wizard
   m_EditorClassIdentifier: 
   name: Wizard
-  icon: {fileID: 21300000, guid: 716afabba36e355408cde639fb2048b6, type: 3}
+  sprite: {fileID: 21300000, guid: 716afabba36e355408cde639fb2048b6, type: 3}
   currentHealth: 25
   maxHealth: 25
   dice: {fileID: 11400000, guid: 8c98814e714819347b9f12482f8ca702, type: 2}
