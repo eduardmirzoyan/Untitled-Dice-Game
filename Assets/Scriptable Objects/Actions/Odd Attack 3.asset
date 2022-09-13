@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98db1c1f449c0b9498fb5d9abac79e4f, type: 3}
+  m_Name: Odd Attack 3
+  m_EditorClassIdentifier: 
+  name: Brash Strike
+  description: 'Deal %%
+
+    ODD: Gain 1 STRENGTH first'
+  icon: {fileID: 21300000, guid: e7a651dc91f2c2e4aba78db8374028fc, type: 3}
+  sourceEquipment: {fileID: 0}
+  sourceCombatant: {fileID: 0}
+  canTargetSelf: 0
+  canTargetAllies: 0
+  canTargetEnemies: 1
+  hasCooldown: 0
+  cooldown: 0
+  hasUses: 0
+  uses: 0
+  baseDamageMultiplier: 1
+  strength: {fileID: 11400000, guid: d8c4ebbee6f48a648b867aeb78f7e0f8, type: 2}

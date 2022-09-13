@@ -45,6 +45,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
   - {fileID: 11400000, guid: 0af394f37864ba24fbebac3ee3269a0e, type: 2}
   - {fileID: 11400000, guid: 2f13d58c006bb0548b2b28f3a9c2a38a, type: 2}
+  - {fileID: 11400000, guid: c2c57100d3d0e2c48be3cc194eedc6d7, type: 2}
+  - {fileID: 11400000, guid: f5feff6c4e6833b4f84dd7acea02dcf5, type: 2}
   specialActionsToChooseFrom:
   - {fileID: 11400000, guid: d5ec2ecc7f8aa94448a7f585e80a4591, type: 2}
   - {fileID: 11400000, guid: df8b85f4b19f47046a4ec51bb7117ac9, type: 2}
@@ -55,6 +57,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 320e9696fcc58ce4caa858f35d678009, type: 2}
   - {fileID: 11400000, guid: 1e2508c0ef559ea48922084cf702d3d6, type: 2}
   - {fileID: 11400000, guid: d269f9ff33b4a8748997cad76887884b, type: 2}
+  - {fileID: 11400000, guid: 6fa0bc0d74ff6544c82cc34c7bbecc60, type: 2}
+  - {fileID: 11400000, guid: 27a192bc872b6ff418dd34c9321375e1, type: 2}
+  - {fileID: 11400000, guid: 9fe1d09490e1b8740a6ba61caddbd981, type: 2}
+  - {fileID: 11400000, guid: 63154fc8f6a1d74458c0756a41602c39, type: 2}
   rangeOfSpecialsPerWeapon: {x: 1, y: 2}
   armorNames:
   - Worn Armor

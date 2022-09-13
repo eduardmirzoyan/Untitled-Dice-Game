@@ -33,4 +33,8 @@ public abstract class AttackAction : Action
 
         return baseText;
     }
+
+    public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice) {
+        combatants[targetIndex].TakeDamage(ActionBaseDamage());
+    }
 }

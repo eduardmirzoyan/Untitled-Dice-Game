@@ -548,6 +548,12 @@ public class CombatManager : MonoBehaviour
     public void SelectTarget(Combatant combatant) {
         // Check if target is valid
 
+        // Check if target passes constraints
+        if (!selectedAction.CheckTargetConstraints(combatant)) {
+            selectedAction.ShowTargetConstraintFeedback(combatant);
+            return;
+        }
+
         // Clear any previous targets if possible
         if (selectedTarget != null) {
             // Reset list of targets

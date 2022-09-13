@@ -19,13 +19,4 @@ public class LowrollAttack1 : AttackAction
             CombatEvents.instance.TriggerOnFeedback("This action requires a LOWROLL.");
         }
     }
-
-    public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)
-    {
-        if (dice.IsLowroll())
-        {
-            // Deal damage
-            combatants[targetIndex].TakeDamage(ActionBaseDamage());
-        }
-    }
 }

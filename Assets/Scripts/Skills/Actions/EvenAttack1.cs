@@ -18,9 +18,4 @@ public class EvenAttack1 : AttackAction
             CombatEvents.instance.TriggerOnFeedback("This action requires an EVEN die.");
         }
     }
-
-    public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)
-    {
-        combatants[targetIndex].TakeDamage(ActionBaseDamage());
-    }
 }

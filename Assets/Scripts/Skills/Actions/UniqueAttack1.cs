@@ -19,9 +19,4 @@ public class UniqueAttack1 : AttackAction
             CombatEvents.instance.TriggerOnFeedback("This action requires you to have a UNIQUE die pool.");
         }
     }
-
-    public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)
-    {
-        combatants[targetIndex].TakeDamage(ActionBaseDamage());
-    }
 }

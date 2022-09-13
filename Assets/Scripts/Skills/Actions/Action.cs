@@ -54,7 +54,7 @@ public abstract class Action : Skill
         return true;
     }
 
-    public virtual void ShowTargetConstraintFeedback() {
+    public virtual void ShowTargetConstraintFeedback(Combatant combatant) {
         // Does nothing
     }
 

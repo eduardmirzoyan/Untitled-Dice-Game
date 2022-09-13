@@ -18,9 +18,4 @@ public class PairAttack1 : AttackAction
             CombatEvents.instance.TriggerOnFeedback("This action requires you to have a PAIR.");
         } 
     }
-
-    public override void Perform(int targetIndex, List<Combatant> combatants, Dice dice)
-    {
-        combatants[targetIndex].TakeDamage(ActionBaseDamage());
-    }
 }

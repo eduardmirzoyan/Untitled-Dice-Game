@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
         // Initialize library
         dictionary = new Dictionary<string, string>();
+        // Die keywords
         dictionary["REROLL"] = "Roll the dice to a new value (The new value can be same as it was previously)";
         dictionary["HIGHROLL"] = "The value of the die is at its maximum.";
         dictionary["LOWROLL"] = "The value of the die is at its minimum.";
@@ -34,6 +35,13 @@ public class GameManager : MonoBehaviour
         dictionary["SHRINK"] = "Decrease the value of the die by 1, with overflow";
         dictionary["PAIR"] = "Your dice pool contains 2+ dice with the same value.";
         dictionary["UNIQUE"] = "Every die in your dice pool has a different value.";
+        dictionary["BOUNTY"] = "Triggers if the target has the mark status effect, then removes the status.";
+
+        // Status effect keywords
+        dictionary["MARK"] = "Triggers additional Skill effects when unit is targeted.";
+        dictionary["BLEED"] = "On Turn Start: Unit takes damage equal to stacks. Then half stacks.";
+        dictionary["STRENGTH"] = "Increase the damage of your next Attack Action by 20% per stack. Then remove this effect.";
+        // ?
         dictionary["HIGHROLLPOOL"] = "The value of all your dice are at their maximum";
         dictionary["LOWROLLPOOL"] = "The value of all your dice are at their minimum";
 

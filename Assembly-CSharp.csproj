@@ -77,6 +77,7 @@
      <Compile Include="Assets\Scripts\Units\Unit.cs" />
      <Compile Include="Assets\Scripts\Item.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive6.cs" />
+     <Compile Include="Assets\Scripts\Status Effects\Strength.cs" />
      <Compile Include="Assets\Scripts\DicePool.cs" />
      <Compile Include="Assets\Scripts\Dice.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive3.cs" />
@@ -114,6 +115,7 @@
      <Compile Include="Assets\Scripts\UI\DiceBoardUI.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive8.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive2.cs" />
+     <Compile Include="Assets\Scripts\Equipment\Equipment.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\LowrollAttack2.cs" />
      <Compile Include="Assets\Scripts\Equipment\Weapon.cs" />
      <Compile Include="Assets\Scripts\UI\HealthbarUI.cs" />
@@ -127,10 +129,13 @@
      <Compile Include="Assets\Scripts\Skills\Actions\Highroll\HighrollAttack1.cs" />
      <Compile Include="Assets\Scripts\UI\StorageUI.cs" />
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
-     <Compile Include="Assets\Scripts\Status Effects\Bleed.cs" />
-     <Compile Include="Assets\Scripts\Status Effects\Strength.cs" />
      <Compile Include="Assets\Scripts\Skills\Skill.cs" />
-     <Compile Include="Assets\Scripts\Equipment\Equipment.cs" />
+     <Compile Include="Assets\Scripts\Status Effects\Bleed.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\BountyAttack.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\EvenAttack2.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\OddAttack2.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\EvenAttack3.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\OddAttack3.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
