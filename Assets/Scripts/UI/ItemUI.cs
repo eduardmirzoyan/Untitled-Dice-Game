@@ -6,12 +6,19 @@ using UnityEngine.EventSystems;
 
 public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
+    [Header("Components")]
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Item item;
     [SerializeField] private Image itemSprite;
-    [SerializeField] private bool isInteractable;
+    [SerializeField] private Image outlineSprite;
+    [SerializeField] private Outline outline;
+    
+
+    [Header("Data")]
+    [SerializeField] private Item item;
     [SerializeField] private ItemSlotUI itemSlotUI;
+    [SerializeField] private bool isInteractable;
+
     private bool isBeingDragged;
     private Transform currentParent;
     private Transform playerScreen;
@@ -19,6 +26,7 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        outline = GetComponentInChildren<Outline>();
         playerScreen = transform.root;
     }
 
@@ -34,6 +42,7 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         this.item = item;
         this.itemSlotUI = itemSlotUI;
         itemSprite.sprite = item.sprite;
+        outlineSprite.sprite = item.sprite;
         isInteractable = true;
     }
 
@@ -55,12 +64,18 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // Show outline
+        outline.effectColor = Color.white;
+
         // Show tooltip at this items location
         ItemTooltipUI.instance.Show(item, transform.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        // Hide outline
+        outline.effectColor = Color.clear;
+
         // HIde item info
         ItemTooltipUI.instance.Hide();
     }

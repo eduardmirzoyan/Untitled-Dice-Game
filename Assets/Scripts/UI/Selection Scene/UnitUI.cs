@@ -11,11 +11,14 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private RectTransform origin;
     [SerializeField] private Image image;
+    [SerializeField] private Image outlineImage;
+    [SerializeField] private Outline outline;
+    
+
+    [Header("Data")]
+    [SerializeField] private Unit unit;
     [SerializeField] private bool isInteractable;
     [SerializeField] private int index;
-
-    [Header("Settings")]
-    [SerializeField] private Unit unit;
 
     // Debugging
     private bool isBeingDragged;
@@ -24,7 +27,6 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     private void Awake() {
         canvasGroup = GetComponent<CanvasGroup>();
-        image = GetComponent<Image>();
         playerScreen = transform.root;
     }
 
@@ -43,7 +45,10 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         origin = parent;
         currentParent = parent;
         image.sprite = unit.sprite;
+        outlineImage.sprite = unit.sprite;
+
         image.SetNativeSize();
+        outlineImage.SetNativeSize();
     }
 
     public Unit GetUnit() {
@@ -115,7 +120,11 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!isInteractable) return;
-        
+
+        // Show outline
+        outline.effectColor = Color.white;
+
+        // Show tooltip
         UnitTooltipUI.instance.Show(unit, transform.position);
     }
 
@@ -123,6 +132,10 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     {
         if (!isInteractable) return;
 
+        // Hide outline
+        outline.effectColor = Color.clear;
+
+        // Hide tooltip
         UnitTooltipUI.instance.Hide();
     }
 
