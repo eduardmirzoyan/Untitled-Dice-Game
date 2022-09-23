@@ -69,7 +69,7 @@ public class CombatStationUI : MonoBehaviour
         }   
     }
 
-    private void OnActionConfirm(Action action) {
+    private void OnActionConfirm(Combatant source, Action action, Dice dice, Combatant target) {
         // Remove any target indicator
         targetAnimator.Play("Idle");
 

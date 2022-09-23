@@ -65,7 +65,7 @@ public class CombatEvents : MonoBehaviour
     public event Action<Action, Dice> onActionSelect;
     public event Action<Combatant> onTargetSelect;
     public event Action<Action> onPreActionConfirm;
-    public event Action<Action> onActionConfirm;
+    public event Action<Combatant, Action, Dice, Combatant> onActionConfirm;
     public event Action<Action> onActionPerformed;
     public event Action<int> onPlayerTurnEnd;
 
@@ -208,9 +208,9 @@ public class CombatEvents : MonoBehaviour
         }
     }
 
-    public void TriggerOnActionConfirm(Action action) {
+    public void TriggerOnActionConfirm(Combatant source, Action action, Dice dice, Combatant target) {
         if (onActionConfirm != null) {
-            onActionConfirm(action);
+            onActionConfirm(source, action, dice, target);
         }
     }
 

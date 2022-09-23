@@ -209,7 +209,7 @@ public class CombatManager : MonoBehaviour
             // Debugging
             print(currentCombatant.unit.name + " is deciding it's action...");
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
 
             // Select action
             SelectAction(bestChoice.Item1, bestChoice.Item2);
@@ -226,9 +226,9 @@ public class CombatManager : MonoBehaviour
             print(currentCombatant.unit.name + " choose it's target: " + bestChoice.Item3.unit.name);
 
             // Trigger event
-            CombatEvents.instance.TriggerOnFeedback(currentCombatant.unit.name + " used " + bestChoice.Item1.name + " on " + bestChoice.Item3.unit.name);
+            CombatEvents.instance.TriggerOnFeedback(currentCombatant.unit.name + " used <color=yellow>" + bestChoice.Item1.name + "</color> on " + bestChoice.Item3.unit.name);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
 
             // Confirm action
             yield return ConfirmAction();
@@ -606,7 +606,7 @@ public class CombatManager : MonoBehaviour
         CombatEvents.instance.TriggerOnPreActionConfirm(selectedAction);
 
         // Trigger event
-        CombatEvents.instance.TriggerOnActionConfirm(selectedAction);
+        CombatEvents.instance.TriggerOnActionConfirm(currentCombatant, selectedAction, selectedDie, selectedTarget);
 
         // Error handling ~~~~~~~~~~~~~~~~~~
         if (selectedAction == null || selectedDie == null || selectedTarget == null) {
@@ -639,21 +639,18 @@ public class CombatManager : MonoBehaviour
         selectedAction.SetCooldown();
         selectedAction.UpdateUses();
 
+        // Set selected die innactive
+        selectedDie.Exhaust();
+
+        // Trigger event
+        CombatEvents.instance.TriggerOnExhaust(selectedDie);
+
         // Hover for dramatic effect
         if (selectedAction is AttackAction)
             yield return HoverOverTarget();
 
-        // Set selected die innactive
-        selectedDie.Exhaust();
-
-        // Wait for dramatic effect
-        yield return new WaitForSeconds(0);
-
         // Then return model
         currentCombatant.modelTransform.position = CombatManagerUI.instance.GetCellCenter(currentCombatant.hexPosition);
-
-        // Trigger event
-        CombatEvents.instance.TriggerOnExhaust(selectedDie);
 
         // Clear action
         selectedAction = null;

@@ -780,7 +780,7 @@ MonoBehaviour:
   lockImage: {fileID: 5730284964484784740}
   itemSkillPrefab: {fileID: 8568210849032105906, guid: 1bf4dc054e8736a499b89307f9fb1fc6, type: 3}
   actionsLayoutGroup: {fileID: 1914864727}
-  offset: {x: 0.2, y: 0.1, z: 0}
+  offset: {x: 0.25, y: 0.1, z: 0}
   isVisible: 0
   isLocked: 0
 --- !u!1 &5730284966084658254

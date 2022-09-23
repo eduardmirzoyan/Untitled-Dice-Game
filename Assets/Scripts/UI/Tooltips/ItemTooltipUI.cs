@@ -94,43 +94,46 @@ public class ItemTooltipUI : MonoBehaviour
             }
         }
 
-        // // If item is a weapon then display it's actions
-        // if (item is Weapon) {
-        //     var weapon = (Weapon) item;
-        //     itemDescription.text = "Base Damage: " + weapon.baseDamage;
-
-        //     // Display all the actions
-        //     foreach (var action in weapon.actions) {
-        //         // Spawn visuals of actions
-        //         var itemSkillUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
-        //         itemSkillUI.Initialize(action);
-        //         itemSkillUIs.Add(itemSkillUI);
-        //     }
-        // }
-        // else if (item is Armor) {
-        //     var armor = (Armor) item;
-        //     itemDescription.text = "";
-
-        //     // Display all the actions
-        //     foreach (var passive in armor.passives) {
-        //         // Spawn visuals of actions
-        //         var actionHolderUI = Instantiate(itemSkillPrefab, actionsLayoutGroup.transform).GetComponent<ItemSkillUI>();
-        //         actionHolderUI.Initialize(passive);
-        //         itemSkillUIs.Add(actionHolderUI);
-        //     }
-        // }
-
-        // Upate Canvas
+        // Update Canvas
         LayoutRebuilder.ForceRebuildLayoutImmediate(actionsLayoutGroup.GetComponent<RectTransform>());
 
-        // Upate Canvas
+        // Update Canvas
         LayoutRebuilder.ForceRebuildLayoutImmediate(windowTransform);
 
+        // Check if offscreen
+
+        // Get mouse position
+        var pos = Input.mousePosition;
+        var width = windowTransform.rect.width;
+        var height = windowTransform.rect.height;
+        var curOffset = offset;
+
+        // Check if window goes off-screen on x-axis
+        // If so, flip horizontally
+        if (pos.x + width > Screen.width) {
+            width = -width;
+            curOffset.x = -curOffset.x;
+        }
+            
+
+        // Check if window goes off-screen on y-axis
+        // If so, flip vertically
+        if (pos.y + height > Screen.height) {
+            height = -height;
+            curOffset.y = -curOffset.y;
+        }
+            
+
         // Move transform
-        transform.position = position + offset;
+        transform.position = position + curOffset;
 
         // Translate tooltip so that window's bottom left corner is at bottom right
-        windowTransform.anchoredPosition = new Vector2(windowTransform.rect.width / 2, windowTransform.rect.height / 2);
+        windowTransform.anchoredPosition = new Vector2(width / 2, height / 2);
+        
+        // Debug
+        // print("Item tooltip:" + transform.position);
+        // print("Window size: " + windowTransform.rect);
+        // print("Mouse: " + Input.mousePosition);
 
         isVisible = true;
     }

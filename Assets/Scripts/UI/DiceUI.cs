@@ -15,6 +15,7 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
     [SerializeField] private Animator animator;
     [SerializeField] private Image[] pipHolders;
     [SerializeField] private Combatant combatant;
+    [SerializeField] private Transform effectsTransform;
 
     [SerializeField] private RectTransform origin;
     private RectTransform rectTransform;
@@ -48,7 +49,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         CombatEvents.instance.onPlayerTurnStart += OnPlayerTurnStart;
         CombatEvents.instance.onDieStartDrag += OnStartDrag;
         CombatEvents.instance.onDieEndDrag += OnEndDrag;
-        CombatEvents.instance.onPlayerTurnEnd += OnPlayerTurnEnd;
+        CombatEvents.instance.onActionConfirm += OnActionConfirm;
+        CombatEvents.instance.onTurnEnd += OnTurnEnd;
 
         // Subscribe to events
         CombatEvents.instance.onRoll += OnRoll;
@@ -68,7 +70,8 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         CombatEvents.instance.onPlayerTurnStart -= OnPlayerTurnStart;
         CombatEvents.instance.onDieStartDrag -= OnStartDrag;
         CombatEvents.instance.onDieEndDrag -= OnEndDrag;
-        CombatEvents.instance.onPlayerTurnEnd -= OnPlayerTurnEnd;
+        CombatEvents.instance.onActionConfirm -= OnActionConfirm;
+        CombatEvents.instance.onTurnEnd -= OnTurnEnd;
 
         CombatEvents.instance.onRoll -= OnRoll;
         CombatEvents.instance.onReroll -= OnRoll;
@@ -77,6 +80,16 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         CombatEvents.instance.onShrink -= OnShrink;
         CombatEvents.instance.onReplenish -= OnReplenish;
         CombatEvents.instance.onExhaust -= OnExhaust;
+    }
+
+    private void OnActionConfirm(Combatant source, Action action, Dice dice, Combatant target) {
+        // If this die was chosen
+        if (this.dice == dice) {
+            animator.Play("Chosen");
+        }
+        else {
+            animator.Play("Idle");
+        }
     }
 
     private void OnPlayerTurnStart(int value) {
@@ -89,15 +102,15 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
         }
     }
 
-    private void OnPlayerTurnEnd(int valid) {
+    private void OnTurnEnd(int valid) {
         // Check if this is an ally die
         if (combatant.isAlly()) {
             // Make it NOT interactive
             isInteractable = false;
-
-            // Remove any highlight
-            animator.Play("Idle");
         }
+
+        // Remove any highlight
+        animator.Play("Idle");
     }
 
     private void CheckHighlight() {
@@ -337,6 +350,10 @@ public class DiceUI : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHa
 
     public void SetParent(Transform transform) {
         currentParent = transform;
+    }
+
+    public Transform GetEffectTransform() {
+        return effectsTransform;
     }
 
     private void FollowAndRotate() {

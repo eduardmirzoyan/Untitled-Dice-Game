@@ -13,6 +13,7 @@ public class Combatant : ScriptableObject
     public float baseDamageMultiplier = 1f;
     
     public Transform modelTransform;
+    public Transform diceTransform;
 
     public void Initialize(Unit unit, DicePool dicePool, int index, Vector3Int hexPosition) {
         this.unit = unit;
@@ -33,6 +34,10 @@ public class Combatant : ScriptableObject
 
     public void AssignModel(Transform transform) {
         this.modelTransform = transform;
+    }
+
+    public void AssignDie(Transform transform) {
+        this.diceTransform = transform;
     }
 
     public void AddStatusEffect(StatusEffect statusEffect) {

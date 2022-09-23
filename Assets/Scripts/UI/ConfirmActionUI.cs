@@ -38,7 +38,7 @@ public class ConfirmActionUI : MonoBehaviour
         }
     }
 
-    public void Hide(Action action) {
+    public void Hide(Combatant source, Action action, Dice dice, Combatant target) {
         button.interactable = false;
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;

@@ -38,6 +38,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Skills\Actions\BountyAttack.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\LowrollAttack3.cs" />
+     <Compile Include="Assets\Scripts\UI\ActionDisplayUI.cs" />
      <Compile Include="Assets\Scripts\UI\Selection Scene\UnitHolderUI.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\Highroll\HighrollAttack5.cs" />
@@ -106,6 +107,7 @@
      <Compile Include="Assets\Scripts\Status Effects\StatusEffect.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\AttackAction.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\OddAttack1.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\DoubleDamageAttack.cs" />
      <Compile Include="Assets\Scripts\UI\FloatingNumberUI.cs" />
      <Compile Include="Assets\Scripts\UI\Main Menu\HelpUI.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\EvenAttack2.cs" />
@@ -136,8 +138,8 @@
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
      <Compile Include="Assets\Scripts\Skills\Skill.cs" />
      <Compile Include="Assets\Scripts\Status Effects\Bleed.cs" />
-     <Compile Include="Assets\Scripts\Skills\Actions\DoubleDamageAttack.cs" />
-     <Compile Include="Assets\Scripts\UI\ActionDisplayUI.cs" />
+     <Compile Include="Assets\Scripts\Status Effects\Burn.cs" />
+     <Compile Include="Assets\Scripts\Status Effects\Poison.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

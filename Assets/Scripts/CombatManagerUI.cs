@@ -148,6 +148,9 @@ public class CombatManagerUI : MonoBehaviour
         var dieUI = Instantiate(dicePrefab, dieOutlineUI.transform).GetComponent<DiceUI>();
         dieUI.transform.position = dieOutlineUI.transform.position;
         dieUI.Initialize(combatant, dieColor, dieOutlineUI.GetComponent<RectTransform>());
+        
+        // Assign transform
+        combatant.AssignDie(dieUI.GetEffectTransform());
 
         // Store
         dieUIs.Add(dieUI);
@@ -246,7 +249,7 @@ public class CombatManagerUI : MonoBehaviour
         }
     }
 
-    private void ClearActions(Action action) {
+    private void ClearActions(Combatant source, Action action, Dice dice, Combatant target) {
         // If there is no UI displaying, do nothing
         if (actionHolders.Count == 0) 
             return;

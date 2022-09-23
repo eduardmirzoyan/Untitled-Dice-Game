@@ -55,12 +55,8 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Display item info
-        Vector3[] corners = new Vector3[4];
-        // Get all corners of item boundry
-        GetComponent<RectTransform>().GetWorldCorners(corners);
-        // Send bottom right corner as position
-        ItemTooltipUI.instance.Show(item, corners[3]);
+        // Show tooltip at this items location
+        ItemTooltipUI.instance.Show(item, transform.position);
     }
 
     public void OnPointerExit(PointerEventData eventData)

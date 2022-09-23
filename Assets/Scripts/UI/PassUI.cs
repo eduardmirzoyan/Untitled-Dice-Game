@@ -24,7 +24,7 @@ public class PassUI : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
     }
 
-    public void Hide(Action action) {
+    public void Hide(Combatant source, Action action, Dice dice, Combatant target) {
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;

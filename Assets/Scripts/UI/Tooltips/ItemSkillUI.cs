@@ -25,17 +25,4 @@ public class ItemSkillUI : MonoBehaviour
 
         skillDisplayDescriptionUI.InitializeRaw(skill);
     }
-
-    // public void Initialize(Action action) {
-    //     this.action = action;
-    //     skillDisplaySlotUI.Initialize(action, false);
-    //     skillDisplayDescriptionUI.Initialize(action);
-        
-    // }
-
-    // public void Initialize(Passive passive) {
-    //     this.passive = passive;
-    //     skillDisplaySlotUI.Initialize(passive);
-    //     skillDisplayDescriptionUI.Initialize(passive);
-    // }
 }

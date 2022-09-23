@@ -642,10 +642,11 @@ RectTransform:
   m_GameObject: {fileID: 5106957764423059705}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3664377370247550519}
+  - {fileID: 3802763448002445668}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -696,7 +697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 5106957762916780005}
   selectionOutline: {fileID: 5106957764132142766}
-  dice: {fileID: 11400000, guid: 01a4f84211627b349ac4bdad902cc2ea, type: 2}
+  dice: {fileID: 0}
   animator: {fileID: 5106957764423059706}
   pipHolders:
   - {fileID: 5106957764632878884}
@@ -708,6 +709,8 @@ MonoBehaviour:
   - {fileID: 5106957762872151041}
   - {fileID: 8249415160987025210}
   - {fileID: 2812681282392616304}
+  combatant: {fileID: 0}
+  effectsTransform: {fileID: 3802763448002445668}
   origin: {fileID: 0}
   travelRate: 0.1
   spinRate: 3
@@ -1115,3 +1118,34 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8861898365846031718
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3802763448002445668}
+  m_Layer: 0
+  m_Name: Effects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3802763448002445668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8861898365846031718}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5106957764423059709}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

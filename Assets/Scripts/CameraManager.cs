@@ -48,15 +48,15 @@ public class CameraManager : MonoBehaviour
         CombatEvents.instance.onTurnEnd += OnTurnEnd;
     }
 
-    private void OnActionConfirm(Action action) {
+    private void OnActionConfirm(Combatant source, Action action, Dice dice, Combatant target) {
         // Select the targeter and targetee as the focus
-        if (CombatManager.instance.selectedTarget != null) {
+        if (target != null) {
             // Clear any targets first
             targets.Clear();
             // Add current combatant
-            targets.Add(CombatManager.instance.currentCombatant.modelTransform);
+            targets.Add(source.modelTransform);
             // Add target
-            targets.Add(CombatManager.instance.selectedTarget.modelTransform);
+            targets.Add(target.modelTransform);
         }
     }
 

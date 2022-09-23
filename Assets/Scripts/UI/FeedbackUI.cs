@@ -25,9 +25,6 @@ public class FeedbackUI : MonoBehaviour
     }
 
     private void ShowMessage(string message) {
-        // Make sure it is player turn before showing message
-        if (!CombatManager.instance.isPlayerTurn) return;
-
         if (coroutine != null) StopCoroutine(coroutine);
 
         // Show Message

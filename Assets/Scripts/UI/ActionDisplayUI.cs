@@ -57,7 +57,7 @@ public class ActionDisplayUI : MonoBehaviour
         }
     }
 
-    private void DisplayHide(Action action) {
+    private void DisplayHide(Combatant source, Action action, Dice dice, Combatant target) {
         // Hide the UI
         selectedAction = null;
         canvasGroup.alpha = 0f;
