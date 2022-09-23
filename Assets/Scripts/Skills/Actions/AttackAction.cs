@@ -21,13 +21,14 @@ public abstract class AttackAction : Action
         return (int) (ActionBaseDamage() * sourceCombatant.baseDamageMultiplier);
     }
 
-    public override string GetDynamicDescription()
+    public override string GetRawDescription()
     {
-        string baseText = base.GetDynamicDescription();
+        string baseText = base.GetRawDescription();
 
         // If the source is a weapon, then replace damage numbers
         if (sourceEquipment is Weapon) {
             string hyperlinkDamageValue = "<link=\"" + baseDamageMultiplier + "x weapon base damage" + "\"><color=yellow>" + ActionBaseDamage() + "</color></link>";
+            // Show base damage
             baseText = baseText.Replace("%%", hyperlinkDamageValue);
         }
 

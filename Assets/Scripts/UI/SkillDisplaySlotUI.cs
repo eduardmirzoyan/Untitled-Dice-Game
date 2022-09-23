@@ -26,6 +26,7 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
     [SerializeField] private DiceUI containedDiceUI;
     [SerializeField] private float highlightAlpha = 0.5f;
     [SerializeField] private bool isFunctional;
+    [SerializeField] private bool showTooltip = true;
 
     private void Awake() {
         animator = GetComponent<Animator>();
@@ -145,10 +146,21 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
         // If this is not functional, then dip
         if (!isFunctional) return;
 
-        // If a die is hovered over, then reduce alpha
-        if (eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI)) {
-            skillIcon.color = new Color(255, 255, 255, highlightAlpha);
+        // If this slot is hovered... 
+
+        // Make sure there already isn't a die inserted
+        if (containedDiceUI == null) {
+            // A die is in-hand, give visual feedback
+            if (eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI)) {
+                skillIcon.color = new Color(255, 255, 255, highlightAlpha);
+            }
+
+            // Trigger event
+            CombatEvents.instance.TriggerOnActionHover(action);
         }
+        
+        // Don't show any tooltips if disabled
+        if (!showTooltip) return;
 
         // Show tooltip
         if (action != null) {
@@ -163,6 +175,10 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
     {
         // Make icon fully opaque if a point exits
         skillIcon.color = new Color(255, 255, 255, 1);
+
+        // Trigger event
+        if (containedDiceUI == null)
+            CombatEvents.instance.TriggerOnActionHover(null);
         
         // Hide tooltip
         SkillTooltipUI.instance.Hide();

@@ -32,14 +32,12 @@ public abstract class Skill : ScriptableObject
         sourceCombatant = null;
     }
 
-    public virtual string GetDynamicDescription() {
+    public virtual string GetRawDescription() {
+        // This gets the description of the skill replacing words
+
         // Use regex to insert hyperlinks inplace of fully captialized words
         Regex rx = new Regex("\\b[A-Z][A-Z]+");
         
-        // INCORPERATE THIS LATER?
-        //     string hyperlinkDamageValue = "<link=\"" + baseDamageMultiplier + "x weapon BASE DAMAGE" + "\"><color=yellow>" + ActionBaseDamage() + "</color></link>";
-        //     return formattedDescription.Replace("%%", hyperlinkDamageValue);
-
         return rx.Replace(description, new MatchEvaluator(InsertHyperlink));
     }
 

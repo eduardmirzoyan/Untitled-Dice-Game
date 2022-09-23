@@ -203,31 +203,34 @@ public class CombatManager : MonoBehaviour
         // If Unit is NPC then let it decide its own action
         if (currentCombatant.unit.ai != null) {
         
-            // Find best triple
+            // Find best triple using AI
             (Action, Dice, Combatant) bestChoice = 
                     currentCombatant.unit.ai.SelectBestActionAndTarget(combatants, currentCombatant.unit.GetActions(), currentCombatant.dicePool);
+            // Debugging
             print(currentCombatant.unit.name + " is deciding it's action...");
 
             yield return new WaitForSeconds(1f);
 
-            print(bestChoice);
-
             // Select action
             SelectAction(bestChoice.Item1, bestChoice.Item2);
-            
+            // Debugging
             print(currentCombatant.unit.name + " choose action: " + bestChoice.Item1.name 
                                                     + " with die value: " + bestChoice.Item2.GetValue());
 
+            // Visually show die being selected here
+            // TODO
+
             // Select target
             SelectTarget(bestChoice.Item3);
+            // Debugging
             print(currentCombatant.unit.name + " choose it's target: " + bestChoice.Item3.unit.name);
-
-            yield return new WaitForSeconds(1f);
 
             // Trigger event
             CombatEvents.instance.TriggerOnFeedback(currentCombatant.unit.name + " used " + bestChoice.Item1.name + " on " + bestChoice.Item3.unit.name);
 
-            // Confirm
+            yield return new WaitForSeconds(1f);
+
+            // Confirm action
             yield return ConfirmAction();
         }
         else {

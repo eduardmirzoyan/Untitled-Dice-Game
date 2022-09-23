@@ -377,6 +377,7 @@ MonoBehaviour:
   cooldownText: {fileID: 0}
   action: {fileID: 0}
   passive: {fileID: 0}
+  skill: {fileID: 0}
   containedDiceUI: {fileID: 0}
   highlightAlpha: 0.5
   isFunctional: 0
@@ -1197,7 +1198,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: f6bc68865347c7b4b8573ec973dc351b, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901
@@ -1621,6 +1622,7 @@ MonoBehaviour:
   skillDisplayDescriptionUI: {fileID: 8568210848289752506}
   action: {fileID: 0}
   passive: {fileID: 0}
+  skill: {fileID: 0}
 --- !u!1 &8568210849189311153
 GameObject:
   m_ObjectHideFlags: 0

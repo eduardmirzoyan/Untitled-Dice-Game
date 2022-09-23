@@ -779,9 +779,11 @@ MonoBehaviour:
   cooldownText: {fileID: 3811979587791752191}
   action: {fileID: 0}
   passive: {fileID: 0}
+  skill: {fileID: 0}
   containedDiceUI: {fileID: 0}
   highlightAlpha: 0.5
   isFunctional: 0
+  showTooltip: 0
 --- !u!95 &546011354708705275
 Animator:
   serializedVersion: 4

@@ -56,7 +56,7 @@ public class SkillTooltipUI : MonoBehaviour
         transform.position = position + offset;
 
         // Initialize
-        skillDisplayDescriptionUI.Initialize(action);
+        skillDisplayDescriptionUI.InitializeRaw(action);
 
         // Display window
         canvasGroup.alpha = 1f;
@@ -73,7 +73,7 @@ public class SkillTooltipUI : MonoBehaviour
         transform.position = position + offset;
 
         // Initialize
-        skillDisplayDescriptionUI.Initialize(passive);
+        skillDisplayDescriptionUI.InitializeRaw(passive);
 
         // Display window
         canvasGroup.alpha = 1f;

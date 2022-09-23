@@ -17,5 +17,5 @@ MonoBehaviour:
   sprite: {fileID: 86963966, guid: 20597968d5281954482d5d148d07fa12, type: 3}
   skills:
   - {fileID: 11400000, guid: da106550ad2aa4449a95304487f0b9c4, type: 2}
-  - {fileID: 11400000, guid: 320e9696fcc58ce4caa858f35d678009, type: 2}
+  - {fileID: 11400000, guid: 3c615c58c053b0b44b87030507f94071, type: 2}
   baseDamage: 5
