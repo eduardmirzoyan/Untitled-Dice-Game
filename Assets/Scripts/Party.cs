@@ -9,6 +9,7 @@ public class Party : ScriptableObject
     public List<Unit> partyMembers;
     public DicePool dicePool;
     public int maxSize = 4;
+    public int size = 0;
     
     private void Awake() {
         // Initialize with null
@@ -45,8 +46,11 @@ public class Party : ScriptableObject
         partyMembers[index] = unit;
 
         // Add unit's die to diepool
-        if (unit != null)
+        if (unit != null) {
             dicePool.Add(unit.dice, index);
+            
+        }
+        
     }
 
     public Unit this[int index] {

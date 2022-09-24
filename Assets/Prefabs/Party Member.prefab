@@ -1113,6 +1113,7 @@ MonoBehaviour:
   - {fileID: 2835673607420040237}
   - {fileID: 8226176321940899431}
   combatant: {fileID: 0}
+  effectsTransform: {fileID: 0}
   origin: {fileID: 0}
   travelRate: 0.1
   spinRate: 3
@@ -1153,8 +1154,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   header: Die
-  description: This display the die currently held by this UNIT. A die is defined
-    by its largest possible roll,  shown here.
+  description: The die held by this unit. A die is defined by its largest possible
+    roll,  shown here.
 --- !u!1 &1440613643574181310
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,7 +2457,7 @@ GameObject:
   - component: {fileID: 7778510077534757002}
   - component: {fileID: 7778510077534757004}
   - component: {fileID: 7778510077534757003}
-  - component: {fileID: 1578394209}
+  - component: {fileID: 1965223010}
   m_Layer: 5
   m_Name: Weapon 1 Slot Icon
   m_TagString: Untagged
@@ -2524,7 +2525,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
---- !u!114 &1578394209
+--- !u!114 &1965223010
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2533,13 +2534,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7778510077534757001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Script: {fileID: 11500000, guid: 3da0870003b190e42a314199fe1700ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   highlightImage: {fileID: 1748007317}
   itemUI: {fileID: 0}
-  isWeaponSlot: 1
-  isArmorSlot: 0
+  isActive: 1
+  partyIndex: 0
+  weaponIndex: 0
+  unit: {fileID: 0}
+  itemUIPrefab: {fileID: 3742355565742030271, guid: 28d81eabeb0eecc4db9019b7dfa64d23, type: 3}
 --- !u!1 &7778510077547248390
 GameObject:
   m_ObjectHideFlags: 0
@@ -2892,7 +2896,7 @@ GameObject:
   - component: {fileID: 7778510077831512471}
   - component: {fileID: 7778510077831512489}
   - component: {fileID: 7778510077831512488}
-  - component: {fileID: 976429747}
+  - component: {fileID: 1971626944}
   m_Layer: 5
   m_Name: Armor 2 Slot
   m_TagString: Untagged
@@ -2960,7 +2964,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
---- !u!114 &976429747
+--- !u!114 &1971626944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2969,13 +2973,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7778510077831512470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Script: {fileID: 11500000, guid: 10c9c769551d013499d5b55936761786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   highlightImage: {fileID: 1101224459}
   itemUI: {fileID: 0}
-  isWeaponSlot: 0
-  isArmorSlot: 1
+  isActive: 1
+  partyIndex: 0
+  armorIndex: 1
+  unit: {fileID: 0}
+  itemUIPrefab: {fileID: 3742355565742030271, guid: 28d81eabeb0eecc4db9019b7dfa64d23, type: 3}
 --- !u!1 &7778510077863168370
 GameObject:
   m_ObjectHideFlags: 0
@@ -3116,12 +3123,6 @@ MonoBehaviour:
   healthStat: {fileID: 7778510078684559365}
   speedStat: {fileID: 7778510079070701463}
   unitModelTransform: {fileID: 7778510078217583685}
-  weaponSlots:
-  - {fileID: 1578394209}
-  - {fileID: 1937791552}
-  armorSlots:
-  - {fileID: 1493931370}
-  - {fileID: 976429747}
   itemPrefab: {fileID: 3742355565742030271, guid: 28d81eabeb0eecc4db9019b7dfa64d23, type: 3}
   slidingWindow: {fileID: 1599884347}
   emptyColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
@@ -3258,7 +3259,7 @@ GameObject:
   - component: {fileID: 7778510078058527437}
   - component: {fileID: 7778510078058527439}
   - component: {fileID: 7778510078058527438}
-  - component: {fileID: 1937791552}
+  - component: {fileID: 1902953096}
   m_Layer: 5
   m_Name: Weapon 2 Slot Icon
   m_TagString: Untagged
@@ -3326,7 +3327,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
---- !u!114 &1937791552
+--- !u!114 &1902953096
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3335,13 +3336,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7778510078058527436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Script: {fileID: 11500000, guid: 3da0870003b190e42a314199fe1700ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   highlightImage: {fileID: 1035109309}
   itemUI: {fileID: 0}
-  isWeaponSlot: 1
-  isArmorSlot: 0
+  isActive: 1
+  partyIndex: 0
+  weaponIndex: 1
+  unit: {fileID: 0}
+  itemUIPrefab: {fileID: 3742355565742030271, guid: 28d81eabeb0eecc4db9019b7dfa64d23, type: 3}
 --- !u!1 &7778510078214170144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3648,7 +3652,7 @@ GameObject:
   - component: {fileID: 7778510078624895563}
   - component: {fileID: 7778510078624895565}
   - component: {fileID: 7778510078624895564}
-  - component: {fileID: 1493931370}
+  - component: {fileID: 742506174}
   m_Layer: 5
   m_Name: Armor 1 Slot
   m_TagString: Untagged
@@ -3716,7 +3720,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
---- !u!114 &1493931370
+--- !u!114 &742506174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3725,13 +3729,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7778510078624895562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a446b4f59715a8745aed619434466dde, type: 3}
+  m_Script: {fileID: 11500000, guid: 10c9c769551d013499d5b55936761786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   highlightImage: {fileID: 1308469787}
   itemUI: {fileID: 0}
-  isWeaponSlot: 0
-  isArmorSlot: 1
+  isActive: 1
+  partyIndex: 0
+  armorIndex: 0
+  unit: {fileID: 0}
+  itemUIPrefab: {fileID: 3742355565742030271, guid: 28d81eabeb0eecc4db9019b7dfa64d23, type: 3}
 --- !u!1 &7778510078674082906
 GameObject:
   m_ObjectHideFlags: 0

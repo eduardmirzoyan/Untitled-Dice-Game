@@ -144,6 +144,12 @@ public abstract class Unit : ScriptableObject
             throw new System.Exception("WEAPON ATTEMPTED TO BE EQUIPPED TO AN INVALID INDEX: " + slot);
         }
 
+        // Main logic is handled in UI... idk if this is good
+
+        // Set weapon
+        weapons[slot] = weapon;
+        return;
+
         // Weapon in slot is being removed
         if (weapon == null) {
             weapons[slot] = null;
@@ -159,7 +165,6 @@ public abstract class Unit : ScriptableObject
                 // Replace the equipped weapon with this one
                 // But idk how to make sure the previous weapon is not lost...
             }
-            Debug.Log("equipped");
             // Equip the weapon
             weapons[slot] = weapon;
         }
@@ -186,6 +191,12 @@ public abstract class Unit : ScriptableObject
             throw new System.Exception("ARMOR ATTEMPTED TO BE EQUIPPED TO AN INVALID INDEX: " + slot);
         }
 
+        // Main logic is handled in UI... idk if this is good
+
+        // Set armor
+        armors[slot] = armor;
+        return;
+
         // armor in slot is being removed
         if (armor == null)
         {
@@ -204,7 +215,6 @@ public abstract class Unit : ScriptableObject
                 // Replace the equipped armor with this one
                 // But idk how to make sure the previous armor is not lost...
             }
-            Debug.Log("equipped");
             // Equip the armor
             armors[slot] = armor;
         }

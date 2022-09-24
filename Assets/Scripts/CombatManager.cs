@@ -65,6 +65,9 @@ public class CombatManager : MonoBehaviour
     }
 
     private void Start() {
+        // Deploy party
+        GameManager.instance.DeployPlayerParty();
+
         // Start combat
         coroutine = StartCoroutine(StartCombat());
     }

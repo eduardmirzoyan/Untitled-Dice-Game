@@ -17,73 +17,71 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
     [SerializeField] private TextMeshProUGUI healthStat;
     [SerializeField] private TextMeshProUGUI speedStat;
     [SerializeField] private RectTransform unitModelTransform;
-    [SerializeField] private List<ItemSlotUI> weaponSlots;
-    [SerializeField] private List<ItemSlotUI> armorSlots;
-    
-    [Header("Temporary")]
-    [SerializeField] private GameObject itemPrefab;
     [SerializeField] private SlidingWindow slidingWindow;
 
-    [Header("Settings")]
+    [Header("Data")]
     [SerializeField] private Color emptyColor;
     [SerializeField] private Color highlightColor;
     [SerializeField] private Color fullColor;
-    
+
     // Unit name
     [SerializeField] private UnitUI unitUI;
-    private bool interact;
+    private bool isInteractable;
 
-    private void Start() {
+    private void Start()
+    {
         // Check if we are in selection
-        if (SelectionEvents.instance != null) {
+        if (SelectionEvents.instance != null)
+        {
             SelectionEvents.instance.onDisplayUnitOptions += OnDisplay;
-            SelectionEvents.instance.onAddUnitToParty += AddUnit;
-            SelectionEvents.instance.onItemInsertIntoSlot += HandleItemInsertedIntoItemSlot;
         }
         // Check if we are in combat
-        else if (CombatEvents.instance != null) {
+        else if (CombatEvents.instance != null)
+        {
             CombatEvents.instance.onCombatStart += OnCombatStart;
         }
 
-        // Sub to Game event
-        GameEvents.instance.onSetParty += SetUnit;   
+        // SUB!
+        GameEvents.instance.onDeployUnit += DeployUnit;
     }
 
-    private void OnCombatStart(int value) {
+    private void OnCombatStart(int value)
+    {
         // Bring into view
         slidingWindow.Raise();
     }
 
-    private void OnDisplay(List<Unit> units) {
+    private void OnDisplay(List<Unit> units)
+    {
         // Bring into view
         slidingWindow.Raise();
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         // Unsub
-        if (SelectionEvents.instance != null) {
-            SelectionEvents.instance.onAddUnitToParty -= AddUnit;
-            SelectionEvents.instance.onItemInsertIntoSlot -= HandleItemInsertedIntoItemSlot;
+        if (SelectionEvents.instance != null)
+        {
+            SelectionEvents.instance.onDisplayUnitOptions -= OnDisplay;
         }
-        GameEvents.instance.onSetParty -= SetUnit;
+        else if (CombatEvents.instance != null)
+        {
+            CombatEvents.instance.onCombatStart -= OnCombatStart;
+        }
+        
+        GameEvents.instance.onDeployUnit -= DeployUnit;
     }
 
-    public void EquipUnitUI(UnitUI newUnitUI) {
-        unitUI = newUnitUI;
-        unitUI.SetParent(unitModelTransform);
-        unitUI.SetIndex(index);
-
-        UpdateVisuals();
-    }
-
-    public void OnDrop(PointerEventData eventData) {
+    public void OnDrop(PointerEventData eventData)
+    {
         // Make sure there already isn't an item and it is an itemUI
         if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI))
         {
-            interact = true;
-            EquipUnitUI(newUnitUI);
+            // Add unit
+            AddUnit(newUnitUI);
 
-            SelectionManager.instance.AddUnitToParty(unitUI.GetUnit(), index);
+            // Update party
+            GameManager.instance.SetPlayerParty(newUnitUI.GetUnit(), index);
         }
     }
 
@@ -92,67 +90,33 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         // TODO?
     }
 
-    private void HandleItemInsertedIntoItemSlot(ItemUI itemUI, ItemSlotUI itemSlotUI) {
-        // Check if item is weapon
-        int wpnIndex = weaponSlots.IndexOf(itemSlotUI);
-        if (wpnIndex != -1) {
-            // Item wants to be removed
-            if (itemUI == null) {
-                unitUI.GetUnit().EquipWeapon(null, wpnIndex);
-                return;
-            }
+    private void AddUnit(UnitUI unitUI) {
+        this.unitUI = unitUI;
+        this.unitUI.SetParent(unitModelTransform);
+        this.unitUI.SetIndex(index);
+        isInteractable = true;
 
-            var weapon = (Weapon) itemUI.GetItem();
+        UpdateVisuals();
 
-            // Equip weapon logic
-            unitUI.GetUnit().EquipWeapon(weapon, wpnIndex);
-            return;
-        }
-
-        // Check if item is armor
-        int amrIndex = armorSlots.IndexOf(itemSlotUI);
-        if (amrIndex != -1) {
-
-            // Item wants to be removed
-            if (itemUI == null) {
-                unitUI.GetUnit().EquipArmor(null, amrIndex);
-                return;
-            }
-
-            var armor = (Armor) itemUI.GetItem();
-
-            // Equip weapon logic
-            unitUI.GetUnit().EquipArmor(armor, amrIndex);
-            return;
-        }
-
-        // Else we don't care
+        // Trigger event
+        GameEvents.instance.TriggerOnAddUnitToParty(unitUI.GetUnit(), index);
     }
 
-    private void SetUnit(Party party) {
-        var ui = Instantiate(GameManager.instance.unitUIprefab, unitModelTransform).GetComponent<UnitUI>();
-        ui.Initialize(party[index], index, unitModelTransform, false);
-        EquipUnitUI(ui);
-        interact = false;
-    }
-
-
-    private void AddUnit(Unit unit, int index) {
+    private void DeployUnit(Unit unit, int index)
+    {
         if (this.index == index) {
-            if (unit == null) {
-                unitUI = null;
-                UpdateVisuals();
-            }
-        }
-        else if (unitUI != null && unitUI.GetUnit() == unit) {
-            unitUI = null;
-            UpdateVisuals();
+            var unitUI = Instantiate(GameManager.instance.unitUIprefab, unitModelTransform).GetComponent<UnitUI>();
+            unitUI.Initialize(unit, index, unitModelTransform, false);
+
+            AddUnit(unitUI);
         }
     }
 
-    public void UpdateVisuals() {
+    public void UpdateVisuals()
+    {
         // Make sure a unit exists
-        if (unitUI == null) {
+        if (unitUI == null)
+        {
             // Set to default values
 
             // Update display name
@@ -183,7 +147,8 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
         unitName.text = unit.name;
         unitName.color = fullColor;
 
-        if (dropIcon == null) {
+        if (dropIcon == null)
+        {
             print("null for " + gameObject.name);
         }
 
@@ -199,27 +164,12 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
         // Update speed stat
         speedStat.text = unit.speed.ToString();
-
-        // Check for weapons
-        for (int i = 0; i < weaponSlots.Count; i++) {
-            if (unit.weapons[i] != null) {
-                var itemUI = Instantiate(itemPrefab, weaponSlots[i].transform).GetComponent<ItemUI>();
-                itemUI.Initialize(unit.weapons[i], weaponSlots[i]);
-            }
-        }
-        
-        // Check for armor
-        for (int i = 0; i < armorSlots.Count; i++) {
-            if (unit.armors[i] != null) {
-                var itemUI = Instantiate(itemPrefab, armorSlots[i].transform).GetComponent<ItemUI>();
-                itemUI.Initialize(unit.armors[i], armorSlots[i]);
-            }
-        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI)) {
+        if (eventData.pointerDrag != null && unitUI == null && eventData.pointerDrag.TryGetComponent(out UnitUI newUnitUI))
+        {
             unitName.color = highlightColor;
             dropIcon.color = highlightColor;
             dropArrowIcon.color = highlightColor;
@@ -228,10 +178,12 @@ public class PartyMemberUI : MonoBehaviour, IDropHandler, IPointerClickHandler, 
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (unitUI != null) {
+        if (unitUI != null)
+        {
             unitName.color = fullColor;
         }
-        else {
+        else
+        {
             unitName.color = emptyColor;
             dropIcon.color = emptyColor;
             dropArrowIcon.color = emptyColor;

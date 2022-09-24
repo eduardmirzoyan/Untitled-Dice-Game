@@ -13,7 +13,11 @@ public class StartButtonUI : MonoBehaviour
     }
 
     private void Start() {
-        SelectionEvents.instance.onPartyFull += OnPartyFull;
+        GameEvents.instance.onPartyFull += OnPartyFull;
+    }
+
+    private void OnDestroy() {
+        GameEvents.instance.onPartyFull -= OnPartyFull;
     }
 
     private void OnPartyFull(bool state) {

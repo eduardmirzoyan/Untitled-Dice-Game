@@ -140,6 +140,8 @@
      <Compile Include="Assets\Scripts\SelectionEvents.cs" />
      <Compile Include="Assets\Scripts\Skills\Skill.cs" />
      <Compile Include="Assets\Scripts\Status Effects\Bleed.cs" />
+     <Compile Include="Assets\Scripts\UI\WeaponSlotUI.cs" />
+     <Compile Include="Assets\Scripts\UI\ArmorSlotUI.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

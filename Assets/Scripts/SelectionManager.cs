@@ -89,42 +89,40 @@ public class SelectionManager : MonoBehaviour
         playerParty.Set(unit, index);
 
         // Trigger event
-        SelectionEvents.instance.TriggerOnAddUnitToParty(unit, index);
+        // SelectionEvents.instance.TriggerOnAddUnitToParty(unit, index);
+        GameEvents.instance.TriggerOnAddUnitToParty(unit, index);
 
         // Trigger second event
         SelectionEvents.instance.TriggerOnPartyFull(playerParty.IsFull());
     }
 
     public void StartGame() {
-        // Make sure the player's party is full before transitioning
-        if (playerParty.IsFull()) {
-            
-            // Replace party with copy
-            for (int i = 0; i < playerParty.maxSize; i++) {
-                // Make copy of unit
-                var copy = Instantiate(playerParty[i]);
-                // Make copy of die
-                copy.dice = Instantiate(playerParty[i].dice);
+        // Replace party with copy
+        // for (int i = 0; i < playerParty.maxSize; i++)
+        // {
+        //     // Make copy of unit
+        //     var copy = Instantiate(playerParty[i]);
+        //     // Make copy of die
+        //     copy.dice = Instantiate(playerParty[i].dice);
 
-                // Clear the current unit
-                playerParty[i].ClearEquipment();
+        //     // Clear the current unit
+        //     playerParty[i].ClearEquipment();
 
-                // Add the selected unit to party
-                playerParty.Set(copy, i);
-            }
+        //     // Add the selected unit to party
+        //     playerParty.Set(copy, i);
+        // }
 
-            // Transfer data to combat manager
-            GameManager.instance.SetPlayer(playerParty);
+        // Transfer data to combat manager
+        // GameManager.instance.SetPlayer(playerParty);
 
-            // Set random encounter
-            GameManager.instance.SetOpponent(combatEnounterGenerator.GenerateEnemyEncounter());
+        // Set random encounter
+        GameManager.instance.SetOpponent(combatEnounterGenerator.GenerateEnemyEncounter());
 
-            // Lower window
-            slidingWindow.Raise();
+        // Lower window
+        slidingWindow.Raise();
 
-            // Transition to combat scene
-            TransitionManager.instance.LoadNextScene();
-        }
+        // Transition to combat scene
+        TransitionManager.instance.LoadNextScene();
     }
 
 }

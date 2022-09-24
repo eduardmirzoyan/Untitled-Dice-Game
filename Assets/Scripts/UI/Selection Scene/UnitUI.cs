@@ -149,16 +149,17 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
             UnitTooltipUI.instance.Lock();
         }
 
-        // If right click
-        if (eventData.button == PointerEventData.InputButton.Right && index != -1) {
-            // Reset location
-            ResetLocation();
+        // // If right click
+        // if (eventData.button == PointerEventData.InputButton.Right && index != -1) {
+        //     // Reset location
+        //     ResetLocation();
 
-            // Trigger event
-            SelectionManager.instance.AddUnitToParty(null, index);
+        //     // Trigger event
+        //     // SelectionManager.instance.AddUnitToParty(null, index);
+        //     GameEvents.instance.TriggerOnAddUnitToParty(null, index);
 
-            // Remove index
-            index = -1;
-        }
+        //     // Remove index
+        //     index = -1;
+        // }
     }
 }

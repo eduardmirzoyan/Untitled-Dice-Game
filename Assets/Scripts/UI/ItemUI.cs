@@ -62,6 +62,24 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         currentParent = transform;
     }
 
+    public Transform GetParent() {
+        return currentParent;
+    }
+
+    public void ResetTo(Transform transform) {
+        // Return parent
+        rectTransform.SetParent(transform);
+
+        // Reset old parent
+        currentParent = null;
+
+        // Reset rotation
+        this.transform.rotation = Quaternion.identity;
+
+        // Reset position
+        this.transform.localPosition = Vector3.zero;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Show outline

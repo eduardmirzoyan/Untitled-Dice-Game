@@ -34,5 +34,6 @@ public class StorageUI : MonoBehaviour
         // Spawn the item
         var itemUI = Instantiate(itemPrefab, itemSlotUIs[index].transform).GetComponent<ItemUI>();
         itemUI.Initialize(item, itemSlotUIs[index]);
+        itemSlotUIs[index].StoreItem(itemUI);
     }
 }

@@ -56,6 +56,9 @@ public class PauseManager : MonoBehaviour
     public void MainMenu() {
         // Resume first
         Resume();
+
+        // Clear player party
+        GameManager.instance.ClearPlayerParty();
         
         // Load main menu
         TransitionManager.instance.LoadMainMenu();

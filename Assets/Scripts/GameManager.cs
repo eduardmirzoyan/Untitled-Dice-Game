@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public Party allyParty;
     public Party enemyParty;
     public Storage storage;
-
+    public int minPartySize = 4;
     [SerializeField] public GameObject unitUIprefab;
 
     public bool fastMode;
@@ -57,8 +57,28 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public void SetPlayer(Party party) {
-        this.allyParty = party;
+    public void SetPlayerParty(Unit unit, int index) {
+        // Add the unit to the party
+        allyParty.Set(unit, index);
+
+        // Trigger event
+        GameEvents.instance.TriggerOnPartyFull(allyParty.IsFull());
+    }
+
+    public void DeployPlayerParty() {
+        // Create UnitUIs for each member in the player party
+        int index = 0;
+        foreach (var member in allyParty.GetMembers()) {
+            // Trigger event
+            GameEvents.instance.TriggerOnDeployUnit(member, index);
+
+            index++;
+        }
+    }
+
+    public void ClearPlayerParty() {
+        // Create a new party
+        allyParty = ScriptableObject.CreateInstance<Party>();
     }
 
     public void SetOpponent(Party party) {
