@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         dictionary["HIGHROLL"] = "The value of the die is at its maximum.";
         dictionary["LOWROLL"] = "The value of the die is at its minimum.";
         dictionary["EVEN"] = "The value of the die is an even number.";
-        dictionary["ODD"] = "The value of the die is an odd number.";
+        dictionary["OD"] = "The value of the die is an odd number.";
         dictionary["GROW"] = "Increase the value of the die by 1, with overflow";
         dictionary["SHRINK"] = "Decrease the value of the die by 1, with overflow";
         dictionary["PAIR"] = "Your dice pool contains 2+ dice with the same value.";
@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         // Create UnitUIs for each member in the player party
         int index = 0;
         foreach (var member in allyParty.GetMembers()) {
+            print("deplying: " + member.name);
             // Trigger event
             GameEvents.instance.TriggerOnDeployUnit(member, index);
 

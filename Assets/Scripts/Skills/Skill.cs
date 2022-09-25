@@ -33,6 +33,7 @@ public abstract class Skill : ScriptableObject
     }
 
     public virtual string GetRawDescription() {
+        //return description;
         // This gets the description of the skill replacing words
 
         // Use regex to insert hyperlinks inplace of fully captialized words
@@ -41,7 +42,21 @@ public abstract class Skill : ScriptableObject
         return rx.Replace(description, new MatchEvaluator(InsertHyperlink));
     }
 
+    public virtual string GetHighlightedDescription() {
+        // This gets the description of the skill replacing words
+
+        // Use regex to insert hyperlinks inplace of fully captialized words
+        Regex rx = new Regex("\\b[A-Z][A-Z]+");
+
+        return rx.Replace(description, new MatchEvaluator(InsertHyperlink));
+    }
+
     private string InsertHyperlink(Match m) {
+        // If the dictionary doesn't have the keyword return without formatting
+        if (!GameManager.instance.dictionary.ContainsKey(m.Value)) {
+            return m.Value;
+        }
+
         return "<link=" + GameManager.instance.dictionary[m.Value] + "><color=yellow>" + m.Value + "</color></link>";
     }
 

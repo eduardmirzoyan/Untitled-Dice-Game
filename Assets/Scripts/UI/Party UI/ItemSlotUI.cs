@@ -6,7 +6,10 @@ using UnityEngine.EventSystems;
 
 public class ItemSlotUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    [Header("Components")]
     [SerializeField] protected Image highlightImage;
+
+    [Header("Data")]
     [SerializeField] protected ItemUI itemUI;
 
     [SerializeField] protected bool isActive = true;

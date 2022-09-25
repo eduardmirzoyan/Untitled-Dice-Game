@@ -65,8 +65,6 @@ public class CombatManager : MonoBehaviour
     }
 
     private void Start() {
-        // Deploy party
-        GameManager.instance.DeployPlayerParty();
 
         // Start combat
         coroutine = StartCoroutine(StartCombat());
@@ -97,6 +95,9 @@ public class CombatManager : MonoBehaviour
     private IEnumerator StartCombat() {
         // Debug Feedback
         print("Combat Start");
+
+        // Deploy party
+        GameManager.instance.DeployPlayerParty();
 
         yield return new WaitForSeconds(0.5f);
 

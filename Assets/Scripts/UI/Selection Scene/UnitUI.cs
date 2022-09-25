@@ -14,11 +14,12 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     [SerializeField] private Image outlineImage;
     [SerializeField] private Outline outline;
     
+    
 
     [Header("Data")]
     [SerializeField] private Unit unit;
+    [SerializeField] private UnitHolderUI unitHolderUI;
     [SerializeField] private bool isInteractable;
-    [SerializeField] private int index;
 
     // Debugging
     private bool isBeingDragged;
@@ -38,9 +39,9 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         }
     }
 
-    public void Initialize(Unit unit, int index, RectTransform parent, bool isInteractable = true) {
+    public void Initialize(Unit unit, UnitHolderUI unitHolderUI, RectTransform parent, bool isInteractable = true) {
         this.unit = unit;
-        this.index = index;
+        this.unitHolderUI = unitHolderUI;
         this.isInteractable = isInteractable;
         origin = parent;
         currentParent = parent;
@@ -51,6 +52,14 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         outlineImage.SetNativeSize();
     }
 
+    public void SetHolder(UnitHolderUI unitHolderUI) {
+        this.unitHolderUI = unitHolderUI;
+    }
+
+    public UnitHolderUI GetHolder() {
+        return unitHolderUI;
+    }
+
     public Unit GetUnit() {
         return unit;
     }
@@ -59,8 +68,23 @@ public class UnitUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         currentParent = transform;
     }
 
-    public void SetIndex(int index) {
-        this.index = index;
+    public Transform GetParent() {
+        return currentParent;
+    }
+
+    public void ResetTo(Transform transform)
+    {
+        // Return parent
+        rectTransform.SetParent(transform);
+
+        // Reset old parent
+        currentParent = null;
+
+        // Reset rotation
+        this.transform.rotation = Quaternion.identity;
+
+        // Reset position
+        this.transform.localPosition = Vector3.zero;
     }
 
     public void ResetLocation() {

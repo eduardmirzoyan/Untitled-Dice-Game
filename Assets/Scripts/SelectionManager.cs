@@ -84,18 +84,6 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
-    public void AddUnitToParty(Unit unit, int index) {
-        // Add unit to party
-        playerParty.Set(unit, index);
-
-        // Trigger event
-        // SelectionEvents.instance.TriggerOnAddUnitToParty(unit, index);
-        GameEvents.instance.TriggerOnAddUnitToParty(unit, index);
-
-        // Trigger second event
-        SelectionEvents.instance.TriggerOnPartyFull(playerParty.IsFull());
-    }
-
     public void StartGame() {
         // Replace party with copy
         // for (int i = 0; i < playerParty.maxSize; i++)

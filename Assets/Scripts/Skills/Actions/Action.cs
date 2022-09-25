@@ -108,8 +108,6 @@ public abstract class Action : Skill
         return rx.Replace(rawText, new MatchEvaluator(InsertFinalValues));
     }
 
-    
-
     private string InsertDieIcons(Match m) {
         // If multiplier is 1 return a pre-format
         if (m.Groups[1].ToString() == "1") return "<color=yellow><sprite=0></color>";
@@ -119,7 +117,7 @@ public abstract class Action : Skill
 
     private string InsertDieValues(Match m) {
         // Calculate final value based on multiplied
-        int value = (int) (float.Parse(m.Groups[1].ToString()) * dice.GetValue());
+        int value = (int) (float.Parse(m.Groups[1].ToString()) * dice.GetValue()); 
 
         return "<color=yellow>" + value + "</color>";
     }
