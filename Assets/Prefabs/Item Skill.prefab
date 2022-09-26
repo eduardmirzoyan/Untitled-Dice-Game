@@ -381,6 +381,7 @@ MonoBehaviour:
   containedDiceUI: {fileID: 0}
   highlightAlpha: 0.5
   isFunctional: 0
+  showTooltip: 1
 --- !u!1 &7165282630464710098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,7 +1032,7 @@ MonoBehaviour:
   allyTargetIcon: {fileID: 8568210849237739193}
   enemyTargetIcon: {fileID: 8568210848374775369}
   passiveIcon: {fileID: 8568210848056333137}
-  enableAutoKeywordTooltip: 1
+  enableAutoKeywordTooltip: 0
   keywordCanvasGroup: {fileID: 8568210847666053531}
   keywordTransform: {fileID: 8568210847666053528}
   keywordText: {fileID: 8568210848058174776}

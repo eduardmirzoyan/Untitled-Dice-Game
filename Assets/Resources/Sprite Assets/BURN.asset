@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!21 &-7965587601098764525
+--- !u!21 &-201063051072782321
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 1
@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 17cbb87897aa2dc47876931d16e04fd9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 059ae326059eeb741b3bfaec2fe99981, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
-  m_Name: inverted_die
+  m_Name: BURN
   m_EditorClassIdentifier: 
-  hashCode: -277586076
-  material: {fileID: -7965587601098764525}
+  hashCode: 3579915
+  material: {fileID: -201063051072782321}
   materialHashCode: 0
   m_Version: 1.1.0
   m_FaceInfo:
@@ -75,29 +75,29 @@ MonoBehaviour:
     m_StrikethroughOffset: 0
     m_StrikethroughThickness: 0
     m_TabWidth: 0
-  spriteSheet: {fileID: 2800000, guid: 17cbb87897aa2dc47876931d16e04fd9, type: 3}
+  spriteSheet: {fileID: 2800000, guid: 059ae326059eeb741b3bfaec2fe99981, type: 3}
   m_SpriteCharacterTable:
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 0
     m_Scale: 1.25
-    m_Name: inverted_die
-    m_HashCode: -277586076
+    m_Name: burn
+    m_HashCode: 3579915
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
-      m_Width: 115
-      m_Height: 115
+      m_Width: 64
+      m_Height: 64
       m_HorizontalBearingX: -5
-      m_HorizontalBearingY: 100
-      m_HorizontalAdvance: 115
+      m_HorizontalBearingY: 48
+      m_HorizontalAdvance: 64
     m_GlyphRect:
       m_X: 0
       m_Y: 0
-      m_Width: 111
-      m_Height: 111
+      m_Width: 64
+      m_Height: 64
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 21300000, guid: 17cbb87897aa2dc47876931d16e04fd9, type: 3}
+    sprite: {fileID: 21300000, guid: 059ae326059eeb741b3bfaec2fe99981, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []

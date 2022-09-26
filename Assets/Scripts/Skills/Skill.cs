@@ -8,11 +8,12 @@ public abstract class Skill : ScriptableObject
     public new string name;
 
     [TextArea(10, 20)]
-    [SerializeField] private string description;
+    [SerializeField] protected string description;
     public Sprite icon;
-
     public Equipment sourceEquipment;
     public Combatant sourceCombatant;
+
+    protected Regex rx = new Regex("[A-Z][A-Z]+\\b");
 
     public void Initialize(Combatant combatant) {
         sourceCombatant = combatant;
@@ -32,15 +33,23 @@ public abstract class Skill : ScriptableObject
         sourceCombatant = null;
     }
 
-    public virtual string GetRawDescription() {
-        //return description;
-        // This gets the description of the skill replacing words
-
-        // Use regex to insert hyperlinks inplace of fully captialized words
-        Regex rx = new Regex("\\b[A-Z][A-Z]+");
-        
-        return rx.Replace(description, new MatchEvaluator(InsertHyperlink));
+    public virtual string GetRawDescription()
+    {
+        // Get base raw description
+        // string rawText = description; //base.GetRawDescription();
+        // Replace text with die icons where needed
+        return rx.Replace(description, new MatchEvaluator(InsertIcons));
     }
+
+    // public virtual string GetRawDescription() {
+    //     //return description;
+    //     // This gets the description of the skill replacing words
+
+    //     // Use regex to insert hyperlinks inplace of fully captialized words
+    //     Regex rx = new Regex("\\b[A-Z][A-Z]+");
+        
+    //     return rx.Replace(description, new MatchEvaluator(InsertHyperlink));
+    // }
 
     public virtual string GetHighlightedDescription() {
         // This gets the description of the skill replacing words
@@ -51,12 +60,17 @@ public abstract class Skill : ScriptableObject
         return rx.Replace(description, new MatchEvaluator(InsertHyperlink));
     }
 
-    private string InsertHyperlink(Match m) {
-        // If the dictionary doesn't have the keyword return without formatting
-        if (!GameManager.instance.dictionary.ContainsKey(m.Value)) {
-            return m.Value;
+    protected virtual string InsertIcons(Match m)
+    {
+        // If word is a keyword then replace it with hyperlink
+        if (GameManager.instance.dictionary.ContainsKey(m.Value)) {
+            return InsertHyperlink(m);
         }
+        // Set the icon
+        return "<sprite=\"" + m.Value + "\" index=0>";
+    }
 
+    protected string InsertHyperlink(Match m) {
         return "<link=" + GameManager.instance.dictionary[m.Value] + "><color=yellow>" + m.Value + "</color></link>";
     }
 

@@ -12,8 +12,10 @@ public abstract class Action : Skill
     public int cooldown = 0;
     public int hasUses = 0;
     public int uses = 0;
+    public int dieMultiplier = 1;
 
-    protected Regex rx = new Regex("(\\d+(?>\\.\\d+|))xD");
+
+    protected Regex rx2 = new Regex("\\b(?>(\\d*)x)?([A-Z][A-Z]+)\\b"); // Get all 2+ Captialized words like -> ##xDIE
     protected Dice dice;
 
     public virtual bool CheckActionConstraints() {
@@ -62,7 +64,8 @@ public abstract class Action : Skill
         // Does nothing
     }
 
-    public void Initialize() {
+    protected override void Init()
+    {
         // Set uses to max uses
         uses = hasUses;
 
@@ -70,7 +73,13 @@ public abstract class Action : Skill
         cooldown = 0;
     }
 
-    public void SetCooldown() {
+    protected override void Uninit()
+    {
+        // Re-init
+        Init();
+    }
+
+    public void StartCooldown() {
         // When action is performed
         // Must add an extra 1 to account for same turn reduce cooldown
         cooldown = hasCooldown + 1;
@@ -81,24 +90,55 @@ public abstract class Action : Skill
         cooldown = Mathf.Max(cooldown - 1, 0);
     }
 
-    public void UpdateUses() {
+    public void ReduceUses() {
         // Reduce uses by 1 until 0
         uses = Mathf.Max(uses - 1, 0);
     }
 
-    public override string GetRawDescription() {
-        // Get base raw description
-        string rawText = base.GetRawDescription();
-        // Replace text with die icons where needed
-        return rx.Replace(rawText, new MatchEvaluator(InsertDieIcons));
-    }
+    // protected override string InsertIcons(Match m)
+    // {
+    //     // If word is a keyword then replace it with hyperlink
+    //     if (GameManager.instance.dictionary.ContainsKey(m.Value))
+    //     {
+    //         return InsertHyperlink(m);
+    //     }
+
+    //     if (dieMultiplier < 1) throw new System.Exception("MULTIPLIER WAS 0??");
+
+    //     // If the multiplier is 1 then do normal output
+    //     if (dieMultiplier == 1) {
+    //         // Set the icon with multiplier
+    //         return "<sprite=\"" + m.Value + "\" index=0>";
+    //     }
+
+    //     // Else add visual
+    //     return dieMultiplier + "x<sprite=\"" + m.Value + "\" index=0>";
+    // }
 
     public string GetDynamicDescription(Dice insertedDie) {
         // Get base raw description
-        string rawText = base.GetRawDescription();
+        string rawText = description;
         dice = insertedDie;
         // Replace text with die values where needed
-        return rx.Replace(rawText, new MatchEvaluator(InsertDieValues));
+        return rx2.Replace(rawText, new MatchEvaluator(delegate (Match m)
+        {
+            int multiplier = 1;
+            if (m.Groups[1].Value.Length != 0) {
+                multiplier = int.Parse(m.Groups[1].Value);
+            }
+
+            if (m.Groups[2].Value.Length != 0) {
+                if (m.Groups[2].Value == "DIE") {
+                    return "<color=yellow>" + multiplier * dice.GetValue() + "</color>";
+                }
+                else if (m.Groups[2].Value == "INVDIE") {
+                    return "<color=yellow>" + multiplier * dice.GetInvertedValue() + "</color>";
+                }
+            }
+
+            // Else if it's a random keyword then display it normally
+            return "<sprite=\"" + m.Value + "\" index=0>";
+        }));
     }
 
     public string GetFinalDescription() {
@@ -106,13 +146,6 @@ public abstract class Action : Skill
         string rawText = base.GetRawDescription();
         // Replace text with die values where needed
         return rx.Replace(rawText, new MatchEvaluator(InsertFinalValues));
-    }
-
-    private string InsertDieIcons(Match m) {
-        // If multiplier is 1 return a pre-format
-        if (m.Groups[1].ToString() == "1") return "<color=yellow><sprite=0></color>";
-
-        return "<color=white>" + m.Groups[1] + "x<sprite=0></color>";
     }
 
     private string InsertDieValues(Match m) {

@@ -640,8 +640,8 @@ public class CombatManager : MonoBehaviour
         CombatEvents.instance.TriggerOnActionPerformed(selectedAction);
 
         // Update uses and cooldown of action
-        selectedAction.SetCooldown();
-        selectedAction.UpdateUses();
+        selectedAction.StartCooldown();
+        selectedAction.ReduceUses();
 
         // Set selected die innactive
         selectedDie.Exhaust();

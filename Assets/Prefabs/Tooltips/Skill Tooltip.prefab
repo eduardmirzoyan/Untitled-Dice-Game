@@ -1125,7 +1125,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Deal 2x<sprite="inverted_die" index=0> damage
+  m_text: Deal 2xDICE damage<sprite="BURN" index=0>a
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3848147ed109f454bbb6b9362cf208a0, type: 2}
   m_sharedMaterial: {fileID: 2687402936931118099, guid: 3848147ed109f454bbb6b9362cf208a0, type: 2}
@@ -1144,7 +1144,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 11400000, guid: f6bc68865347c7b4b8573ec973dc351b, type: 2}
+  m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901
@@ -1359,7 +1359,7 @@ MonoBehaviour:
   allyTargetIcon: {fileID: 2169704546803658140}
   enemyTargetIcon: {fileID: 495857324301002778}
   passiveIcon: {fileID: 3009411650013310122}
-  enableAutoKeywordTooltip: 1
+  enableAutoKeywordTooltip: 0
   keywordCanvasGroup: {fileID: 4416770561088887864}
   keywordTransform: {fileID: 1760265347022394263}
   keywordText: {fileID: 2629988105321731012}

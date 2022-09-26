@@ -9,19 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b8d44f62dafee4fab24c23a66bf52c, type: 3}
-  m_Name: Double Damage Attack
+  m_Script: {fileID: 11500000, guid: af0d6c2bc0f272c4086406a52e8b0c12, type: 3}
+  m_Name: Burn Action 3
   m_EditorClassIdentifier: 
-  name: Big Hit
-  description: Deal 2xD damage
-  icon: {fileID: 21300000, guid: 0c3d53721aba52d40874db14ac20ce9d, type: 3}
+  name: Tempered Blade
+  description: 'Deal DIE damage
+
+    If BURN: Deal damage equal to stacks'
+  icon: {fileID: 21300000, guid: a84f2857919f5d64796271392949a7a0, type: 3}
   sourceEquipment: {fileID: 0}
   sourceCombatant: {fileID: 0}
   canTargetSelf: 0
   canTargetAllies: 0
   canTargetEnemies: 1
-  hasCooldown: 1
+  hasCooldown: 0
   cooldown: 0
   hasUses: 0
   uses: 0
+  dieMultiplier: 1
   baseDamageMultiplier: 1
+  burn: {fileID: 11400000, guid: 48deb61b09912094a87a55d15a50a529, type: 2}

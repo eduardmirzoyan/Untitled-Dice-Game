@@ -149,7 +149,7 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
         // If this slot is hovered... 
 
         // Make sure there already isn't a die inserted
-        if (containedDiceUI == null) {
+        if (isFunctional && containedDiceUI == null) {
             // A die is in-hand, give visual feedback
             if (eventData.pointerDrag != null && eventData.pointerDrag.TryGetComponent(out DiceUI diceUI)) {
                 skillIcon.color = new Color(255, 255, 255, highlightAlpha);
@@ -177,7 +177,7 @@ public class SkillDisplaySlotUI : MonoBehaviour, IDropHandler, IPointerEnterHand
         skillIcon.color = new Color(255, 255, 255, 1);
 
         // Trigger event
-        if (containedDiceUI == null)
+        if (isFunctional && containedDiceUI == null)
             CombatEvents.instance.TriggerOnActionHover(null);
         
         // Hide tooltip

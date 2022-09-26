@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Skills\Actions\BountyAttack.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\Burn\BurnAction5.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\LowrollAttack3.cs" />
      <Compile Include="Assets\Scripts\UI\ActionDisplayUI.cs" />
      <Compile Include="Assets\Scripts\Status Effects\Burn.cs" />
@@ -67,10 +68,13 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive4.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\EvenAttack3.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\Burn\BurnAction2.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive5.cs" />
      <Compile Include="Assets\Scripts\UI\Selection Scene\StartButtonUI.cs" />
      <Compile Include="Assets\Scripts\UI\StatusEffectUI.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\Burn\BurnAction1.cs" />
      <Compile Include="Assets\Scripts\UI\StatusEffectHolderUI.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\Burn\BurnAction4.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive10.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\EvenAttack1.cs" />
      <Compile Include="Assets\Scripts\CameraManager.cs" />
@@ -79,6 +83,7 @@
      <Compile Include="Assets\Scripts\UI\SkillDisplayDescriptionUI.cs" />
      <Compile Include="Assets\Scripts\TransitionManager.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\Action.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\InverseDamageAttack.cs" />
      <Compile Include="Assets\Scripts\UI\QueueUI.cs" />
      <Compile Include="Assets\Scripts\Units\Unit.cs" />
      <Compile Include="Assets\Scripts\Item.cs" />
@@ -129,6 +134,7 @@
      <Compile Include="Assets\Scripts\Status Effects\Poison.cs" />
      <Compile Include="Assets\Scripts\Skills\Actions\LowrollAttack2.cs" />
      <Compile Include="Assets\Scripts\Equipment\Weapon.cs" />
+     <Compile Include="Assets\Scripts\Skills\Actions\Burn\BurnAction3.cs" />
      <Compile Include="Assets\Scripts\UI\HealthbarUI.cs" />
      <Compile Include="Assets\Scripts\UI\ConfirmActionUI.cs" />
      <Compile Include="Assets\Scripts\Skills\Passives\Passive1.cs" />
@@ -143,7 +149,6 @@
      <Compile Include="Assets\Scripts\UI\Party UI\MemberHolderUI.cs" />
      <Compile Include="Assets\Scripts\Skills\Skill.cs" />
      <Compile Include="Assets\Scripts\Status Effects\Bleed.cs" />
-     <Compile Include="Assets\Scripts\Skills\Actions\InverseDamageAttack.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

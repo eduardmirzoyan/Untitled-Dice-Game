@@ -10796,7 +10796,7 @@ MonoBehaviour:
   allyTargetIcon: {fileID: 2169704547010029958}
   enemyTargetIcon: {fileID: 495857324026604544}
   passiveIcon: {fileID: 3009411649748215984}
-  enableAutoKeywordTooltip: 1
+  enableAutoKeywordTooltip: 0
   keywordCanvasGroup: {fileID: 4416770560881989666}
   keywordTransform: {fileID: 1760265346699106189}
   keywordText: {fileID: 2629988105081935838}

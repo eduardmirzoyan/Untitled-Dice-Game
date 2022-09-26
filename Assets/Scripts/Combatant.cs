@@ -41,6 +41,8 @@ public class Combatant : ScriptableObject
     }
 
     public void AddStatusEffect(StatusEffect statusEffect) {
+        // Set the effect to a copy of itself
+        statusEffect = Instantiate(statusEffect);
         
         // Check if combatant already has this status effect
         foreach (var effect in statusEffects) {
@@ -69,6 +71,16 @@ public class Combatant : ScriptableObject
 
         // Trigger event
         CombatEvents.instance.TriggerOnAddEffect(statusEffect, this);
+    }
+
+    public StatusEffect GetStatusEffect(StatusEffect statusEffect) {
+        foreach (var effect in statusEffects) {
+            if (effect.GetType() == statusEffect.GetType())
+            {
+                return effect;
+            }
+        }
+        return null;
     }
 
     public void RemoveStatusEffect(StatusEffect statusEffect) {

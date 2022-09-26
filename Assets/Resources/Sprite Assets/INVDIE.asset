@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!21 &-1466779674241486030
+--- !u!21 &-7965587601098764525
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 1
@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: afc92af1ad6b8ef4aa34eb27278c11c9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 17cbb87897aa2dc47876931d16e04fd9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
-  m_Name: normal_die
+  m_Name: INVDIE
   m_EditorClassIdentifier: 
-  hashCode: -1810079548
-  material: {fileID: -1466779674241486030}
+  hashCode: -277586076
+  material: {fileID: -7965587601098764525}
   materialHashCode: 0
   m_Version: 1.1.0
   m_FaceInfo:
@@ -75,14 +75,14 @@ MonoBehaviour:
     m_StrikethroughOffset: 0
     m_StrikethroughThickness: 0
     m_TabWidth: 0
-  spriteSheet: {fileID: 2800000, guid: afc92af1ad6b8ef4aa34eb27278c11c9, type: 3}
+  spriteSheet: {fileID: 2800000, guid: 17cbb87897aa2dc47876931d16e04fd9, type: 3}
   m_SpriteCharacterTable:
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 0
     m_Scale: 1.25
-    m_Name: normal_die
-    m_HashCode: -1810079548
+    m_Name: inverted_die
+    m_HashCode: -277586076
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -98,6 +98,6 @@ MonoBehaviour:
       m_Height: 111
     m_Scale: 1
     m_AtlasIndex: 0
-    sprite: {fileID: 21300000, guid: afc92af1ad6b8ef4aa34eb27278c11c9, type: 3}
+    sprite: {fileID: 21300000, guid: 17cbb87897aa2dc47876931d16e04fd9, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
